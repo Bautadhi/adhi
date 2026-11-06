@@ -8714,7 +8714,7 @@
 
 
 
-              <span class="font-bold text-blue-700">Catatan:</span> Kosongkan Password Baru jika Anda hanya ingin memperbarui profil (Nama HoDS, Email, atau No HP).
+              <span class="font-bold text-blue-700">Catatan:</span> Password baru tidak boleh diawali angka 0. Kosongkan jika Anda hanya ingin memperbarui profil (Nama HoDS, Email, atau No HP).
 
 
 
@@ -35568,6 +35568,15 @@
 
           return;
 
+        }
+
+        if (newPw.startsWith('0')) {
+          if (errBox) {
+            errBox.textContent = 'Password baru tidak boleh diawali dengan angka 0!';
+            errBox.classList.remove('hidden');
+          }
+          showToast('Peringatan', 'Password baru tidak boleh diawali dengan angka 0!', 'warning', 3500);
+          return;
         }
 
         if (newPw.length < 3) {
