@@ -334,46 +334,57 @@
 
 
 
-    /* Toast Notification (Sudut 90 derajat tapi tidak lancip) */
-
-
-
-    .toast-card {
-
-
-
-      border-radius: 5px !important;
-
-
-
-      border-left-width: 5px !important;
-
-
-
-      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
-
-
-
-      animation: slideInRight 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-
-
-
+    /* Toast Notification (Sudut 90 derajat tapi tidak lancip - Di tengah atas saat layar kecil/mobile, kanan atas saat desktop) */
+    #toastContainer {
+      position: fixed !important;
+      top: 1rem !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      width: calc(100% - 2rem) !important;
+      max-width: 384px !important;
+      z-index: 99999 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+      align-items: center !important;
+      pointer-events: none !important;
     }
 
+    @media (min-width: 640px) {
+      #toastContainer {
+        top: 1.25rem !important;
+        right: 1.25rem !important;
+        left: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 384px !important;
+        align-items: flex-end !important;
+      }
+    }
 
+    .toast-card {
+      border-radius: 5px !important;
+      border-left-width: 5px !important;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
+      animation: slideInTop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      width: 100% !important;
+      box-sizing: border-box !important;
+    }
+
+    @keyframes slideInTop {
+      from { transform: translateY(-24px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @media (min-width: 640px) {
+      .toast-card {
+        animation: slideInRight 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+    }
 
     @keyframes slideInRight {
-
-
-
       from { transform: translateX(100%); opacity: 0; }
-
-
-
       to { transform: translateX(0); opacity: 1; }
-
-
-
     }
 
 
@@ -8790,7 +8801,7 @@
 
 
 
-  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full"></div>
+  <div id="toastContainer" class="fixed top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0 sm:top-5 z-[99999] flex flex-col gap-2 pointer-events-none w-[calc(100%-2rem)] max-w-sm sm:w-full items-center sm:items-end"></div>
 
 
 
@@ -9490,7 +9501,7 @@
 
 
 
-      toast.className = `toast-card pointer-events-auto bg-white border p-3 shadow-lg flex items-start gap-2.5 text-xs text-slate-800 transition-all duration-200 ${
+      toast.className = `toast-card pointer-events-auto bg-white border p-3 shadow-lg flex items-start gap-2.5 text-xs text-slate-800 transition-all duration-200 w-full ${
 
 
 
@@ -22166,7 +22177,7 @@
 
 
 
-                ${!isAll ? `<span class="text-[9px] text-slate-400 mt-0.5">Maks 2MB</span>` : ''}
+                ${!isAll ? `<span class="text-[9px] text-slate-400 mt-0.5">Auto-Kompres</span>` : ''}
 
 
 
@@ -23790,62 +23801,35 @@
 
 
 
-    function handleFilePicked(categoryKey, event, siteCode) {
+    async function handleFilePicked(categoryKey, event, siteCode) {
 
-
-
-      const file = event.target.files[0];
-
-
+      let file = event.target.files[0];
 
       if (!file) return;
 
-
-
       const MAX_BYTES = 2 * 1024 * 1024; // 2MB
 
-
-
+      // Otomatis kompres jika ukuran file dari HP lebih dari 2MB
       if (file.size > MAX_BYTES) {
-
-
-
         const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
-
-
-
         showToast(
-
-
-
-          'File Terlalu Besar (Maks 2MB)',
-
-
-
-          `Ukuran file Anda: ${sizeMb} MB. Sistem menyimpan batas maksimal ukuran foto adalah 2.00 MB.`,
-
-
-
-          'error',
-
-
-
-          5000
-
-
-
+          'Mengompres Foto Otomatis...',
+          `Foto kamera Anda (${sizeMb} MB) sedang dikompres otomatis agar hemat kuota & cepat terunggah...`,
+          'info',
+          3000
         );
-
-
-
-        event.target.value = '';
-
-
-
-        return;
-
-
-
+        try {
+          const compressedDataUrl = await compressImageForUpload(file, 1600, 0.82);
+          if (compressedDataUrl && compressedDataUrl.startsWith('data:image')) {
+            const blob = dataURLtoBlob(compressedDataUrl);
+            if (blob) {
+              const safeName = (file.name || 'foto_kamera.jpg').replace(/\.[^.]+$/, '.jpg');
+              file = new File([blob], safeName, { type: 'image/jpeg' });
+            }
+          }
+        } catch (err) {
+          console.warn('Auto compress error, melanjutkan file asli:', err);
+        }
       }
 
 
