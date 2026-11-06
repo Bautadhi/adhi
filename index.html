@@ -7982,6 +7982,38 @@
 
 
 
+  <!-- MODAL PILIH SUMBER FOTO (KAMERA LANGSUNG ATAU GALERI/FILE) -->
+  <div id="modalPilihSumberFoto" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-3 sm:p-4">
+    <div class="bg-white w-full max-w-sm modal-window overflow-hidden shadow-2xl border border-slate-200">
+      <div class="bg-slate-900 text-white px-4 py-3 flex items-center justify-between border-b border-slate-800">
+        <div class="flex items-center gap-2">
+          <i data-lucide="camera" class="w-4 h-4 text-blue-400"></i>
+          <h3 class="text-xs font-bold">Pilih Sumber Foto</h3>
+        </div>
+        <button id="btnCloseModalSumberFoto" class="w-6 h-6 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-[4px] transition cursor-pointer shadow-xs" title="Tutup">
+          <i data-lucide="x" class="w-4 h-4 text-white stroke-[2.5]"></i>
+        </button>
+      </div>
+      <div class="p-4 space-y-2.5">
+        <p class="text-xs text-slate-600 mb-2 font-medium">Silakan pilih cara pengambilan foto dokumentasi:</p>
+        
+        <button type="button" id="btnPilihKameraLangsung" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 shadow-xs transition cursor-pointer">
+          <i data-lucide="camera" class="w-4 h-4"></i>
+          <span>Ambil Foto Langsung (Kamera HP)</span>
+        </button>
+
+        <button type="button" id="btnPilihGaleriFile" class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 transition cursor-pointer border border-slate-300">
+          <i data-lucide="image" class="w-4 h-4 text-slate-600"></i>
+          <span>Pilih dari Galeri / File Foto</span>
+        </button>
+
+        <button type="button" id="btnBatalSumberFoto" class="w-full py-2 text-center text-xs font-semibold text-slate-500 hover:text-slate-700 transition cursor-pointer">
+          Batal
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- LIGHTBOX IMAGE MODAL (FULLSCREEN PADDING 2MM, ROTASI, ZOOM MIN 100%, TANPA TOMBOL DATABASE) -->
 
 
@@ -22082,6 +22114,7 @@
 
 
             <input type="file" id="fileInput_${boxUid}" accept="image/*" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
+            <input type="file" id="fileInput_cam_${boxUid}" accept="image/*" capture="environment" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
 
 
 
@@ -22245,6 +22278,7 @@
 
 
             <input type="file" id="fileInput_${boxUid}" accept="image/*" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
+            <input type="file" id="fileInput_cam_${boxUid}" accept="image/*" capture="environment" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
 
 
 
@@ -22860,42 +22894,33 @@
 
 
 
-    function triggerFileInput(key, siteCode) {
+    let pendingPhotoTarget = null;
 
-
-
+    function openPhotoSourceModal(key, siteCode) {
       if (appState.isLocked) {
-
-
-
         showToast('Terkunci', 'Periode week ini telah berakhir. Foto dan catatan bersifat hanya-baca (read-only).', 'warning', 3000);
-
-
-
         return;
-
-
-
       }
+      pendingPhotoTarget = { key, siteCode };
+      const m = document.getElementById('modalPilihSumberFoto');
+      if (m) {
+        m.classList.remove('hidden');
+        if (typeof pushModalStack === 'function') pushModalStack('modalPilihSumberFoto');
+        if (window.lucide) lucide.createIcons();
+      }
+    }
 
+    function closePhotoSourceModal(fromPopState = false) {
+      const m = document.getElementById('modalPilihSumberFoto');
+      if (m) m.classList.add('hidden');
+      if (!fromPopState && typeof popModalStack === 'function') {
+        popModalStack('modalPilihSumberFoto');
+      }
+      pendingPhotoTarget = null;
+    }
 
-
-      const targetId = siteCode ? `fileInput_${siteCode}_${key}` : `fileInput_${key}`;
-
-
-
-      let input = document.getElementById(targetId);
-
-
-
-      if (!input) input = document.getElementById(`fileInput_${key}`);
-
-
-
-      if (input) input.click();
-
-
-
+    function triggerFileInput(key, siteCode) {
+      openPhotoSourceModal(key, siteCode);
     }
 
 
@@ -33129,6 +33154,39 @@
     // Event Listener Modal Pilih Format Laporan
 
 
+
+        // Modal Pilih Sumber Foto Handlers (Kamera vs Galeri)
+    const btnCloseModalSumber = document.getElementById('btnCloseModalSumberFoto');
+    if (btnCloseModalSumber) btnCloseModalSumber.addEventListener('click', () => closePhotoSourceModal(false));
+
+    const btnBatalSumber = document.getElementById('btnBatalSumberFoto');
+    if (btnBatalSumber) btnBatalSumber.addEventListener('click', () => closePhotoSourceModal(false));
+
+    const btnCam = document.getElementById('btnPilihKameraLangsung');
+    if (btnCam) {
+      btnCam.addEventListener('click', () => {
+        if (!pendingPhotoTarget) return;
+        const { key, siteCode } = pendingPhotoTarget;
+        const targetCamId = siteCode ? `fileInput_cam_${siteCode}_${key}` : `fileInput_cam_${key}`;
+        let camInput = document.getElementById(targetCamId);
+        if (!camInput) camInput = document.getElementById(`fileInput_cam_${key}`);
+        closePhotoSourceModal(false);
+        if (camInput) camInput.click();
+      });
+    }
+
+    const btnGal = document.getElementById('btnPilihGaleriFile');
+    if (btnGal) {
+      btnGal.addEventListener('click', () => {
+        if (!pendingPhotoTarget) return;
+        const { key, siteCode } = pendingPhotoTarget;
+        const targetId = siteCode ? `fileInput_${siteCode}_${key}` : `fileInput_${key}`;
+        let galInput = document.getElementById(targetId);
+        if (!galInput) galInput = document.getElementById(`fileInput_${key}`);
+        closePhotoSourceModal(false);
+        if (galInput) galInput.click();
+      });
+    }
 
     const btnCloseFormat = document.getElementById('btnCloseModalFormatLaporan');
 
