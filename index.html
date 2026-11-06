@@ -54,6 +54,11 @@
 
 
 
+  <script>
+    window.tailwind = {
+      darkMode: 'class'
+    };
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
 
 
@@ -117,6 +122,18 @@
     /* CSS EMBEDDED - Desain Presisi: Sudut 90 derajat tapi tidak lancip (subtle 5px radius) */
 
 
+
+    
+    /* Filter Controls Card - Styling Tema Terang (#cbd5e1) & Tema Gelap Abu-abu Agak Gelap (#334155) */
+    #filterControlsCard {
+      background-color: #cbd5e1;
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+    body.dark-theme #filterControlsCard,
+    html.dark #filterControlsCard {
+      background-color: #334155 !important;
+      border-color: #475569 !important;
+    }
 
     :root {
 
@@ -334,57 +351,46 @@
 
 
 
-    /* Toast Notification (Sudut 90 derajat tapi tidak lancip - Di tengah atas saat layar kecil/mobile, kanan atas saat desktop) */
-    #toastContainer {
-      position: fixed !important;
-      top: 1rem !important;
-      left: 50% !important;
-      transform: translateX(-50%) !important;
-      width: calc(100% - 2rem) !important;
-      max-width: 384px !important;
-      z-index: 99999 !important;
-      display: flex !important;
-      flex-direction: column !important;
-      gap: 0.5rem !important;
-      align-items: center !important;
-      pointer-events: none !important;
-    }
+    /* Toast Notification (Sudut 90 derajat tapi tidak lancip) */
 
-    @media (min-width: 640px) {
-      #toastContainer {
-        top: 1.25rem !important;
-        right: 1.25rem !important;
-        left: auto !important;
-        transform: none !important;
-        width: 100% !important;
-        max-width: 384px !important;
-        align-items: flex-end !important;
-      }
-    }
+
 
     .toast-card {
+
+
+
       border-radius: 5px !important;
+
+
+
       border-left-width: 5px !important;
+
+
+
       box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.15);
-      animation: slideInTop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      width: 100% !important;
-      box-sizing: border-box !important;
+
+
+
+      animation: slideInRight 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+
+
     }
 
-    @keyframes slideInTop {
-      from { transform: translateY(-24px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
 
-    @media (min-width: 640px) {
-      .toast-card {
-        animation: slideInRight 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-      }
-    }
 
     @keyframes slideInRight {
+
+
+
       from { transform: translateX(100%); opacity: 0; }
+
+
+
       to { transform: translateX(0); opacity: 1; }
+
+
+
     }
 
 
@@ -408,6 +414,48 @@
     ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
 
 
+
+    /* TOAST CONTAINER RESPONSIVE: HP (Tengah Atas padding 1mm) & Laptop (Kanan Atas) */
+    #toastContainer {
+      position: fixed !important;
+      z-index: 9999 !important;
+      display: flex !important;
+      flex-direction: column !important;
+      gap: 0.5rem !important;
+      pointer-events: none !important;
+    }
+    @media (max-width: 639px) {
+      #toastContainer {
+        top: 8px !important;
+        left: 50% !important;
+        right: auto !important;
+        transform: translateX(-50%) !important;
+        width: calc(100vw - 2mm) !important;
+        max-width: calc(100vw - 2mm) !important;
+        padding-left: 1mm !important;
+        padding-right: 1mm !important;
+        box-sizing: border-box !important;
+        align-items: center !important;
+      }
+      #toastContainer .toast-card {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+      }
+    }
+    @media (min-width: 640px) {
+      #toastContainer {
+        top: 1.25rem !important;
+        right: 1.25rem !important;
+        left: auto !important;
+        transform: none !important;
+        width: 100% !important;
+        max-width: 24rem !important;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        align-items: flex-end !important;
+      }
+    }
 
     /* Slider compact styling (Lebar Ramping: 168px / 10.5rem & Sisi Kanan Rata Sempurna) */
 
@@ -999,6 +1047,7 @@
 
 
 
+    body.dark-theme #mainAppHeader #headerWeekPeriod,
     body.dark-theme #mainAppHeader #headerUserStatus,
 
 
@@ -3627,7 +3676,7 @@
 
 
 
-        <div class="leading-tight min-w-0 cursor-default select-none">
+        <div class="hidden md:block leading-tight min-w-0 cursor-default select-none">
 
 
 
@@ -3663,22 +3712,17 @@
 
 
 
-      <!-- Sisi Kanan: Status User Login & Tombol Fullscreen di Pojok Kanan Atas -->
-
-
-
+      <!-- Sisi Kanan: Periode Week, Nama HODs & Tombol Fullscreen di Pojok Kanan Atas -->
       <div class="flex items-center gap-2 shrink-0 cursor-default">
 
-
-
-        <div id="headerUserStatus" class="h-8 px-3 rounded-[5px] bg-blue-700 text-white flex items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default">
-
-
-
+        <!-- Kotak Periode Week di Sebelah Kiri Nama HODs -->
+        <div id="headerWeekPeriod" class="h-8 px-3 rounded-[5px] bg-blue-700 text-white flex items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default whitespace-nowrap uppercase tracking-wider" title="Periode Week Aktif">
           -
+        </div>
 
-
-
+        <!-- Kotak Nama HODs (Langsung Nama Saja) -->
+        <div id="headerUserStatus" class="hidden md:flex h-8 px-3 rounded-[5px] bg-blue-700 text-white items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default truncate max-w-[220px]" title="Nama HODs / User">
+          -
         </div>
 
 
@@ -4097,6 +4141,19 @@
 
                 </button>
 
+                <!-- Tombol Khusus Admin / Login ALL: WA Gedung & WA Mobil -->
+                <div id="sliderAdminWaCleanupGroup" class="space-y-1 hidden">
+                  <button id="sliderBtnReminderGedung" type="button" class="w-full text-left px-2 py-1.5 text-xs font-semibold rounded-[5px] flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/50 cursor-pointer transition-colors duration-150 border border-transparent bg-transparent" title="Kirim Pesan Pengingat WA Audit Gedung ke Grup">
+                    <i data-lucide="bell-ring" class="w-3.5 h-3.5 shrink-0 text-emerald-400"></i>
+                    <span class="truncate">WA GEDUNG</span>
+                  </button>
+
+                  <button id="sliderBtnReminderMobil" type="button" class="w-full text-left px-2 py-1.5 text-xs font-semibold rounded-[5px] flex items-center gap-2 text-slate-400 hover:text-white hover:bg-slate-800/50 cursor-pointer transition-colors duration-150 border border-transparent bg-transparent" title="Kirim Pesan Pengingat WA Audit Mobil ke Grup">
+                    <i data-lucide="send" class="w-3.5 h-3.5 shrink-0 text-blue-400"></i>
+                    <span class="truncate">WA MOBIL</span>
+                  </button>
+                </div>
+
 
 
               </div>
@@ -4183,149 +4240,44 @@
 
 
 
-            <!-- Filters Group -->
+            <!-- Filters Group: Card Dropdown Pres Bersudut Halus & Kontras Tema Terang/Gelap -->
+            <div id="filterControlsCard" class="bg-slate-300 dark:bg-slate-700 border border-slate-400/80 dark:border-slate-600 rounded-[5px] py-1 px-1.5 sm:px-2 shadow-2xs flex flex-wrap items-center gap-2 sm:gap-2.5 transition-colors">
 
-
-
-            <div class="flex flex-wrap items-end gap-3">
-
-
-
-              <!-- Filter Site: Atasnya Nama PIC, Kotak Hanya Kode Site Saja -->
-
-
-
-              <div id="filterSiteGroup" class="flex flex-col">
-
-
-
-                <div class="flex items-center mb-1 h-4">
-
-
-
-                  <span id="labelSitePic" class="text-[11px] font-bold text-slate-700 truncate max-w-[200px]">-</span>
-
-
-
-                </div>
-
-
-
-                <select id="selectSite" class="bg-white border border-slate-300 text-slate-800 text-xs sm:text-sm px-3 py-1.5 min-w-[130px] subtle-box focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold">
-
-
-
+              <!-- Filter Site (Dropdown Kode Site Saja - Ukuran Seragam) -->
+              <div id="filterSiteGroup" class="flex items-center">
+                <select id="selectSite" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm px-2.5 py-1 w-[125px] sm:w-[130px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold transition h-[34px] sm:h-[36px]">
                 </select>
-
-
-
               </div>
 
-
-
-              <!-- Filter Week: Atas Kotak = Rentang Tanggal, Dropdown = Week XX Saja -->
-
-
-
-              <div class="flex flex-col">
-
-
-
-                <span id="labelWeekRange" class="text-[11px] font-bold text-slate-700 mb-1 text-center w-full block truncate">Rentang Tanggal</span>
-
-
-
-                <div class="flex items-center gap-1">
-
-
-
-                  <button id="btnPrevWeek" class="px-2 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs subtle-box transition cursor-pointer" title="Minggu Sebelumnya">
-
-
-
-                    &lt;
-
-
-
-                  </button>
-
-
-
-                  <select id="selectWeek" class="bg-white border border-slate-300 text-slate-800 text-xs sm:text-sm px-2.5 py-1.5 min-w-[110px] subtle-box focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold">
-
-
-
-                  </select>
-
-
-
-                  <button id="btnNextWeek" class="px-2 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs subtle-box transition cursor-pointer" title="Minggu Berikutnya">
-
-
-
-                    &gt;
-
-
-
-                  </button>
-
-
-
-                </div>
-
-
-
+              <!-- Filter Week (Prev, Dropdown Week, Next - Ukuran Seragam) -->
+              <div class="flex items-center gap-1">
+                <button id="btnPrevWeek" class="w-7 sm:w-8 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs rounded-[4px] transition cursor-pointer shadow-2xs h-[34px] sm:h-[36px] flex items-center justify-center font-bold" title="Minggu Sebelumnya">
+                  &lt;
+                </button>
+                <select id="selectWeek" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm px-2.5 py-1 w-[125px] sm:w-[130px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold transition h-[34px] sm:h-[36px]">
+                </select>
+                <button id="btnNextWeek" class="w-7 sm:w-8 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs rounded-[4px] transition cursor-pointer shadow-2xs h-[34px] sm:h-[36px] flex items-center justify-center font-bold" title="Minggu Berikutnya">
+                  &gt;
+                </button>
               </div>
 
-
+              <!-- Checkbox Fasilitas Pantry (Khusus Form Gedung - Ukuran Seragam) -->
+              <div id="kontrolPantryGedung" class="flex items-center">
+                <label id="labelCheckboxPantry" class="flex items-center justify-between px-3 py-1 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 rounded-[4px] cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none w-[125px] sm:w-[130px] h-[34px] sm:h-[36px] shadow-2xs" title="Centang jika site ini memiliki fasilitas Pantry">
+                  <span class="text-xs font-bold text-slate-800 dark:text-slate-100">PANTRY</span>
+                  <input type="checkbox" id="checkboxHasPantry" class="w-3.5 h-3.5 text-blue-600 rounded-[3px] border-slate-400 focus:ring-blue-500 cursor-pointer accent-blue-600">
+                </label>
+              </div>
 
               <!-- Kontrol Tambahan Audit Mobil (Plat & + Input Plat) -->
-
-
-
-              <div id="kontrolKhususMobil" class="hidden flex flex-wrap items-end gap-2">
-
-
-
-                <div class="flex flex-col">
-
-
-
-                  <span class="text-[11px] font-bold text-slate-700 mb-1 text-center w-full block">Pilih Nopol</span>
-
-
-
-                  <select id="selectPlatMobil" class="bg-white border border-slate-300 text-slate-800 text-xs sm:text-sm px-3 py-1.5 min-w-[140px] subtle-box focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-bold">
-
-
-
-                  </select>
-
-
-
-                </div>
-
-
-
-                <button id="btnOpenModalInputPlat" type="button" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold subtle-box shadow-xs flex items-center gap-1.5 transition cursor-pointer" title="Daftarkan Nomor Plat & Driver Baru">
-
-
-
+              <div id="kontrolKhususMobil" class="hidden flex flex-wrap items-center gap-2">
+                <select id="selectPlatMobil" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm px-2.5 py-1 min-w-[130px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-bold h-[34px] sm:h-[36px]">
+                </select>
+                <button id="btnOpenModalInputPlat" type="button" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[4px] shadow-xs flex items-center gap-1.5 transition cursor-pointer h-[34px] sm:h-[36px]" title="Daftarkan Nomor Plat & Driver Baru">
                   <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-
-
-
                   <span>+ Input Daftar NOPOL</span>
-
-
-
                 </button>
-
-
-
               </div>
-
-
 
             </div>
 
@@ -7994,33 +7946,31 @@
 
 
   <!-- MODAL PILIH SUMBER FOTO (KAMERA LANGSUNG ATAU GALERI/FILE) -->
-  <div id="modalPilihSumberFoto" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-3 sm:p-4">
+  <div id="modalPilihSumberFoto" class="fixed inset-0 bg-slate-950/70 backdrop-blur-xs z-50 flex items-end sm:items-center justify-center hidden p-3 sm:p-4" onclick="if(event.target === this) closePhotoSourceModal()">
     <div class="bg-white w-full max-w-sm modal-window overflow-hidden shadow-2xl border border-slate-200">
       <div class="bg-slate-900 text-white px-4 py-3 flex items-center justify-between border-b border-slate-800">
         <div class="flex items-center gap-2">
           <i data-lucide="camera" class="w-4 h-4 text-blue-400"></i>
           <h3 class="text-xs font-bold">Pilih Sumber Foto</h3>
         </div>
-        <button id="btnCloseModalSumberFoto" class="w-6 h-6 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-[4px] transition cursor-pointer shadow-xs" title="Tutup">
+        <button id="btnCloseModalSumberFoto" type="button" onclick="closePhotoSourceModal()" class="w-6 h-6 flex items-center justify-center bg-red-600 hover:bg-red-700 text-white rounded-[4px] transition cursor-pointer shadow-xs" title="Tutup">
           <i data-lucide="x" class="w-4 h-4 text-white stroke-[2.5]"></i>
         </button>
       </div>
       <div class="p-4 space-y-2.5">
         <p class="text-xs text-slate-600 mb-2 font-medium">Silakan pilih cara pengambilan foto dokumentasi:</p>
         
-        <button type="button" id="btnPilihKameraLangsung" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 shadow-xs transition cursor-pointer">
+        <button type="button" id="btnPilihKameraLangsung" onclick="selectPhotoSource('camera')" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 shadow-xs transition cursor-pointer">
           <i data-lucide="camera" class="w-4 h-4"></i>
           <span>Ambil Foto Langsung (Kamera HP)</span>
         </button>
 
-        <button type="button" id="btnPilihGaleriFile" class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 transition cursor-pointer border border-slate-300">
+        <button type="button" id="btnPilihGaleriFile" onclick="selectPhotoSource('gallery')" class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 transition cursor-pointer border border-slate-300">
           <i data-lucide="image" class="w-4 h-4 text-slate-600"></i>
           <span>Pilih dari Galeri / File Foto</span>
         </button>
 
-        <button type="button" id="btnBatalSumberFoto" class="w-full py-2 text-center text-xs font-semibold text-slate-500 hover:text-slate-700 transition cursor-pointer">
-          Batal
-        </button>
+
       </div>
     </div>
   </div>
@@ -8725,7 +8675,7 @@
 
 
 
-              <span class="font-bold text-blue-700">Catatan:</span> Password baru tidak boleh diawali angka 0. Kosongkan jika Anda hanya ingin memperbarui profil (Nama HoDS, Email, atau No HP).
+              <span class="font-bold text-blue-700">Catatan:</span> Kosongkan Password Baru jika Anda hanya ingin memperbarui profil (Nama HoDS, Email, atau No HP).
 
 
 
@@ -8801,7 +8751,7 @@
 
 
 
-  <div id="toastContainer" class="fixed top-4 left-1/2 -translate-x-1/2 sm:left-auto sm:right-5 sm:translate-x-0 sm:top-5 z-[99999] flex flex-col gap-2 pointer-events-none w-[calc(100%-2rem)] max-w-sm sm:w-full items-center sm:items-end"></div>
+  <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full"></div>
 
 
 
@@ -8833,7 +8783,100 @@
 
 
 
-    let APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzbtFdOFDCPbHh8cSHr1mme89yKcaGssi9HjGJoWpSQpxaZV0pi9iSuSslE0HAkng2P/exec";
+    let APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwK5JRPCpdREkMh3TBWlCBeBO0HuTLvT5XFfQ8wLs9EqnfQipqbHkmfkK5Z7vYb6T_g/exec";
+
+    // ==============================================================================
+    // SISTEM ANTRIAN SINKRONISASI (QUEUE) & RETRY EXPONENTIAL BACKOFF DENGAN JITTER
+    // Mencegah bentrok/tindih data saat banyak user & retry otomatis hingga 10x
+    // ==============================================================================
+    const appSyncQueue = {
+      items: [],
+      isProcessing: false,
+      maxRetries: 10,
+      baseDelayMs: 2000,
+      maxDelayMs: 15000,
+
+      enqueue(task) {
+        const taskId = 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
+        const queueItem = {
+          id: taskId,
+          type: task.type || 'sync',
+          description: task.description || 'Proses Sinkronisasi',
+          execute: task.execute,
+          retries: 0,
+          addedAt: Date.now()
+        };
+        this.items.push(queueItem);
+        console.log(`[SyncQueue] Masuk antrian: "${queueItem.description}". Total antrian: ${this.items.length}`);
+        
+        if (!this.isProcessing) {
+          this.processNext();
+        }
+        return taskId;
+      },
+
+      async processNext() {
+        if (this.isProcessing || this.items.length === 0) return;
+        this.isProcessing = true;
+
+        const currentTask = this.items[0];
+        let isSuccess = false;
+
+        while (currentTask.retries < this.maxRetries) {
+          currentTask.retries++;
+          try {
+            console.log(`[SyncQueue] Memproses "${currentTask.description}" (Percobaan ${currentTask.retries}/${this.maxRetries})...`);
+            const result = await currentTask.execute();
+            if (result !== false) {
+              isSuccess = true;
+              console.log(`[SyncQueue] Sukses pada percobaan ${currentTask.retries}: "${currentTask.description}"`);
+              break;
+            }
+          } catch (err) {
+            console.warn(`[SyncQueue] Gagal percobaan ${currentTask.retries}/${this.maxRetries} untuk "${currentTask.description}":`, err);
+          }
+
+          if (currentTask.retries < this.maxRetries) {
+            // Jeda bertahap unik (Exponential Backoff + Jitter acak per perangkat)
+            const exponentialDelay = Math.min(this.maxDelayMs, this.baseDelayMs * Math.pow(1.4, currentTask.retries - 1));
+            const jitter = Math.floor(Math.random() * 1200) + 300; // 300ms - 1500ms acak
+            const uniqueDelay = Math.round(exponentialDelay + jitter);
+            console.log(`[SyncQueue] Menunggu jeda unik ${(uniqueDelay / 1000).toFixed(1)}s sebelum mencoba lagi...`);
+            await new Promise(resolve => setTimeout(resolve, uniqueDelay));
+          }
+        }
+
+        if (!isSuccess) {
+          console.error(`[SyncQueue] Gagal permanen setelah ${this.maxRetries}x percobaan: "${currentTask.description}"`);
+          if (typeof showToast === 'function') {
+            showToast(
+              'Sinkronisasi Tertunda',
+              `Data ${currentTask.description} tersimpan aman di HP. Koneksi server Google sedang sibuk, akan dicoba kembali saat online.`,
+              'warning',
+              5000
+            );
+          }
+        }
+
+        this.items.shift();
+        this.isProcessing = false;
+
+        if (this.items.length > 0) {
+          const pauseBetweenTasks = 250 + Math.floor(Math.random() * 250);
+          setTimeout(() => this.processNext(), pauseBetweenTasks);
+        }
+      },
+
+      getQueueLength() {
+        return this.items.length;
+      },
+
+      isBusy() {
+        return this.isProcessing;
+      }
+    };
+    window.appSyncQueue = appSyncQueue;
+
 
 
 
@@ -8941,7 +8984,8 @@
 
 
 
-        { key: "ruang_sparepart", name: "Ruang Sparepart", desc: "Foto rak & bin sparepart" }
+        { key: "ruang_sparepart", name: "Ruang Sparepart", desc: "Foto rak & bin sparepart" },
+        { key: "pantry", name: "Pantry", desc: "Foto kebersihan area pantry", is_optional: true }
 
 
 
@@ -9501,7 +9545,7 @@
 
 
 
-      toast.className = `toast-card pointer-events-auto bg-white border p-3 shadow-lg flex items-start gap-2.5 text-xs text-slate-800 transition-all duration-200 w-full ${
+      toast.className = `toast-card pointer-events-auto bg-white border p-3 shadow-lg flex items-start gap-2.5 text-xs text-slate-800 transition-all duration-200 ${
 
 
 
@@ -9642,69 +9686,28 @@
 
 
     function showConfirm(title, message, detailsHtml, onConfirm) {
-
-
-
       dom.confirmModalTitle.textContent = title;
-
-
-
       dom.confirmModalMessage.textContent = message;
-
-
-
       dom.confirmModalDetails.innerHTML = detailsHtml || '';
-
-
-
       pendingConfirmAction = onConfirm;
-
-
-
       dom.confirmModal.classList.remove('hidden');
-
-
-
-      document.body.classList.add('overflow-hidden'); // Kunci background agar tidak bisa di-scroll
-
-
-
+      document.body.classList.add('overflow-hidden');
+      if (typeof pushModalStack === 'function') {
+        pushModalStack('confirmModal');
+      }
       lucide.createIcons();
-
-
-
     }
 
-
-
     function hideConfirm() {
-
-
-
       dom.confirmModal.classList.add('hidden');
-
-
-
-      document.body.classList.remove('overflow-hidden'); // Kembalikan scroll background
-
-
-
+      document.body.classList.remove('overflow-hidden');
       pendingConfirmAction = null;
-
-
-
-      if (typeof restoreActiveSliderButton === 'function') {
-
-
-
-        restoreActiveSliderButton();
-
-
-
+      if (typeof popModalStack === 'function') {
+        popModalStack('confirmModal');
       }
-
-
-
+      if (typeof restoreActiveSliderButton === 'function') {
+        restoreActiveSliderButton();
+      }
     }
 
 
@@ -9757,7 +9760,7 @@
 
 
 
-      let curMon = new Date(2025, 11, 29, 0, 0, 0, 0); // 29 Des 2025 (Senin)
+      let curMon = new Date(2026, 10, 2, 0, 0, 0, 0); // 2 Nov 2026 (Senin Week 45)
 
 
 
@@ -9769,7 +9772,7 @@
 
 
 
-      while (curMon <= now) {
+      while (curMon <= now || weeks.length === 0) {
 
 
 
@@ -9949,14 +9952,51 @@
 
 
 
-      weeks.sort((a,b) => b.week_key.localeCompare(a.week_key));
-
-
+            weeks.sort((a,b) => b.week_key.localeCompare(a.week_key));
 
       return weeks;
 
+    }
 
+    // Cek apakah seluruh foto pada suatu week memiliki catatan CLOSE (hasil pembersihan 3 bulan)
+    function isWeekFullyClosed(weekKey) {
+      if (!weekKey) return false;
+      if (!appState.drivePhotos || !Array.isArray(appState.drivePhotos) || appState.drivePhotos.length === 0) {
+        return false;
+      }
+      const photosInWeek = appState.drivePhotos.filter(p => p && p.week_key === weekKey);
+      // Jika week belum memiliki foto sama sekali, jangan sembunyikan karena week aktif perlu diisi
+      if (photosInWeek.length === 0) return false;
+      // Jika terdapat foto dan SEMUA foto berstatus catatan CLOSE, week tersebut disembunyikan
+      return photosInWeek.every(p => {
+        const note = String(p.catatan || p.notes || '').trim().toUpperCase();
+        return note === 'CLOSE';
+      });
+    }
 
+    // Sinkronisasi dan render dropdown pilihan week (Mulai dari Week 45 & Auto-hide week yang seluruh fotonya CLOSE)
+    function updateWeekDropdownOptions() {
+      if (!dom.selectWeek) return;
+      const allComputed = computeWeeks();
+      const activeWeeks = allComputed.filter(w => !isWeekFullyClosed(w.week_key));
+      appState.availableWeeks = activeWeeks.length > 0 ? activeWeeks : allComputed.slice(0, 1);
+
+      let curr = appState.availableWeeks.find(w => w.week_key === appState.selectedWeekKey);
+      if (!curr) {
+        curr = appState.availableWeeks.find(w => w.is_current) || appState.availableWeeks[0];
+        appState.selectedWeekKey = curr ? curr.week_key : '';
+        appState.currentWeek = curr;
+      }
+
+      dom.selectWeek.innerHTML = appState.availableWeeks.map(w => 
+        `<option value="${w.week_key}" ${w.week_key === curr.week_key ? 'selected' : ''}>${w.week_title || ('Week ' + w.week_number)}</option>`
+      ).join('');
+
+      if (dom.selectWeek.value !== appState.selectedWeekKey && curr) {
+        dom.selectWeek.value = curr.week_key;
+      }
+
+      updateWeekDateRangeLabel();
     }
 
 
@@ -11668,77 +11708,49 @@
       let siteRows = validSites.map((site, origIdx) => {
 
         const siteCode = site.code.toUpperCase();
+        const hasPantrySite = isMobil ? false : siteHasPantry(siteCode);
+        const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || hasPantrySite);
+        const siteCatCount = siteCats.length || (isMobil ? 5 : 9);
 
         const catScores = {};
-
         const catRawSum = {};
-
         let totalCatRatingSum = 0;
-
         let hasAnyExplicitRating = false;
 
-
-
-        // A. Nilai per kategori (total bintang dibagi selectedWeeks.length; jika tidak ada foto = 0)
-
+        // A. Nilai per kategori (total bintang dibagi selectedWeeks.length; jika tidak ada pantry = null)
         categories.forEach(cat => {
-
+          if (!isMobil && cat.key === 'pantry' && !hasPantrySite) {
+            catScores[cat.key] = null;
+            catRawSum[cat.key] = 0;
+            return;
+          }
           let sumWeekStars = 0;
-
           selectedWeeks.forEach(w => {
-
             const r = getBoxRating(siteCode, w, cat.key);
-
             if (r > 0) {
-
               sumWeekStars += r;
-
               hasAnyExplicitRating = true;
-
             }
-
           });
-
           const avg = selectedWeeks.length > 0 ? (sumWeekStars / selectedWeeks.length) : 0;
-
           catScores[cat.key] = avg;
-
           catRawSum[cat.key] = sumWeekStars;
-
           totalCatRatingSum += avg;
-
         });
 
-
-
-        // B. Nilai per minggu (rata-rata seluruh kategori pada minggu tersebut; tidak ada foto = 0)
-
+        // B. Nilai per minggu (rata-rata kategori aktif site ini pada minggu tersebut)
         const weekScores = {};
-
         selectedWeeks.forEach(w => {
-
           let weekCatSum = 0;
-
-          categories.forEach(c => {
-
+          siteCats.forEach(c => {
             const r = getBoxRating(siteCode, w, c.key);
-
             if (r > 0) weekCatSum += r;
-
           });
-
-          weekScores[w] = categories.length > 0 ? (weekCatSum / categories.length) : 0;
-
+          weekScores[w] = siteCatCount > 0 ? (weekCatSum / siteCatCount) : 0;
         });
 
-
-
-        // C. Nilai Hasil Akhir (Rata-rata seluruh kategori dibagi categories.length)
-
-        const finalScore = categories.length > 0 ? (totalCatRatingSum / categories.length) : 0;
-
-
-
+        // C. Nilai Hasil Akhir (Rata-rata kategori aktif site ini: dibagi 9 jika tanpa pantry, dibagi 10 jika ada pantry)
+        const finalScore = siteCatCount > 0 ? (totalCatRatingSum / siteCatCount) : 0;
         return {
 
           originalIdx: origIdx + 1,
@@ -11959,7 +11971,12 @@
 
 
 
-            if (rawSum > 0) {
+            
+            if (cat.key === 'pantry' && !isMobil && !siteHasPantry(row.code)) {
+              rowsHtml += `<td class="py-2 px-2 text-center whitespace-nowrap text-slate-400 font-bold bg-slate-50/50" title="Site ${row.code} tidak memiliki fasilitas Pantry">
+                <span class="text-xs text-slate-400 font-semibold">-</span>
+              </td>`;
+            } else if (rawSum > 0) {
 
               const formatted = (score % 1 === 0) ? score.toFixed(0) : score.toFixed(1);
 
@@ -13015,6 +13032,7 @@
 
 
 
+      updateSliderAdminActionButtons();
       const btnGedung = document.getElementById('sliderBtnAuditGedung');
 
 
@@ -13268,6 +13286,7 @@
 
 
         switchAuditType('gedung');
+        if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
 
 
 
@@ -13304,10 +13323,12 @@
 
 
         switchAuditType('mobil');
+        const _kp = document.getElementById('kontrolPantryGedung'); if (_kp) _kp.classList.add('hidden');
 
 
 
       } else if (viewName === 'rekap_gedung' || viewName === 'rekap') {
+        const _kpR = document.getElementById('kontrolPantryGedung'); if (_kpR) _kpR.classList.add('hidden');
 
 
 
@@ -13541,25 +13562,33 @@
 
     function closeSlider() {
 
-
-
       const slider = document.getElementById('leftSlider');
-
-
 
       if (slider && !slider.classList.contains('hidden')) {
 
-
-
         slider.classList.add('hidden');
-
-
 
       }
 
-
-
     }
+
+    function closeSliderIfMobile() {
+      if (window.innerWidth < 1024) {
+        closeSlider();
+      }
+    }
+
+    function applyResponsiveSliderState() {
+      const slider = document.getElementById('leftSlider');
+      if (!slider) return;
+      if (window.innerWidth < 1024) {
+        slider.classList.add('hidden');
+      } else {
+        slider.classList.remove('hidden');
+      }
+    }
+    window.addEventListener('resize', applyResponsiveSliderState);
+    
 
 
 
@@ -13590,6 +13619,29 @@
         // ----------------- MODAL PENGATURAN (GANTI PASSWORD & HAPUS DATA) ----------------- //
 
 
+
+    
+    function setupPasswordInputProtection() {
+      const newPwInput = document.getElementById('inputNewPassword');
+      if (newPwInput && !newPwInput.dataset.hasZeroBlocker) {
+        newPwInput.dataset.hasZeroBlocker = 'true';
+        newPwInput.addEventListener('input', () => {
+          let val = newPwInput.value;
+          if (val.startsWith('0')) {
+            while (val.startsWith('0')) {
+              val = val.substring(1);
+            }
+            newPwInput.value = val;
+            showToast('Peringatan', 'Sandi baru tidak boleh diawali dengan angka 0!', 'warning', 2500);
+            const errBox = document.getElementById('changePwError');
+            if (errBox) {
+              errBox.textContent = 'Sandi baru tidak boleh diawali dengan angka 0!';
+              errBox.classList.remove('hidden');
+            }
+          }
+        });
+      }
+    }
 
     function openChangePasswordModal() {
 
@@ -13623,7 +13675,27 @@
 
 
 
-      if (newPwInput) newPwInput.value = '';
+      if (newPwInput) {
+        newPwInput.value = '';
+        if (!newPwInput.dataset.hasZeroBlocker) {
+          newPwInput.dataset.hasZeroBlocker = 'true';
+          newPwInput.addEventListener('input', () => {
+            let val = newPwInput.value;
+            if (val.startsWith('0')) {
+              while (val.startsWith('0')) {
+                val = val.substring(1);
+              }
+              newPwInput.value = val;
+              showToast('Peringatan', 'Sandi baru tidak boleh diawali dengan angka 0!', 'warning', 2500);
+              const errBox = document.getElementById('changePwError');
+              if (errBox) {
+                errBox.textContent = 'Sandi baru tidak boleh diawali dengan angka 0!';
+                errBox.classList.remove('hidden');
+              }
+            }
+          });
+        }
+      }
 
 
 
@@ -14507,6 +14579,26 @@
 
 
 
+        function updateSliderAdminActionButtons() {
+      const isLoginAll = Boolean(appState.currentUser && (
+        String(appState.currentUser.site_code || '').toUpperCase() === 'ALL' ||
+        String(appState.currentUser.role || '').toUpperCase() === 'ADMIN'
+      ));
+      const groupAdmin = document.getElementById('sliderAdminWaCleanupGroup');
+      const btnGedung = document.getElementById('sliderBtnReminderGedung');
+      const btnMobil = document.getElementById('sliderBtnReminderMobil');
+
+      if (isLoginAll) {
+        if (groupAdmin) groupAdmin.classList.remove('hidden');
+        if (btnGedung) btnGedung.classList.remove('hidden');
+        if (btnMobil) btnMobil.classList.remove('hidden');
+      } else {
+        if (groupAdmin) groupAdmin.classList.add('hidden');
+        if (btnGedung) btnGedung.classList.add('hidden');
+        if (btnMobil) btnMobil.classList.add('hidden');
+      }
+    }
+
     function initSliderNavigation() {
 
 
@@ -14683,11 +14775,11 @@
 
 
 
-      if (btnGedung) btnGedung.addEventListener('click', () => setActiveAppView('gedung'));
+      if (btnGedung) btnGedung.addEventListener('click', () => { setActiveAppView('gedung'); closeSliderIfMobile(); });
 
 
 
-      if (btnMobil) btnMobil.addEventListener('click', () => setActiveAppView('mobil'));
+      if (btnMobil) btnMobil.addEventListener('click', () => { setActiveAppView('mobil'); closeSliderIfMobile(); });
 
 
 
@@ -14767,7 +14859,7 @@
 
 
 
-          setActiveAppView('rekap_gedung');
+          setActiveAppView('rekap_gedung'); closeSliderIfMobile();
 
 
 
@@ -14795,7 +14887,7 @@
 
 
 
-          setActiveAppView('rekap_mobil');
+          setActiveAppView('rekap_mobil'); closeSliderIfMobile();
 
 
 
@@ -14879,7 +14971,7 @@
 
 
 
-          setActiveAppView('rekap_nilai_gedung');
+          setActiveAppView('rekap_nilai_gedung'); closeSliderIfMobile();
 
 
 
@@ -14903,7 +14995,7 @@
 
 
 
-          setActiveAppView('rekap_nilai_mobil');
+          setActiveAppView('rekap_nilai_mobil'); closeSliderIfMobile();
 
 
 
@@ -15012,6 +15104,7 @@
 
 
           setActiveAppView(appState.activeAppView || 'gedung');
+      updateSliderAdminActionButtons();
 
 
 
@@ -15225,15 +15318,11 @@
 
         btnGantiPw.addEventListener('click', (e) => {
 
-
-
           e.stopPropagation();
-
-
 
           if (typeof window.setPengaturanActiveSubmenu === 'function') window.setPengaturanActiveSubmenu('edit_profil');
 
-
+          closeSliderIfMobile();
 
           openChangePasswordModal();
 
@@ -15253,15 +15342,11 @@
 
         btnHapusData.addEventListener('click', (e) => {
 
-
-
           e.stopPropagation();
-
-
 
           if (typeof window.setPengaturanActiveSubmenu === 'function') window.setPengaturanActiveSubmenu('hapus_data');
 
-
+          closeSliderIfMobile();
 
           openClearCacheModal();
 
@@ -15373,7 +15458,7 @@
 
         btnKeluar.addEventListener('click', () => {
 
-
+          closeSliderIfMobile();
 
           if (modalLogout) {
 
@@ -15580,6 +15665,97 @@
 
 
       initSliderNavigation();
+      if (typeof applyResponsiveSliderState === 'function') applyResponsiveSliderState();
+      if (typeof setupPasswordInputProtection === 'function') setupPasswordInputProtection();
+
+      // --- EVENT LISTENER WA REMINDER DARI DASHBOARD (DENGAN POPUP KONFIRMASI) --- //
+      const btnRemGedung = document.getElementById('sliderBtnReminderGedung');
+      if (btnRemGedung && !btnRemGedung.dataset.hasListener) {
+        btnRemGedung.dataset.hasListener = 'true';
+        btnRemGedung.addEventListener('click', () => {
+          if (typeof closeSliderIfMobile === 'function') closeSliderIfMobile();
+          showConfirm(
+            'Konfirmasi Kirim WA Gedung',
+            'Apakah Anda yakin ingin mengirim pesan pengingat WA Audit Gedung ke grup WhatsApp sekarang?',
+            '<div class="flex items-center gap-2 text-emerald-700 dark:text-emerald-400 font-bold text-xs"><i data-lucide="bell-ring" class="w-4 h-4 shrink-0"></i><span>Pesan rekap status audit kebersihan gedung akan langsung dikirimkan ke grup.</span></div>',
+            async () => {
+              hideConfirm();
+              if (!APPS_SCRIPT_URL) {
+                showToast('Error', 'URL Apps Script belum disetel.', 'error');
+                return;
+              }
+              showToast('Proses WA Gedung', 'Sedang memproses rekap dan mengirim WA ke grup...', 'info', 3000);
+              try {
+                const res = await directFetch(APPS_SCRIPT_URL, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                  body: JSON.stringify({ action: 'reminder_gedung' })
+                });
+                const data = await res.json();
+                if (data && data.success) {
+                  showToast('Sukses WA Gedung', `Pesan berhasil dikirim ke grup! (${data.belum_upload} Belum, ${data.kurang_upload} Kurang, ${data.lengkap} Lengkap)`, 'success', 4000);
+                } else {
+                  showToast('Perhatian WA', data ? (data.message || 'Gagal mengirim pesan') : 'Gagal terhubung', 'warning', 5000);
+                }
+              } catch(err) {
+                showToast('Error', 'Koneksi ke Apps Script gagal: ' + err.message, 'error', 4000);
+              }
+            }
+          );
+        });
+      }
+
+      const btnRemMobil = document.getElementById('sliderBtnReminderMobil');
+      if (btnRemMobil && !btnRemMobil.dataset.hasListener) {
+        btnRemMobil.dataset.hasListener = 'true';
+        btnRemMobil.addEventListener('click', () => {
+          if (typeof closeSliderIfMobile === 'function') closeSliderIfMobile();
+          showConfirm(
+            'Konfirmasi Kirim WA Mobil',
+            'Apakah Anda yakin ingin mengirim pesan pengingat WA Audit Armada Mobil ke grup WhatsApp sekarang?',
+            '<div class="flex items-center gap-2 text-blue-700 dark:text-blue-400 font-bold text-xs"><i data-lucide="send" class="w-4 h-4 shrink-0"></i><span>Pesan rekap armada operasional mobil 5 sudut akan langsung dikirimkan ke grup.</span></div>',
+            async () => {
+              hideConfirm();
+              if (!APPS_SCRIPT_URL) {
+                showToast('Error', 'URL Apps Script belum disetel.', 'error');
+                return;
+              }
+              showToast('Proses WA Mobil', 'Sedang memproses rekap armada dan mengirim WA ke grup...', 'info', 3000);
+              try {
+                const res = await directFetch(APPS_SCRIPT_URL, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                  body: JSON.stringify({ action: 'reminder_mobil' })
+                });
+                const data = await res.json();
+                if (data && data.success) {
+                  showToast('Sukses WA Mobil', `Pesan berhasil dikirim ke grup! (${data.belum_upload} Belum, ${data.kurang_upload} Kurang, ${data.lengkap} Lengkap)`, 'success', 4000);
+                } else {
+                  showToast('Perhatian WA', data ? (data.message || 'Gagal mengirim pesan') : 'Gagal terhubung', 'warning', 5000);
+                }
+              } catch(err) {
+                showToast('Error', 'Koneksi ke Apps Script gagal: ' + err.message, 'error', 4000);
+              }
+            }
+          );
+        });
+      }
+
+      if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
+      const chkPantry = document.getElementById('checkboxHasPantry');
+      if (chkPantry && !chkPantry.dataset.hasListener) {
+        chkPantry.dataset.hasListener = 'true';
+        chkPantry.addEventListener('change', () => {
+          const isAll = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
+          if (isAll) return;
+          const currentSite = appState.sites.find(s => String(s.id) === String(appState.selectedSiteId) || (s.code && s.code.toUpperCase() === String(appState.selectedSiteId).toUpperCase())) || appState.sites[0];
+          if (!currentSite) return;
+          const isChecked = chkPantry.checked;
+          setSitePantry(currentSite.code, isChecked, true);
+          // Toast dinonaktifkan sesuai permintaan user
+          loadAuditPerSite();
+        });
+      }
 
 
 
@@ -15587,35 +15763,7 @@
 
 
 
-      appState.availableWeeks = computeWeeks();
-
-
-
-      const curr = appState.availableWeeks.find(w => w.is_current) || appState.availableWeeks[0];
-
-
-
-      appState.currentWeek = curr;
-
-
-
-      appState.selectedWeekKey = curr.week_key;
-
-
-
-      // Populate Week dropdown (Hanya Week XX saja, atasnya rentang tanggal)
-
-
-
-      dom.selectWeek.innerHTML = appState.availableWeeks.map(w => 
-
-
-
-        `<option value="${w.week_key}" ${w.week_key === curr.week_key ? 'selected' : ''}>${w.week_title || ('Week ' + w.week_number)}</option>`
-
-
-
-      ).join('');
+      updateWeekDropdownOptions();
 
 
 
@@ -15636,6 +15784,7 @@
 
 
       loadLocalCache();
+      if (typeof updateWeekDropdownOptions === 'function') updateWeekDropdownOptions();
 
 
 
@@ -15687,27 +15836,12 @@
 
 
 
-      // 6. Auto-sinkronisasi berkala setiap 5 menit (Smart Delta - hanya update jika data beda)
-
-
-
+      // 6. Auto-sinkronisasi berkala setiap 15 menit (Smart Delta - hemat kuota 3x lipat & anti-bentrok)
       setInterval(() => {
-
-
-
         fetchLiveFromGoogleAppsScript().catch(err => {
-
-
-
-          console.warn('Auto-sync 5 min note:', err);
-
-
-
+          console.warn('Auto-sync 15 min note:', err);
         });
-
-
-
-      }, 5 * 60 * 1000);
+      }, 15 * 60 * 1000);
 
 
 
@@ -16974,10 +17108,8 @@
 
 
               appState.drivePhotos = syncedPhotos;
-
-
-
               saveLocalCache();
+              if (typeof updateWeekDropdownOptions === 'function') updateWeekDropdownOptions();
 
 
 
@@ -17082,26 +17214,13 @@
 
 
         function updateWeekDateRangeLabel() {
-
-
-
+      const headerWeekLbl = document.getElementById('headerWeekPeriod');
       const lbl = document.getElementById('labelWeekRange');
-
-
-
       const wInfo = appState.availableWeeks.find(w => w.week_key === appState.selectedWeekKey) || appState.currentWeek;
-
-
-
-      if (lbl && wInfo) {
-
-
-
-        lbl.textContent = wInfo.date_range || wInfo.label;
-
-
-
-      }
+      const rawTextVal = (wInfo && (wInfo.date_range || wInfo.label)) ? (wInfo.date_range || wInfo.label) : '-';
+      const textVal = typeof rawTextVal === 'string' ? rawTextVal.toUpperCase() : rawTextVal;
+      if (headerWeekLbl) headerWeekLbl.textContent = textVal;
+      if (lbl) lbl.textContent = textVal;
 
 
 
@@ -17154,57 +17273,22 @@
 
 
     function updateSitePicHeader() {
-
-
-
+      const headerUserStatus = document.getElementById('headerUserStatus');
       const lblPic = document.getElementById('labelSitePic');
-
-
-
-      if (!lblPic) return;
-
-
-
-      const val = dom.selectSite.value;
-
-
+      const val = dom.selectSite ? dom.selectSite.value : 'ALL';
 
       if (val === 'ALL' || appState.selectedSiteId === 'ALL') {
-
-
-
-        lblPic.textContent = 'Semua PDS';
-
-
-
-        lblPic.className = 'text-[11px] font-bold text-slate-500 truncate max-w-[200px]';
-
-
-
+        const adminName = (appState.currentUser && appState.currentUser.pic_name) ? appState.currentUser.pic_name : 'Administrator';
+        if (headerUserStatus) headerUserStatus.textContent = adminName;
+        if (lblPic) lblPic.textContent = adminName;
         return;
-
-
-
       }
 
-
-
       const realSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
-
-
-
       const site = realSites.find(s => String(s.id) === String(val) || (s.code && s.code.toUpperCase() === String(val).toUpperCase()));
-
-
-
       const pic = (site && site.pic) ? site.pic : (appState.currentUser && appState.currentUser.pic_name ? appState.currentUser.pic_name : '-');
-
-
-
-      lblPic.textContent = pic;
-
-
-
+      if (headerUserStatus) headerUserStatus.textContent = pic;
+      if (lblPic) lblPic.textContent = pic;
     }
 
 
@@ -17276,6 +17360,7 @@
       }
 
       updateSitePicHeader();
+      if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
     }
 
     function updateSiteFilterViewMode() {
@@ -18664,913 +18749,417 @@
 
 
 
-      // Sinkronisasi ke server (Google Apps Script & Flask)
-
-
-
+      // Sinkronisasi ke server (Google Apps Script & Flask via appSyncQueue)
       try {
-
-
-
-        directFetch(APPS_SCRIPT_URL, {
-
-
-
-          method: "POST",
-
-
-
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-
-
-
-          body: JSON.stringify({
-
-
-
-            action: "edit_plat",
-
-
-
-            site_code: siteCode,
-
-
-
-            old_no_plat: oldNoPlat,
-
-
-
-            new_no_plat: newNoPlat,
-
-
-
-            nama_driver: newDriver
-
-
-
-          })
-
-
-
-        }).then(() => {
-
-          setTimeout(() => fetchLiveFromGoogleAppsScript().catch(() => {}), 1200);
-
-        }).catch(err => console.warn('Background sync edit_plat:', err));
-
-
-
-        if (isLocalFlaskServer()) {
-
-
-
-          try {
-
-
-
-            fetch('/api/plat-mobil', {
-
-
-
-              method: "POST",
-
-
-
-              headers: { "Content-Type": "application/json" },
-
-
-
-              body: JSON.stringify({
-
-
-
-                action: "edit",
-
-
-
-                site_code: siteCode,
-
-
-
-                old_no_plat: oldNoPlat,
-
-
-
-                no_plat: newNoPlat,
-
-
-
-                nama_driver: newDriver
-
-
-
-              })
-
-
-
-            }).catch(() => {});
-
-
-
-          } catch(e) {}
-
-
-
+        if (typeof appSyncQueue !== 'undefined') {
+          appSyncQueue.enqueue({
+            type: 'edit_plat',
+            description: `Update plat ${newNoPlat} (${siteCode})`,
+            execute: async () => {
+              if (!APPS_SCRIPT_URL) return true;
+              const res = await directFetch(APPS_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                  action: "edit_plat",
+                  site_code: siteCode,
+                  old_no_plat: oldNoPlat,
+                  new_no_plat: newNoPlat,
+                  nama_driver: newDriver
+                })
+              });
+              if (!res) throw new Error("Jaringan offline");
+              if (!res.ok && res.status !== 200) throw new Error(`HTTP ${res.status}`);
+              const result = await res.json();
+              if (!result || !result.success) throw new Error(result?.message || 'Gagal update plat');
+              return true;
+            }
+          });
         }
 
-
-
+        if (typeof isLocalFlaskServer === 'function' && isLocalFlaskServer()) {
+          try {
+            directFetch('/api/plat-mobil', {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                action: "edit",
+                site_code: siteCode,
+                old_no_plat: oldNoPlat,
+                no_plat: newNoPlat,
+                nama_driver: newDriver
+              })
+            }).catch(() => {});
+          } catch(e) {}
+        }
       } catch(e) {}
 
-
-
       editingPlatKey = null;
-
-
-
       renderDaftarNopolList();
-
-
-
       syncPlatDropdown();
-
-
-
       loadAuditPerSite();
-
-
-
       showToast('Data Diperbarui', `Nopol ${newNoPlat} (${newDriver}) berhasil diperbarui!`, 'success', 3000);
-
-
-
     }
-
-
 
     let pendingPlatToDelete = null;
 
-
-
     function confirmDeletePlat(siteCode, noPlat) {
+      openModalKonfirmasiHapusNopol(siteCode, noPlat);
+    }
 
+    function openModalKonfirmasiHapusNopol(siteCode, noPlat) {
       const target = (appState.registeredPlats || []).find(p => p.site_code === siteCode && p.no_plat === noPlat);
-
       const driverName = target ? target.nama_driver : '-';
-
       pendingPlatToDelete = { siteCode, noPlat, driverName };
 
-
-
       const badgeNopol = document.getElementById('konfirmasiHapusNopolBadge');
-
       const badgeDriver = document.getElementById('konfirmasiHapusDriverBadge');
-
       if (badgeNopol) badgeNopol.textContent = `${noPlat} (${siteCode})`;
-
       if (badgeDriver) badgeDriver.textContent = `Driver: ${driverName}`;
 
-
-
       const modal = document.getElementById('modalKonfirmasiHapusNopol');
-
       if (modal) {
-
         modal.classList.remove('hidden');
-
         setTimeout(() => modal.classList.remove('opacity-0'), 10);
-
       }
-
-      pushModalStack('modalKonfirmasiHapusNopol');
-
+      if (typeof pushModalStack === 'function') pushModalStack('modalKonfirmasiHapusNopol');
       document.body.classList.add('overflow-hidden');
-
       if (window.lucide) lucide.createIcons();
-
     }
-
-
 
     function closeModalKonfirmasiHapusNopol(fromPopstate = false) {
-
       const modal = document.getElementById('modalKonfirmasiHapusNopol');
-
       if (modal) {
-
         modal.classList.add('opacity-0');
-
         setTimeout(() => modal.classList.add('hidden'), 200);
-
       }
-
-      if (!fromPopstate) {
-
+      if (!fromPopstate && typeof popModalStack === 'function') {
         popModalStack('modalKonfirmasiHapusNopol');
-
       }
-
       pendingPlatToDelete = null;
-
-      if (activeModalStack.length === 0) {
-
+      if (typeof activeModalStack !== 'undefined' && activeModalStack.length === 0) {
         document.body.classList.remove('overflow-hidden');
-
       }
-
     }
-
-
 
     function executeDeletePlat() {
-
       if (!pendingPlatToDelete) return;
-
       const { siteCode, noPlat } = pendingPlatToDelete;
 
-
-
       // Hapus dari registeredPlats
-
       appState.registeredPlats = (appState.registeredPlats || []).filter(p => !(p.site_code === siteCode && p.no_plat === noPlat));
 
-
-
       // Hapus dari pendingPlats jika ada
-
       appState.pendingPlats = (appState.pendingPlats || []).filter(p => !(p.site_code === siteCode && p.no_plat === noPlat));
 
-
-
       // Catat di deletedPlats agar tidak muncul lagi dari Google Sheet
-
       appState.deletedPlats = appState.deletedPlats || [];
-
       appState.deletedPlats.push({ site_code: siteCode, no_plat: noPlat });
 
-
-
       try {
-
         localStorage.setItem('hods_registered_plats', JSON.stringify(appState.registeredPlats));
-
         localStorage.setItem('hods_deleted_plats', JSON.stringify(appState.deletedPlats));
-
       } catch(e) {}
-
-
 
       // Jika plat yang dihapus adalah plat yang sedang aktif dipilih, kosongkan
-
       if (appState.selectedPlat === noPlat) {
-
         appState.selectedPlat = '';
-
       }
 
-
-
-      // Sinkronisasi ke server (Google Apps Script & Flask)
-
+      // Sinkronisasi ke server (Google Apps Script & Flask via appSyncQueue)
       try {
-
-        directFetch(APPS_SCRIPT_URL, {
-
-          method: "POST",
-
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-
-          body: JSON.stringify({
-
-            action: "delete_plat",
-
-            site_code: siteCode,
-
-            no_plat: noPlat
-
-          })
-
-        }).then(() => {
-
-          setTimeout(() => fetchLiveFromGoogleAppsScript().catch(() => {}), 1200);
-
-        }).catch(err => console.warn('Background sync delete_plat:', err));
-
-
-
-        if (isLocalFlaskServer()) {
-
-          try {
-
-            fetch('/api/plat-mobil', {
-
-              method: "POST",
-
-              headers: { "Content-Type": "application/json" },
-
-              body: JSON.stringify({
-
-                action: "delete",
-
-                site_code: siteCode,
-
-                no_plat: noPlat
-
-              })
-
-            }).catch(() => {});
-
-          } catch(e) {}
-
+        if (typeof appSyncQueue !== 'undefined') {
+          appSyncQueue.enqueue({
+            type: 'delete_plat',
+            description: `Hapus nopol ${noPlat} (${siteCode})`,
+            execute: async () => {
+              if (!APPS_SCRIPT_URL) return true;
+              const res = await directFetch(APPS_SCRIPT_URL, {
+                method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({
+                  action: "delete_plat",
+                  site_code: siteCode,
+                  no_plat: noPlat
+                })
+              });
+              if (!res) throw new Error("Jaringan offline");
+              if (!res.ok && res.status !== 200) throw new Error(`HTTP ${res.status}`);
+              const result = await res.json();
+              if (!result || !result.success) throw new Error(result?.message || 'Gagal hapus plat di sheet');
+              return true;
+            }
+          });
         }
 
+        if (typeof isLocalFlaskServer === 'function' && isLocalFlaskServer()) {
+          try {
+            fetch('/api/plat-mobil', {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                action: "delete",
+                site_code: siteCode,
+                no_plat: noPlat
+              })
+            }).catch(() => {});
+          } catch(e) {}
+        }
       } catch(e) {}
-
-
 
       closeModalKonfirmasiHapusNopol();
-
       renderDaftarNopolList();
-
       syncPlatDropdown();
-
       loadAuditPerSite();
-
       showToast('Nopol Dihapus', `Nopol ${noPlat} berhasil dihapus dari daftar.`, 'success', 3000);
-
     }
-
-
 
     async function handleFormInputPlatSubmit(e) {
-
-
-
       e.preventDefault();
-
-
-
-      const siteSelectInp = document.getElementById('inputPlatSiteSelect');
-
-      const realSites = (appState.sites || []).filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
-
-      let targetSiteCode = '';
-
-      if (siteSelectInp && !siteSelectInp.classList.contains('hidden') && siteSelectInp.value) {
-
-        targetSiteCode = siteSelectInp.value.toUpperCase();
-
-      } else {
-
-        const curSite = realSites.find(s => s.id === appState.selectedSiteId || s.code === appState.selectedSiteId);
-
-        targetSiteCode = curSite ? curSite.code : (appState.currentUser ? (appState.currentUser.site_code || 'BGR') : (realSites[0] ? realSites[0].code : 'BGR'));
-
-      }
-
-      if (!targetSiteCode || targetSiteCode === 'ALL') {
-
-        targetSiteCode = realSites[0] ? realSites[0].code : 'BGR';
-
-      }
-
-
+      const currentSite = appState.sites.find(s => s.id === appState.selectedSiteId);
+      if (!currentSite) return;
 
       const noPlat = (dom.inputNoPlat.value || '').trim().toUpperCase();
-
-
-
       const namaDriver = (dom.inputNamaDriver.value || '').trim();
 
-
-
       if (!noPlat || !namaDriver) {
-
-
-
         showToast('Validasi Gagal', 'Nopol dan Nama Driver wajib diisi!', 'warning');
-
-
-
         return;
-
-
-
       }
-
-
 
       // Simpan lokal dan antrean pending
-
-
-
       appState.pendingPlats = appState.pendingPlats || [];
-
-
-
-      const pendingExisting = appState.pendingPlats.find(p => p.site_code === targetSiteCode && p.no_plat === noPlat);
-
-
-
+      const pendingExisting = appState.pendingPlats.find(p => p.site_code === currentSite.code && p.no_plat === noPlat);
       if (pendingExisting) {
-
-
-
         pendingExisting.nama_driver = namaDriver;
-
-
-
       } else {
-
-
-
         appState.pendingPlats.push({
-
-
-
-          site_code: targetSiteCode,
-
-
-
+          site_code: currentSite.code,
           no_plat: noPlat,
-
-
-
           nama_driver: namaDriver
-
-
-
         });
-
-
-
       }
 
-
-
-      const existing = appState.registeredPlats.find(p => p.site_code === targetSiteCode && p.no_plat === noPlat);
-
-
-
+      const existing = appState.registeredPlats.find(p => p.site_code === currentSite.code && p.no_plat === noPlat);
       if (existing) {
-
-
-
         existing.nama_driver = namaDriver;
-
-
-
       } else {
-
-
-
         appState.registeredPlats.unshift({
-
-
-
-          site_code: targetSiteCode,
-
-
-
+          site_code: currentSite.code,
           no_plat: noPlat,
-
-
-
           nama_driver: namaDriver
-
-
-
         });
-
-
-
       }
-
-
 
       try {
-
-
-
         localStorage.setItem('hods_registered_plats', JSON.stringify(appState.registeredPlats));
-
-
-
       } catch(e) {}
-
-
 
       // Kirim ke server di latar belakang (Google Apps Script & Flask)
-
-
-
       try {
-
-
-
         directFetch(APPS_SCRIPT_URL, {
-
-
-
           method: "POST",
-
-
-
           headers: { "Content-Type": "text/plain;charset=utf-8" },
-
-
-
           body: JSON.stringify({
-
-
-
             action: "add_plat",
-
-
-
-            site_code: targetSiteCode,
-
-
-
+            site_code: currentSite.code,
             no_plat: noPlat,
-
-
-
             nama_driver: namaDriver
-
-
-
           })
-
-
-
-        }).then(() => {
-
-          setTimeout(() => fetchLiveFromGoogleAppsScript().catch(() => {}), 1200);
-
         }).catch(err => console.warn('Background sync add_plat:', err));
 
-
-
-        if (isLocalFlaskServer()) {
-
-
-
+        if (typeof isLocalFlaskServer === 'function' && isLocalFlaskServer()) {
           try {
-
-
-
-            fetch('/api/plat-mobil', {
-
-
-
+            directFetch('/api/plat-mobil', {
               method: "POST",
-
-
-
               headers: { "Content-Type": "application/json" },
-
-
-
               body: JSON.stringify({
-
-
-
-                action: "add",
-
-
-
-                site_code: targetSiteCode,
-
-
-
+                site_code: currentSite.code,
                 no_plat: noPlat,
-
-
-
                 nama_driver: namaDriver
-
-
-
               })
-
-
-
             }).catch(() => {});
-
-
-
           } catch(e) {}
-
-
-
         }
-
-
-
       } catch(e) {}
 
-
-
       appState.selectedPlat = noPlat;
-
-
-
       closeModalInputPlat();
-
-
-
       showToast('Nopol Disimpan', `Nopol ${noPlat} (${namaDriver}) berhasil didaftarkan!`, 'success', 3500);
 
-
-
       // Pindahkan langsung ke audit mobil jika sedang di gedung
-
-
-
       if (appState.auditType !== 'mobil') {
-
-
-
         switchAuditType('mobil');
-
-
-
       } else {
-
-
-
         syncPlatDropdown();
-
-
-
         loadAuditPerSite();
-
-
-
       }
-
-
-
     }
 
-
-
     // ----------------- LOAD AUDIT PER SITE ----------------- //
+    // ----------------- FASILITAS PANTRY (DINAMIS PER SITE & SYNC GOOGLE SHEET) ----------------- //
+    function siteHasPantry(siteCode) {
+      if (!siteCode) return false;
+      const sCode = String(siteCode).toUpperCase().trim();
+      const site = (appState.sites || []).find(s => s && s.code && s.code.toUpperCase() === sCode);
+      if (site && typeof site.has_pantry !== 'undefined' && site.has_pantry !== null) {
+        return site.has_pantry === true || site.has_pantry === 1 || String(site.has_pantry).toUpperCase() === 'TRUE';
+      }
+      const local = localStorage.getItem('hods_site_pantry_' + sCode);
+      if (local !== null) {
+        return local === 'true' || local === '1';
+      }
+      return false;
+    }
 
+    function setSitePantry(siteCode, hasPantry, syncOnline = true) {
+      if (!siteCode) return;
+      const sCode = String(siteCode).toUpperCase().trim();
+      const boolVal = Boolean(hasPantry === true || hasPantry === 'true' || hasPantry === 1);
+      const site = (appState.sites || []).find(s => s && s.code && s.code.toUpperCase() === sCode);
+      if (site) {
+        site.has_pantry = boolVal;
+      }
+      try {
+        localStorage.setItem('hods_site_pantry_' + sCode, String(boolVal));
+      } catch (e) {}
 
-
-    async function loadAuditPerSite() {
-
-
-
-      const isAll = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
-
-
-
-      const realSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
-
-
-
-      
-
-
-
-      let currentSite = null;
-
-
-
-      if (!isAll) {
-
-
-
-        currentSite = appState.sites.find(s => s.id === appState.selectedSiteId || (s.code && s.code.toUpperCase() === String(appState.selectedSiteId).toUpperCase()));
-
-
-
-        if (!currentSite && realSites.length > 0) {
-
-
-
-          currentSite = realSites[0];
-
-
-
-          appState.selectedSiteId = currentSite.id;
-
-
-
-          dom.selectSite.value = currentSite.id;
-
-
-
+      if (syncOnline) {
+        // Sync ke Google Apps Script (Google Sheets)
+        if (typeof APPS_SCRIPT_URL !== 'undefined' && APPS_SCRIPT_URL) {
+          directFetch(APPS_SCRIPT_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({
+              action: "save_pantry",
+              site_code: sCode,
+              has_pantry: boolVal
+            })
+          }).then(res => res ? res.json() : null).then(res => {
+            console.log('Online pantry sync response:', res);
+          }).catch(err => {
+            console.warn('Gagal sinkronisasi pantry ke Google Sheet:', err);
+          });
         }
+        // Sync ke server lokal Flask jika sedang berjalan
+        if (typeof isLocalFlaskServer === 'function' && isLocalFlaskServer()) {
+          directFetch('/api/save-pantry', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              site_code: sCode,
+              has_pantry: boolVal
+            })
+          }).catch(() => {});
+        }
+      }
+    }
 
+    function getActiveGedungCategories(siteCode) {
+      const hasPantry = siteHasPantry(siteCode);
+      return (appState.categoriesGedung || []).filter(c => c.key !== 'pantry' || hasPantry);
+    }
 
+    function updatePantryCheckboxUI() {
+      const container = document.getElementById('kontrolPantryGedung');
+      const checkbox = document.getElementById('checkboxHasPantry');
+      if (!container || !checkbox) return;
 
+      const isGedung = (appState.auditType === 'gedung' && (!appState.currentAppView || appState.currentAppView === 'gedung'));
+      if (!isGedung) {
+        container.classList.add('hidden');
+        return;
+      }
+            const isAll = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
+      if (isAll) {
+        container.classList.add('hidden');
+        checkbox.checked = false;
+        checkbox.disabled = true;
+        return;
       }
 
+      container.classList.remove('hidden');
 
+      checkbox.disabled = false;
+      container.title = 'Centang jika site ini memiliki fasilitas Pantry.';
+      const currentSite = appState.sites.find(s => String(s.id) === String(appState.selectedSiteId) || (s.code && s.code.toUpperCase() === String(appState.selectedSiteId).toUpperCase())) || appState.sites[0];
+      if (currentSite) {
+        checkbox.checked = siteHasPantry(currentSite.code);
+      }
+    }
 
+    async function loadAuditPerSite() {
+      if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
+      const isAll = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
+      const realSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
+      
+      let currentSite = null;
+      if (!isAll) {
+        currentSite = appState.sites.find(s => s.id === appState.selectedSiteId || (s.code && s.code.toUpperCase() === String(appState.selectedSiteId).toUpperCase()));
+        if (!currentSite && realSites.length > 0) {
+          currentSite = realSites[0];
+          appState.selectedSiteId = currentSite.id;
+          dom.selectSite.value = currentSite.id;
+        }
+      }
       updateSitePicHeader();
 
-
-
       const weekInfo = appState.availableWeeks.find(w => w.week_key === appState.selectedWeekKey) || appState.currentWeek;
-
-
-
       appState.isLocked = weekInfo ? weekInfo.is_passed : false;
-
-
 
       const isMobilMode = (appState.activeAppView === 'mobil' || appState.auditType === 'mobil' || appState.activeAuditType === 'mobil');
 
-
-
       // Auto-Lock Banner Update (Konsisten: Form Mobil vs Form Gedung)
-
-
-
       const lockBanner = document.getElementById('lockNoticeBanner');
-
-
-
       const btnInputPlat = document.getElementById('btnOpenModalInputPlat');
-
-
-
       if (appState.isLocked) {
-
-
-
         if (lockBanner) {
-
-
-
           lockBanner.classList.remove('hidden');
-
-
-
           lockBanner.innerHTML = `
-
-
-
             <div class="flex items-center gap-2 font-semibold">
-
-
-
               <i data-lucide="lock" class="w-4 h-4 text-amber-600"></i>
-
-
-
               <span>${isMobilMode ? 'Form Mobil Terkunci:' : 'Form Gedung Terkunci:'} Periode ${weekInfo.week_title} (${weekInfo.date_range}) telah berakhir. Foto dan catatan bersifat read-only.</span>
-
-
-
             </div>
-
-
-
             <span class="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-[3px]">TERKUNCI</span>
-
-
-
           `;
-
-
-
         }
-
-
-
         if (btnInputPlat) {
-
-
-
           btnInputPlat.classList.add('opacity-50', 'pointer-events-none');
-
-
-
           btnInputPlat.title = 'Tidak dapat menambah nopol pada week yang telah berakhir';
-
-
-
         }
-
-
-
       } else {
-
-
-
         if (lockBanner) lockBanner.classList.add('hidden');
-
-
-
         if (btnInputPlat) {
-
-
-
           btnInputPlat.classList.remove('opacity-50', 'pointer-events-none');
-
-
-
           btnInputPlat.title = 'Daftarkan Nopol & Driver Baru';
-
-
-
         }
-
-
-
       }
-
-
 
       if (isAll) {
-
-
-
         if (dom.currentSiteTitle) dom.currentSiteTitle.textContent = 'ALL - SELURUH PDS';
-
-
-
         if (dom.currentWeekSubtitle) {
-
-
-
           dom.currentWeekSubtitle.textContent = isMobilMode 
-
-
-
-            ? `Foto armada mobil seluruh PDS - ${weekInfo ? weekInfo.label : ''}`
-
-
-
-            : `Foto fasilitas seluruh PDS - ${weekInfo ? weekInfo.label : ''}`;
-
-
-
+            ? `Foto 5 sudut armada mobil seluruh PDS - ${weekInfo ? weekInfo.label : ''}`
+            : `Foto 9 area kerja fasilitas seluruh PDS - ${weekInfo ? weekInfo.label : ''}`;
         }
 
-
-
         const bannerMobil = document.getElementById('bannerInfoMobil');
-
-
-
         if (bannerMobil) bannerMobil.classList.add('hidden');
-
-
-
         const kontrolMobil = document.getElementById('kontrolKhususMobil');
-
-
-
         if (kontrolMobil) kontrolMobil.classList.add('hidden');
 
-
-
         renderAllSitesPhotoCards(realSites, isMobilMode);
-
-
-
         return;
-
-
-
       }
-
-
 
       if (!currentSite) return;
 
-
-
       if (dom.currentSiteTitle) dom.currentSiteTitle.textContent = `${currentSite.code} · ${currentSite.name}`;
-
-
-
       if (dom.currentWeekSubtitle) {
-
-
-
         dom.currentWeekSubtitle.textContent = isMobilMode 
-
-
-
-          ? `Foto armada mobil - ${weekInfo.label}`
-
-
-
-          : `Foto fasilitas - ${weekInfo.label}`;
-
-
-
+          ? `Foto 5 sudut armada mobil - ${weekInfo.label}`
+          : `Foto 9 area kerja fasilitas - ${weekInfo.label}`;
       }
-
-
 
       const bannerMobil = document.getElementById('bannerInfoMobil');
       const kontrolMobil = document.getElementById('kontrolKhususMobil');
@@ -19583,3327 +19172,1017 @@
         if (kontrolMobil) kontrolMobil.classList.add('hidden');
       }
 
-
-
       // Filter photos for this site & week
-
-
-
       let boxes = [];
 
-
-
       if (isMobilMode) {
-
-
-
         // ----------------- MODE AUDIT MOBIL (5 SUDUT FOTO PER PLAT KENDARAAN) ----------------- //
-
-
-
         let currentPlats = appState.registeredPlats.filter(p => p.site_code.toUpperCase() === currentSite.code.toUpperCase());
 
-
-
         // Hapus auto-generate default dummy plat!
-
-
-
         // Jika belum ada plat resmi dari Google Sheet atau input user, JANGAN MUNCULKAN KOTAK FOTO, TAMPILKAN BANNER INFO WAJIB ISI DULU!
-
-
-
         if (currentPlats.length === 0) {
-
-
-
           appState.selectedPlat = '';
-
-
-
           if (dom.selectPlatMobil) {
-
-
-
             dom.selectPlatMobil.innerHTML = `<option value="">-- Belum Ada Nopol Terdaftar --</option>`;
-
-
-
             dom.selectPlatMobil.disabled = true;
-
-
-
           }
-
-
-
           if (dom.displayNoPlat) dom.displayNoPlat.textContent = 'Belum Ada Nopol Terdaftar';
-
-
-
           if (dom.displayNamaDriver) dom.displayNamaDriver.textContent = 'Silakan klik tombol [+ Input Daftar NOPOL]';
-
-
-
           if (dom.sitePhotoCounter) dom.sitePhotoCounter.textContent = '0 dari 0 foto';
 
-
-
           appState.currentBoxes = [];
-
-
-
           dom.cardsGrid.innerHTML = `
-
-
-
             <div class="col-span-full py-12 px-6 bg-white border-2 border-dashed border-amber-300 rounded-[5px] text-center my-3 shadow-xs">
-
-
-
               <div class="w-14 h-14 mx-auto rounded-full bg-amber-100 flex items-center justify-center text-amber-600 mb-3 shadow-xs">
-
-
-
                 <i data-lucide="alert-triangle" class="w-7 h-7"></i>
-
-
-
               </div>
-
-
-
               <h3 class="text-base font-bold text-slate-900 mb-1.5">Belum Ada Nopol Terdaftar untuk Site ${currentSite.code}</h3>
-
-
-
               <p class="text-xs text-slate-600 max-w-lg mx-auto mb-5 leading-relaxed">
-
-
-
                 Site ini belum memiliki armada mobil atau sopir yang terdaftar. Kotak foto tidak dapat ditampilkan sebelum data nopol dan nama sopir diisi. Silakan daftarkan terlebih dahulu.
-
-
-
               </p>
-
-
-
               <button type="button" onclick="openModalInputPlat()" class="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[5px] inline-flex items-center gap-2 shadow transition cursor-pointer">
-
-
-
                 <i data-lucide="plus-circle" class="w-4 h-4"></i>
-
-
-
                 <span>+ Daftarkan Nopol & Driver Sekarang</span>
-
-
-
               </button>
-
-
-
             </div>
-
-
-
           `;
-
-
-
           if (window.lucide) lucide.createIcons();
-
-
-
           return;
-
-
-
         }
-
-
 
         if (dom.selectPlatMobil) dom.selectPlatMobil.disabled = false;
 
-
-
         if (!appState.selectedPlat || !currentPlats.some(p => p.no_plat === appState.selectedPlat)) {
-
-
-
           appState.selectedPlat = currentPlats[0].no_plat;
-
-
-
         }
-
-
 
         if (dom.selectPlatMobil) {
-
-
-
           dom.selectPlatMobil.innerHTML = currentPlats.map(p => 
-
-
-
             `<option value="${p.no_plat}" ${p.no_plat === appState.selectedPlat ? 'selected' : ''}>${p.no_plat} - ${p.nama_driver}</option>`
-
-
-
           ).join('');
-
-
-
           dom.selectPlatMobil.value = appState.selectedPlat;
-
-
-
         }
 
-
-
         const activePlatObj = currentPlats.find(p => p.no_plat === appState.selectedPlat) || currentPlats[0];
-
-
-
         if (dom.displayNoPlat) dom.displayNoPlat.textContent = activePlatObj.no_plat;
-
-
-
         if (dom.displayNamaDriver) dom.displayNamaDriver.textContent = activePlatObj.nama_driver;
-
-
 
         const cleanPlat = activePlatObj.no_plat.replace(/[^a-zA-Z0-9]/g, '');
 
-
-
         boxes = appState.categoriesMobil.map(cat => {
-
-
-
           const expectedKey = 'mobil_' + cleanPlat + '_' + cat.key;
 
-
-
           // Cari foto yang cocok secara spesifik dengan plat/driver ini
-
-
-
           let found = appState.drivePhotos.find(p => {
-
-
-
             if (p.site_code !== currentSite.code || p.week_key !== appState.selectedWeekKey) return false;
-
-
-
             if (!matchPhotoToCategory(p, cat, true)) return false;
 
-
-
             // 1. Jika objek foto memiliki no_plat / plat eksplisit
-
-
-
             const photoPlat = (p.no_plat || p.plat || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-
-
-
             if (photoPlat && photoPlat === cleanPlat.toUpperCase()) {
-
-
-
               return true;
-
-
-
             }
-
-
 
             // 2. Jika category_key mengandung cleanPlat (misal: mobil_TSM01_tampak_belakang)
-
-
-
             const pKey = (p.category_key || '').toUpperCase();
-
-
-
             if (pKey.includes(cleanPlat.toUpperCase())) {
-
-
-
               return true;
-
-
-
             }
-
-
 
             // 3. Fallback jika hanya ada 1 plat terdaftar di site ini (foto lama tanpa label plat)
-
-
-
             if (currentPlats.length === 1) {
-
-
-
               return true;
-
-
-
             }
-
-
 
             return false;
-
-
-
           });
 
-
-
           let rawLink = found ? (found.link_gambar || found.thumbnail_url || found.file_url) : null;
-
-
-
           let fileId = found ? found.file_id : null;
-
-
-
           let linkGambar = convertToDirectImageLink(rawLink, fileId);
-
-
-
           const hasPhoto = Boolean(found && linkGambar && linkGambar.trim() !== '');
 
-
-
           return {
-
-
-
             key: expectedKey,
-
-
-
             base_key: cat.key,
-
-
-
             site_code: currentSite.code,
-
-
-
             site_name: currentSite.name,
-
-
-
             week_key: appState.selectedWeekKey,
-
-
-
             name: cat.name,
-
-
-
             desc: cat.desc,
-
-
-
             plat: activePlatObj.no_plat,
-
-
-
             driver: activePlatObj.nama_driver,
-
-
-
             has_photo: hasPhoto,
-
-
-
             file_id: fileId,
-
-
-
             drive_url: found ? (found.drive_url || null) : null,
-
-
-
             link_gambar: hasPhoto ? linkGambar : null,
-
-
-
             file_url: hasPhoto ? linkGambar : null,
-
-
-
             catatan: (found && found.catatan && found.catatan !== '-') ? found.catatan : "",
-
-
-
             upload_time: (found && found.timestamp) ? found.timestamp : null,
-
-
-
             file_size: found ? (found.file_size || 0) : 0
-
-
-
           };
-
-
-
         });
 
-
-
         appState.currentBoxes = boxes;
-
-
-
         const uploadedCount = boxes.filter(b => b.has_photo).length;
-
-
-
         dom.sitePhotoCounter.textContent = `${uploadedCount} dari 5 foto`;
 
-
-
       } else {
-
-
-
         // ----------------- MODE AUDIT GEDUNG (9 AREA FASILITAS KERJA) ----------------- //
-
-
-
         const sitePhotos = appState.drivePhotos.filter(p => 
-
-
-
           p.site_code === currentSite.code && 
-
-
-
           p.week_key === appState.selectedWeekKey &&
-
-
-
           !p.category_key.startsWith('mobil_') &&
-
-
-
           p.category_key !== 'audit_mobil'
-
-
-
         );
 
+        const hasPantry = siteHasPantry(currentSite.code);
+        const activeCats = (appState.categoriesGedung || []).filter(c => c.key !== 'pantry' || hasPantry);
+        const totalExpected = activeCats.length;
 
-
-        boxes = appState.categoriesGedung.map(cat => {
-
-
-
+        boxes = activeCats.map(cat => {
           const found = sitePhotos.find(p => p.category_key === cat.key);
-
-
-
           
-
-
-
           let rawLink = found ? (found.link_gambar || found.thumbnail_url || found.file_url) : null;
-
-
-
           let fileId = found ? found.file_id : null;
-
-
-
           let linkGambar = convertToDirectImageLink(rawLink, fileId);
-
-
-
           const hasPhoto = Boolean(found && linkGambar && linkGambar.trim() !== '');
 
-
-
           return {
-
-
-
             key: cat.key,
-
-
-
             base_key: cat.key,
-
-
-
             site_code: currentSite.code,
-
-
-
             site_name: currentSite.name,
-
-
-
             week_key: appState.selectedWeekKey,
-
-
-
             name: cat.name,
-
-
-
             desc: cat.desc,
-
-
-
             has_photo: hasPhoto,
-
-
-
             file_id: fileId,
-
-
-
             drive_url: found ? (found.drive_url || null) : null,
-
-
-
             link_gambar: hasPhoto ? linkGambar : null,
-
-
-
             file_url: hasPhoto ? linkGambar : null,
-
-
-
             catatan: (found && found.catatan && found.catatan !== '-') ? found.catatan : "",
-
-
-
             upload_time: (found && found.timestamp) ? found.timestamp : null,
-
-
-
             file_size: found ? (found.file_size || 0) : 0
-
-
-
           };
-
-
-
         });
 
-
-
         appState.currentBoxes = boxes;
-
-
-
         const uploadedCount = boxes.filter(b => b.has_photo).length;
-
-
-
-        dom.sitePhotoCounter.textContent = `${uploadedCount} dari 9 foto`;
-
-
-
+        dom.sitePhotoCounter.textContent = `${uploadedCount} dari ${totalExpected} foto`;
       }
-
-
 
       appState.currentBoxes = boxes;
-
-
-
       renderPhotoCards(boxes, currentSite);
-
-
-
     }
-
-
 
         // ----------------- HAPUS FOTO (BERSIH, HANDAL DENGAN RESOLUSI SITE KUAT) ----------------- //
-
-
-
     async function handleDeleteBoxPhoto(key, siteCode) {
-
-
-
       // 1. Dapatkan site aktif secara presisi
-
-
-
       let currentSite = null;
-
-
-
       if (siteCode) {
-
-
-
         currentSite = appState.sites.find(s => s.code.toUpperCase() === siteCode.toUpperCase());
-
-
-
       }
-
-
-
       if (!currentSite) {
-
-
-
         const activeVal = (dom.selectSite && dom.selectSite.value) ? dom.selectSite.value : appState.selectedSiteId;
-
-
-
         currentSite = appState.sites.find(s => String(s.id) === String(activeVal) || (s.code && s.code.toUpperCase() === String(activeVal).toUpperCase()));
-
-
-
       }
-
-
-
       if (!currentSite || currentSite.code === 'ALL') {
-
-
-
         currentSite = appState.sites.find(s => s.code !== 'ALL') || appState.sites[0];
-
-
-
       }
-
-
-
       if (!currentSite) {
-
-
-
         showToast('Peringatan', 'Silakan pilih site terlebih dahulu.', 'warning');
-
-
-
         return;
-
-
-
       }
 
+      const isMobil = (appState.auditType === 'mobil' || (key && key.startsWith('mobil_')));
+      const catList = isMobil ? appState.categoriesMobil : appState.categoriesGedung;
+      
+      // Temukan target box saat ini di memori tampilan
+      const targetBox = (appState.currentBoxes || []).find(b => b.key === key) ||
+                        (appState.currentBoxes || []).find(b => b.base_key === key) ||
+                        (appState.currentBoxes || []).find(b => key.endsWith('_' + b.base_key));
 
-
-      const isMobil = (appState.activeAuditType === 'mobil' || appState.activeAppView === 'mobil' || appState.auditType === 'mobil' || key.startsWith('mobil_'));
-
-
-
-      const catDef = (appState.categoriesGedung && appState.categoriesGedung.find(c => c.key === key)) ||
-
-                     (appState.categoriesMobil && appState.categoriesMobil.find(c => c.key === key || key.endsWith(c.key))) ||
-
-                     (appState.categories && appState.categories.find(c => c.key === key));
-
-
-
-      const catName = catDef ? catDef.name : key;
-
-
+      const catDef = (catList && catList.find(c => c.key === key || key.endsWith('_' + c.key))) ||
+                     (targetBox ? { name: targetBox.name, key: targetBox.base_key || targetBox.key } : null);
+      const catName = catDef ? catDef.name : (targetBox ? targetBox.name : key);
 
       showConfirm(
-
-
-
         'Hapus Foto',
-
-
-
         `Apakah Anda yakin ingin menghapus foto "${catName}" untuk site ${currentSite.code}?`,
-
-
-
         '<div class="text-xs text-rose-600 bg-rose-50 p-2.5 rounded-[5px] border border-rose-200 font-medium">Foto akan segera dihapus dari galeri dan tampilan akan diperbarui. Tindakan ini tidak dapat dibatalkan.</div>',
-
-
-
         () => {
+          // 1. Identifikasi kunci, site, week, dan file_id secara menyeluruh (case-insensitive & toleran tipe)
+          const targetSiteCode = String(currentSite.code || '').toUpperCase().trim();
+          const targetWeek = String(appState.selectedWeekKey || '').toUpperCase().trim();
+          const targetKey = String(key || '').toLowerCase().trim();
+          const baseKey = (targetBox && targetBox.base_key) 
+            ? String(targetBox.base_key).toLowerCase().trim() 
+            : targetKey.replace(/^mobil_[^_]+_/, '');
+          const targetFileId = (targetBox && targetBox.file_id) ? String(targetBox.file_id).trim() : null;
 
+          const deletedFileIds = new Set();
+          if (targetFileId) deletedFileIds.add(targetFileId);
 
+          // 2. Reset langsung box aktif di currentBoxes agar UI seketika 0 ms kembali ke kotak kosong
+          if (targetBox) {
+            targetBox.has_photo = false;
+            targetBox.file_url = null;
+            targetBox.link_gambar = null;
+            targetBox.file_id = null;
+            targetBox.drive_url = null;
+            targetBox.upload_time = null;
+            targetBox.file_size = 0;
+          }
 
-          // 1. Bersihkan foto dari drivePhotos di appState secara presisi
+          // 3. Bersihkan foto dari appState.drivePhotos secara komprehensif
+          appState.drivePhotos = (appState.drivePhotos || []).filter(p => {
+            if (!p) return false;
 
-          let deletedFileIds = [];
-
-          appState.drivePhotos = appState.drivePhotos.filter(p => {
-
-
-
-            const matchSite = (p.site_code === currentSite.code);
-
-
-
-            const matchWeek = (p.week_key === appState.selectedWeekKey);
-
-
-
-            const matchCat = (p.category_key === key) ||
-
-                             (p.category_key && key && (p.category_key.endsWith('_' + key) || key.endsWith('_' + p.category_key)));
-
-
-
-            if (matchSite && matchWeek && matchCat) {
-
-              if (p.file_id) deletedFileIds.push(p.file_id);
-
-              return false;
-
+            // Jika file_id sama persis dengan file_id target
+            if (targetFileId && p.file_id && String(p.file_id).trim() === targetFileId) {
+              if (p.file_id) deletedFileIds.add(String(p.file_id).trim());
+              return false; // Hapus!
             }
 
+            const pSite = String(p.site_code || '').toUpperCase().trim();
+            const pWeek = String(p.week_key || '').toUpperCase().trim();
+            const cleanTargetWeek = targetWeek.replace(/[^0-9]/g, '');
+            const cleanPWeek = pWeek.replace(/[^0-9]/g, '');
 
+            const isMatchSite = (pSite === targetSiteCode);
+            const isMatchWeek = (pWeek === targetWeek) || (cleanTargetWeek && cleanPWeek && cleanTargetWeek === cleanPWeek);
+
+            if (!isMatchSite || !isMatchWeek) {
+              return true; // Jangan hapus foto dari site / minggu lain
+            }
+
+            // Normalisasi kategori
+            const pCat = String(p.category_key || '').toLowerCase().trim();
+            const pBaseCat = pCat.replace(/^mobil_[^_]+_/, '');
+
+            let isMatchCat = false;
+            if (pCat === targetKey || pCat === baseKey || pBaseCat === baseKey || pBaseCat === targetKey) {
+              isMatchCat = true;
+            } else if (p.category_name && catName && p.category_name.toLowerCase().trim() === catName.toLowerCase().trim()) {
+              isMatchCat = true;
+            } else if (isMobil && targetBox && targetBox.plat && p.no_plat) {
+              const pPlat = String(p.no_plat).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+              const tPlat = String(targetBox.plat).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+              if (pPlat === tPlat && (pBaseCat === baseKey || pCat.includes(baseKey))) {
+                isMatchCat = true;
+              }
+            }
+
+            if (isMatchCat) {
+              if (p.file_id) deletedFileIds.add(String(p.file_id).trim());
+              return false; // Hapus!
+            }
 
             return true;
-
-
-
           });
 
-
-
-          // 2. Pasang Deletion Tombstone Lock (Proteksi 5 Menit agar sync tidak memunculkan kembali foto lama)
-
-          const delLockKey = `${currentSite.code}_${appState.selectedWeekKey}_${key}`;
+          // 4. Pasang Tombstone Deletion Lock (5 menit) agar auto-sync 15s tidak membangkitkan foto sebelum Google Sheet tuntas
+          const lockKeys = [
+            `${currentSite.code}_${appState.selectedWeekKey}_${key}`,
+            `${currentSite.code}_${appState.selectedWeekKey}_${baseKey}`,
+            `${targetSiteCode}_${targetWeek}_${targetKey}`,
+            `${targetSiteCode}_${targetWeek}_${baseKey}`
+          ];
+          if (targetFileId) lockKeys.push(`file_${targetFileId}`);
 
           appState.pendingDeleteLocks = appState.pendingDeleteLocks || {};
-
-          appState.pendingDeleteLocks[delLockKey] = Date.now() + 300000;
-
+          const lockExpiry = Date.now() + 300000;
+          lockKeys.forEach(k => {
+            appState.pendingDeleteLocks[k] = lockExpiry;
+          });
           try {
-
             localStorage.setItem('hods_pending_deletes', JSON.stringify(appState.pendingDeleteLocks));
-
           } catch (e) {}
 
-
-
-          // Batalkan juga lock upload jika sebelumnya ada
-
-          if (appState.recentUploadLocks && appState.recentUploadLocks[delLockKey]) {
-
-            delete appState.recentUploadLocks[delLockKey];
-
+          // Bersihkan juga upload lock jika sebelumnya baru saja diunggah
+          if (appState.recentUploadLocks) {
+            lockKeys.forEach(k => {
+              delete appState.recentUploadLocks[k];
+            });
           }
 
-
-
-          // Hapus seluruh cache lokal foto ini
-
+          // 5. Sapu bersih seluruh cache foto lokal di browser (localStorage)
           try {
-
-
-
             localStorage.removeItem(`local_photo_${key}`);
-
-
-
+            localStorage.removeItem(`local_photo_${baseKey}`);
             localStorage.removeItem(`local_time_${key}`);
-
-
-
-            const scopedKey = `local_photo_${currentSite.code}_${appState.selectedWeekKey}_${key}`;
-
-            localStorage.removeItem(scopedKey);
-
-
+            localStorage.removeItem(`local_time_${baseKey}`);
+            
+            localStorage.removeItem(`local_photo_${currentSite.code}_${appState.selectedWeekKey}_${key}`);
+            localStorage.removeItem(`local_photo_${currentSite.code}_${appState.selectedWeekKey}_${baseKey}`);
+            localStorage.removeItem(`local_photo_${targetSiteCode}_${targetWeek}_${key}`);
+            localStorage.removeItem(`local_photo_${targetSiteCode}_${targetWeek}_${baseKey}`);
+            
+            localStorage.removeItem(`cached_drive_photos_${currentSite.code}_${appState.selectedWeekKey}`);
+            localStorage.removeItem(`cached_drive_photos_${targetSiteCode}_${targetWeek}`);
 
             deletedFileIds.forEach(fid => {
-
-              localStorage.removeItem(`local_drive_b64_${fid}`);
-
+              if (fid) localStorage.removeItem(`local_drive_b64_${fid}`);
             });
 
-
-
-            const cacheKey = `cached_drive_photos_${currentSite.code}_${appState.selectedWeekKey}`;
-
-
-
-            localStorage.removeItem(cacheKey);
-
-
-
+            for (let i = localStorage.length - 1; i >= 0; i--) {
+              const lk = localStorage.key(i);
+              if (lk && (lk.includes(key) || lk.includes(baseKey) || (targetFileId && lk.includes(targetFileId)))) {
+                if (lk.startsWith('local_photo_') || lk.startsWith('local_time_') || lk.startsWith('local_drive_b64_')) {
+                  localStorage.removeItem(lk);
+                }
+              }
+            }
           } catch (e) {}
 
-
-
+          // 6. Simpan perubahan ke storage lokal
           saveLocalCache();
 
-
-
-          // 3. Render ulang galeri dan rekap seketika (foto langsung lenyap 0 ms)
-
-
-
+          // 7. Render ulang galeri dan rekapitulasi seketika (foto langsung lenyap 0 ms dari tampilan)
           loadAuditPerSite();
-
-
-
           renderRekapTable();
-
-
-
           renderPdsBelumKirimWithChart();
-
-
-
           showToast('Foto Dihapus', `Foto ${catName} telah dihapus.`, 'info');
 
-
-
-          // 4. Kirim aksi hapus ke Apps Script di latar belakang
-
-
-
+          // 8. Kirim aksi hapus ke Google Apps Script via Antrian Handal (appSyncQueue)
           if (APPS_SCRIPT_URL) {
-
-
-
             try {
-
-
-
-              directFetch(APPS_SCRIPT_URL, {
-
-
-
-                method: "POST",
-
-
-
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
-
-
-
-                body: JSON.stringify({
-
-
-
-                  action: "delete",
-
-
-
-                  site_code: currentSite.code,
-
-
-
-                  week_key: appState.selectedWeekKey,
-
-
-
-                  category_key: key
-
-
-
-                })
-
-
-
-              }).then(res => res.json()).then(result => {
-
-                if (result && result.success) {
-
-                  console.log('Penghapusan foto terkonfirmasi oleh Google Sheet:', key);
-
-                }
-
-              }).catch(e => console.warn('Background delete log:', e));
-
-
-
+              if (typeof appSyncQueue !== 'undefined') {
+                appSyncQueue.enqueue({
+                  type: 'delete_photo',
+                  description: `Hapus foto ${catName} (${currentSite.code})`,
+                  execute: async () => {
+                    const res = await directFetch(APPS_SCRIPT_URL, {
+                      method: "POST",
+                      headers: { "Content-Type": "text/plain;charset=utf-8" },
+                      body: JSON.stringify({
+                        action: "delete",
+                        site_code: currentSite.code,
+                        week_key: appState.selectedWeekKey,
+                        category_key: key,
+                        base_key: baseKey,
+                        file_id: targetFileId || ''
+                      })
+                    });
+                    if (!res) throw new Error("Jaringan offline");
+                    if (!res.ok && res.status !== 200) throw new Error(`HTTP ${res.status}`);
+                    const result = await res.json();
+                    if (!result || !result.success) throw new Error(result?.message || 'Gagal hapus foto di sheet');
+                    console.log('Penghapusan foto terkonfirmasi oleh Google Sheet:', key);
+                    return true;
+                  }
+                });
+              }
             } catch (e) {}
-
-
-
           }
 
-
-
+          // 9. Sinkronkan juga ke local backend jika tersedia
+          if (typeof isLocalFlaskServer === 'function' && isLocalFlaskServer()) {
+            try {
+              directFetch('/api/delete-photo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  site_id: currentSite.id,
+                  week_key: appState.selectedWeekKey,
+                  category_key: key
+                })
+              }).catch(() => {});
+            } catch (e) {}
+          }
         }
-
-
-
       );
-
-
-
     }
-
-
 
     // ----------------- RENDER 10 PHOTO CARDS (DENGAN MENU DOWNLOAD FOTO DARI DATABASE) ----------------- //
-
-
-
         
 
-
-
     // ----------------- RENDER 10 PHOTO CARDS (BERSIH & ANTI-SYNTAX-ERROR) ----------------- //
-
-
-
     function handleCardClick(key, siteCode) {
-
-
-
       let box;
-
-
-
       if (siteCode) {
-
-
-
         box = appState.currentBoxes.find(b => b.key === key && b.site_code === siteCode);
-
-
-
       }
-
-
-
       if (!box) {
-
-
-
         box = appState.currentBoxes.find(b => b.key === key);
-
-
-
       }
-
-
-
       if (!box || !box.has_photo || !box.file_url) return;
-
-
-
       const safeCatatan = box.catatan || '';
-
-
-
       const driveUrl = box.drive_url || (box.file_id ? ('https://drive.google.com/file/d/' + box.file_id + '/view') : '#');
-
-
-
       const isAll = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
-
-
-
       const titlePrefix = (isAll && box.site_code) ? `[${box.site_code}] ` : '';
-
-
-
       openLightbox(box.file_url, titlePrefix + (box.name || 'Foto'), safeCatatan, box.upload_time || '', driveUrl);
-
-
-
     }
-
-
 
     function handleDownloadBoxPhoto(key, siteCode) {
-
-
-
       let box;
-
-
-
       if (siteCode) {
-
-
-
         box = appState.currentBoxes.find(b => b.key === key && b.site_code === siteCode);
-
-
-
       }
-
-
-
       if (!box) {
-
-
-
         box = appState.currentBoxes.find(b => b.key === key);
-
-
-
       }
-
-
-
       if (!box) return;
-
-
-
       let currentSite = siteCode ? appState.sites.find(s => s.code === siteCode) : appState.sites.find(s => s.id === appState.selectedSiteId);
-
-
-
       const effectiveCode = (box && box.site_code) ? box.site_code : (currentSite ? currentSite.code : 'SITE');
-
-
-
       const fileName = 'Foto_' + effectiveCode + '_' + box.key + '_' + appState.selectedWeekKey + '.jpg';
-
-
-
       downloadSinglePhotoFromDrive(box.file_id, box.file_url, fileName);
-
-
-
     }
 
-
-
         // ----------------- IMAGE LOADER & PERSISTENT LOCAL CACHE ----------------- //
-
-
-
         // ----------------- KONSEP LINK GAMBAR: KONVERSI KE DIRECT IMAGE URL ----------------- //
-
-
-
     function convertToDirectImageLink(rawUrl, fileId) {
-
-
-
       if (!rawUrl && !fileId) return null;
-
-
-
       let url = String(rawUrl || '').trim();
-
-
-
       let id = String(fileId || '').trim();
-
-
 
       if (url.startsWith('data:')) return url; // Base64 data URL lokal
 
-
-
       // Ekstrak ID dari tautan Google Drive jika ada
-
-
-
       const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/) || url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-
-
-
       if (match && match[1]) {
-
-
-
         id = match[1];
-
-
-
       }
-
-
 
       // Gunakan CDN langsung Google lh3 tanpa redirect 302 agar bebas CORS di origin null (file://)
-
-
-
       if (id) {
-
-
-
-        try {
-
-
-
-          const cachedB64 = localStorage.getItem('local_drive_b64_' + id);
-
-
-
-          if (cachedB64 && cachedB64.startsWith('data:image')) {
-
-
-
-            return cachedB64;
-
-
-
-          }
-
-
-
-        } catch (e) {}
-
-
-
         return `https://lh3.googleusercontent.com/d/${id}`;
-
-
-
       }
-
-
 
       return url || null;
-
-
-
     }
-
-
 
     function handlePhotoLoaded(categoryKey, imgElement) {
-
-
-
       const loader = document.getElementById(`loader_img_${categoryKey}`);
-
-
-
       if (loader) loader.remove();
-
-
-
       imgElement.classList.remove('opacity-0');
-
-
-
     }
 
-
-
-    async function handlePhotoError(categoryKey, imgElement, fileId) {
-
+    function handlePhotoError(categoryKey, imgElement, fileId) {
       const loader = document.getElementById(`loader_img_${categoryKey}`);
-
-      if (fileId && !imgElement.dataset.b64Fallback) {
-
-        imgElement.dataset.b64Fallback = 'true';
-
-
-
-        // 1. Cek cache localStorage terlebih dahulu (0 ms)
-
-        try {
-
-          const cachedB64 = localStorage.getItem('local_drive_b64_' + fileId);
-
-          if (cachedB64 && cachedB64.startsWith('data:image')) {
-
-            imgElement.src = cachedB64;
-
-            imgElement.classList.remove('opacity-0');
-
-            if (loader) loader.remove();
-
-            return;
-
-          }
-
-        } catch (e) {}
-
-
-
-        // 2. Ambil Base64 langsung dari Google Apps Script Web App (Bypass total proxy internal 502 Bad Gateway)
-
-        if (typeof APPS_SCRIPT_URL !== 'undefined' && APPS_SCRIPT_URL) {
-
-          try {
-
-            const targetUrl = `${APPS_SCRIPT_URL}?action=getBase64&fileId=${encodeURIComponent(fileId)}`;
-
-            const res = await directFetch(targetUrl);
-
-            if (res && res.ok) {
-
-              const data = await res.json();
-
-              if (data && data.success && data.base64) {
-
-                try { localStorage.setItem('local_drive_b64_' + fileId, data.base64); } catch (e) {}
-
-                imgElement.src = data.base64;
-
-                imgElement.classList.remove('opacity-0');
-
-                if (loader) loader.remove();
-
-                return;
-
-              }
-
-            }
-
-          } catch (err) {}
-
-        }
-
+      if (fileId && !imgElement.dataset.retried) {
+        imgElement.dataset.retried = 'true';
+        imgElement.src = `https://lh3.googleusercontent.com/d/${fileId}`;
+        return;
       }
-
       if (loader) loader.remove();
-
       imgElement.classList.remove('opacity-0');
-
     }
-
-
 
     
-
-
-
     // ----------------- RATING 5 BINTANG KHUSUS ADMIN & READ-ONLY UNTUK PDS ----------------- //
-
-
-
     function getBoxRating(siteCode, weekKey, categoryKey) {
-
-
-
       const sCode = (siteCode || (appState.currentSite ? appState.currentSite.code : '') || '').toUpperCase();
-
-
-
       const wKey = weekKey || appState.selectedWeekKey;
-
-
-
-      const cKey = (categoryKey || '').toLowerCase();
-
-
-
       
-
-
-
       // 1. Cek dari data Google Sheet / appState.drivePhotos
-
-
-
       if (appState.drivePhotos && Array.isArray(appState.drivePhotos)) {
-
-
-
-        const matchingPhotos = appState.drivePhotos.filter(p => {
-
-
-
-          if (!p.site_code || p.site_code.toUpperCase() !== sCode) return false;
-
-
-
-          if (p.week_key !== wKey) return false;
-
-
-
-          
-
-
-
-          const pKey = (p.category_key || '').toLowerCase();
-
-
-
-          const bKey = (p.base_key || '').toLowerCase();
-
-
-
-          
-
-
-
-          if (pKey === cKey || bKey === cKey) return true;
-
-
-
-          if (pKey === ('mobil_' + cKey) || pKey.endsWith('_' + cKey)) return true;
-
-
-
-          
-
-
-
-          // Pencocokan sudut armada mobil
-
-
-
-          if (cKey === 'tampak_depan' && (pKey.includes('depan') || pKey.includes('tampak_depan'))) return true;
-
-
-
-          if (cKey === 'tampak_belakang' && (pKey.includes('belakang') || pKey.includes('tampak_belakang'))) return true;
-
-
-
-          if (cKey === 'tampak_samping_kanan' && (pKey.includes('kanan') || pKey.includes('samping_kanan'))) return true;
-
-
-
-          if (cKey === 'tampak_samping_kiri' && (pKey.includes('kiri') || pKey.includes('samping_kiri'))) return true;
-
-
-
-          if (cKey === 'tampak_dalam' && (pKey.includes('dalam') || pKey.includes('interior') || pKey.includes('tampak_dalam'))) return true;
-
-
-
-          
-
-
-
-          return false;
-
-
-
-        });
-
-
-
-        const ratedPhotos = matchingPhotos.filter(p => typeof p.rating !== 'undefined' && p.rating !== null && Number(p.rating) > 0);
-
-
-
-        if (ratedPhotos.length > 0) {
-
-
-
-          const sum = ratedPhotos.reduce((acc, p) => acc + Number(p.rating), 0);
-
-
-
-          return Math.round(sum / ratedPhotos.length);
-
-
-
+        const found = appState.drivePhotos.find(p => 
+          p.site_code && p.site_code.toUpperCase() === sCode &&
+          p.week_key === wKey &&
+          (p.category_key === categoryKey || (p.base_key && p.base_key === categoryKey))
+        );
+        if (found && typeof found.rating !== 'undefined' && found.rating !== null && found.rating > 0) {
+          return parseInt(found.rating);
         }
-
-
-
       }
-
-
 
       // 2. Cek dari localStorage (sinkronisasi seketika)
-
-
-
-      // 2a. Cek key eksak: rating_SITE_WEEK_CATEGORY
-
-
-
-      const exactKey = `rating_${sCode}_${wKey}_${categoryKey}`;
-
-
-
-      const exactVal = localStorage.getItem(exactKey);
-
-
-
-      if (exactVal) {
-
-
-
-        const parsed = parseInt(exactVal);
-
-
-
+      const cacheKey = `rating_${sCode}_${wKey}_${categoryKey}`;
+      const localVal = localStorage.getItem(cacheKey);
+      if (localVal) {
+        const parsed = parseInt(localVal);
         if (!isNaN(parsed) && parsed > 0) return parsed;
-
-
-
       }
-
-
-
-      // 2b. Cek key mobil berlabel plat (misal: rating_BDG_2026-W45_mobil_B1234XYZ_tampak_depan)
-
-
-
-      const prefix = `rating_${sCode}_${wKey}_`;
-
-
-
-      const matchingLocalRatings = [];
-
-
-
-      try {
-
-
-
-        for (let k = 0; k < localStorage.length; k++) {
-
-
-
-          const key = localStorage.key(k);
-
-
-
-          if (key && key.startsWith(prefix)) {
-
-
-
-            const rest = key.substring(prefix.length).toLowerCase();
-
-
-
-            if (rest === cKey || rest.endsWith('_' + cKey) || rest.includes(cKey)) {
-
-
-
-              const val = parseInt(localStorage.getItem(key));
-
-
-
-              if (!isNaN(val) && val > 0) {
-
-
-
-                matchingLocalRatings.push(val);
-
-
-
-              }
-
-
-
-            }
-
-
-
-          }
-
-
-
-        }
-
-
-
-      } catch (e) {}
-
-
-
-      if (matchingLocalRatings.length > 0) {
-
-
-
-        const sum = matchingLocalRatings.reduce((a, b) => a + b, 0);
-
-
-
-        return Math.round(sum / matchingLocalRatings.length);
-
-
-
-      }
-
-
 
       return 0;
-
-
-
     }
 
-
-
-    function renderStarRatingHtml(boxUid, categoryKey, siteCode, rating, isAdmin, hasPhoto) {
-
-
+    function renderStarRatingHtml(boxUid, categoryKey, siteCode, rating, isAdmin, hasPhoto = false) {
+      // Jika belum ada foto, sembunyikan bintang penilaian (baik Admin maupun PDS tidak bisa menilai)
+      if (!hasPhoto) {
+        return '';
+      }
 
       const currentRating = parseInt(rating) || 0;
-
-
-
       
-
-
-
-      // Bintang hanya muncul apabila gambar sudah ada (jika belum ada foto, sembunyikan bintang)
-
-
-
-      if (!hasPhoto) {
-
-
-
+      // Jika login PDS / non-admin dan belum pernah dinilai oleh Admin, jangan tampilkan bintang sama sekali
+      if (!isAdmin && currentRating <= 0) {
         return '';
-
-
-
       }
-
-
-
-      // Status terkunci: apabila sudah terkunci maka bintang juga tidak bisa diedit oleh siapapun (termasuk Admin)
-
-
-
-      const isLocked = Boolean(appState.isLocked);
-
-
-
-      // Jika form terkunci atau non-admin dan belum pernah dinilai, sembunyikan bintang
-
-
-
-      if ((!isAdmin || isLocked) && currentRating <= 0) {
-
-
-
-        return '';
-
-
-
-      }
-
-
 
       let starsHtml = '';
-
-
-
       for (let i = 1; i <= 5; i++) {
-
-
-
         const isFilled = i <= currentRating;
-
-
-
         const starFillClass = isFilled 
-
-
-
           ? 'fill-amber-400 text-amber-400' 
-
-
-
           : 'text-slate-300 dark:text-slate-600 fill-transparent';
-
-
-
         
-
-
-
-        // Hanya Admin dan form TIDAK TERKUNCI yang bisa mengklik/mengubah bintang
-
-
-
-        if (isAdmin && !isLocked) {
-
-
-
+        if (isAdmin) {
           starsHtml += `
-
-
-
             <button type="button" 
-
-
-
                     onclick="event.stopPropagation(); handleRateBox('${categoryKey}', '${siteCode}', ${i}, '${boxUid}')" 
-
-
-
                     onmouseenter="handleStarHover('${boxUid}', ${i})"
-
-
-
                     onmouseleave="handleStarLeave('${boxUid}', ${currentRating})"
-
-
-
                     class="p-0.5 hover:scale-125 transition-transform duration-150 cursor-pointer focus:outline-none group/star" 
-
-
-
                     title="Beri Nilai: ${i} dari 5 Bintang">
-
-
-
               <svg class="star-icon star-${i} w-3.5 h-3.5 ${starFillClass} group-hover/star:drop-shadow-xs" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-
-
-
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-
-
-
               </svg>
-
-
-
             </button>
-
-
-
           `;
-
-
-
         } else {
-
-
-
-          // Read-only (Form Terkunci atau login Non-Admin / PDS): Tidak bisa diklik / diedit
-
-
-
-          const lockTitle = isLocked 
-
-
-
-            ? `Penilaian Terkunci: ${currentRating} dari 5 Bintang` 
-
-
-
-            : `Penilaian: ${currentRating} dari 5 Bintang`;
-
-
-
+          // PDS / Non-admin: Read-only, tidak bisa diklik
           starsHtml += `
-
-
-
-            <div class="p-0.5 pointer-events-none select-none cursor-default" title="${lockTitle}">
-
-
-
+            <div class="p-0.5 pointer-events-none select-none cursor-default" title="Penilaian Admin: ${currentRating} dari 5 Bintang">
               <svg class="star-icon star-${i} w-3.5 h-3.5 ${starFillClass}" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-
-
-
                 <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-
-
-
               </svg>
-
-
-
             </div>
-
-
-
           `;
-
-
-
         }
-
-
-
       }
-
-
 
       return `
-
-
-
         <div class="inline-flex items-center gap-0.5" data-rating="${currentRating}">
-
-
-
           ${starsHtml}
-
-
-
         </div>
-
-
-
       `;
-
-
-
     }
-
-
 
     function handleStarHover(boxUid, hoverRating) {
-
-
-
       const container = document.getElementById(`rating_container_${boxUid}`);
-
-
-
       if (!container) return;
-
-
-
       for (let i = 1; i <= 5; i++) {
-
-
-
         const star = container.querySelector(`.star-${i}`);
-
-
-
         if (star) {
-
-
-
           if (i <= hoverRating) {
-
-
-
             star.classList.add('fill-amber-400', 'text-amber-400');
-
-
-
             star.classList.remove('text-slate-300', 'fill-transparent');
-
-
-
           } else {
-
-
-
             star.classList.remove('fill-amber-400', 'text-amber-400');
-
-
-
             star.classList.add('text-slate-300', 'fill-transparent');
-
-
-
           }
-
-
-
         }
-
-
-
       }
-
-
-
     }
-
-
 
     function handleStarLeave(boxUid, currentRating) {
-
-
-
       const container = document.getElementById(`rating_container_${boxUid}`);
-
-
-
       if (!container) return;
-
-
-
       for (let i = 1; i <= 5; i++) {
-
-
-
         const star = container.querySelector(`.star-${i}`);
-
-
-
         if (star) {
-
-
-
           if (i <= currentRating) {
-
-
-
             star.classList.add('fill-amber-400', 'text-amber-400');
-
-
-
             star.classList.remove('text-slate-300', 'fill-transparent');
-
-
-
           } else {
-
-
-
             star.classList.remove('fill-amber-400', 'text-amber-400');
-
-
-
             star.classList.add('text-slate-300', 'fill-transparent');
-
-
-
           }
-
-
-
         }
-
-
-
       }
-
-
-
     }
 
-
-
     async function handleRateBox(categoryKey, siteCode, rating, boxUid) {
-
-
-
-      // Apabila form audit sudah terkunci, maka bintang tidak bisa diedit
-
-
-
-      if (appState.isLocked) {
-
-
-
-        showToast('Form Terkunci', 'Periode audit sudah terkunci. Penilaian bintang tidak dapat diedit.', 'warning', 2500);
-
-
-
-        return;
-
-
-
-      }
-
-
-
       // Validasi khusus peran Admin
-
-
-
       const isAdmin = Boolean(appState.currentUser && (
-
-
-
         appState.currentUser.site_code === 'ALL' || 
-
-
-
         appState.currentUser.site_code === 'ADMIN' || 
-
-
-
         appState.currentUser.role === 'ADMIN' || 
-
-
-
         appState.currentUser.role === 'admin'
-
-
-
       ));
-
-
-
       if (!isAdmin) return;
 
-
-
       const targetSiteCode = (siteCode || (appState.currentSite ? appState.currentSite.code : '')).toUpperCase();
-
-
-
       const currentWeek = appState.selectedWeekKey;
 
-
+      // Proteksi Tambahan: Jangan izinkan rating jika belum ada foto
+      const photoExists = (appState.drivePhotos || []).some(p => 
+        p.site_code === targetSiteCode && 
+        p.week_key === currentWeek && 
+        (p.category_key === categoryKey || (p.base_key && p.base_key === categoryKey)) &&
+        Boolean(p.file_url || p.drive_url || p.file_id || p.link_gambar)
+      );
+      if (!photoExists) {
+        showToast('Perhatian', 'Tidak dapat memberi penilaian karena belum ada foto yang diunggah.', 'warning', 3000);
+        return;
+      }
 
       // 1. Simpan di localStorage seketika
-
-
-
       const cacheKey = `rating_${targetSiteCode}_${currentWeek}_${categoryKey}`;
-
-
-
       localStorage.setItem(cacheKey, rating);
 
-
-
       // 2. Update di appState.drivePhotos
-
-
-
       if (!appState.drivePhotos) appState.drivePhotos = [];
-
-
-
       let photo = appState.drivePhotos.find(p => 
-
-
-
         p.site_code === targetSiteCode && 
-
-
-
         p.week_key === currentWeek && 
-
-
-
         (p.category_key === categoryKey || (p.base_key && p.base_key === categoryKey))
-
-
-
       );
 
-
-
       const nowFormatted = new Date().toISOString().replace('T', ' ').substring(0, 19);
-
-
-
       if (photo) {
-
-
-
         photo.rating = rating;
-
-
-
       } else {
-
-
-
         photo = {
-
-
-
           timestamp: nowFormatted,
-
-
-
           site_code: targetSiteCode,
-
-
-
           site_name: targetSiteCode,
-
-
-
           week_key: currentWeek,
-
-
-
           category_name: categoryKey,
-
-
-
           category_key: categoryKey,
-
-
-
           file_id: null,
-
-
-
           drive_url: null,
-
-
-
           thumbnail_url: null,
-
-
-
           file_size: 0,
-
-
-
           catatan: '-',
-
-
-
           rating: rating,
-
-
-
           uploader: "ADMIN",
-
-
-
           status: "RATING_ONLY"
-
-
-
         };
-
-
-
         appState.drivePhotos.push(photo);
-
-
-
       }
-
-
-
       saveLocalCache();
 
-
-
       // 3. Update DOM seketika (Instant UI feedback tanpa reload)
-
-
-
       const targetUid = boxUid || (targetSiteCode ? `${targetSiteCode}_${categoryKey}` : categoryKey);
-
-
-
       const container = document.getElementById(`rating_container_${targetUid}`);
-
-
-
       if (container) {
-
-
-
         container.innerHTML = renderStarRatingHtml(targetUid, categoryKey, targetSiteCode, rating, true, true);
-
-
-
       }
-
-
 
       showToast('Rating Berhasil', `Nilai ${rating} dari 5 bintang tersimpan untuk area ini.`, 'success', 2500);
 
-
-
       // 4. Kirim ke Google Apps Script secara online
-
-
-
       if (APPS_SCRIPT_URL) {
-
-
-
         try {
-
-
-
           const payload = {
-
-
-
             action: "save_rating",
-
-
-
             site_code: targetSiteCode,
-
-
-
             week_key: currentWeek,
-
-
-
             category_key: categoryKey,
-
-
-
             rating: rating,
-
-
-
             admin: appState.currentUser ? appState.currentUser.site_code : 'ADMIN'
-
-
-
           };
 
-
-
-          if (isLocalFlaskServer()) {
-
-
-
+          if (window.location.protocol.startsWith('http')) {
             try {
-
-
-
               directFetch('/api/save-rating', {
-
-
-
                 method: 'POST',
-
-
-
                 headers: { 'Content-Type': 'application/json' },
-
-
-
                 body: JSON.stringify(payload)
-
-
-
               }).catch(() => {});
-
-
-
             } catch (e) {}
-
-
-
           }
-
-
 
           directFetch(APPS_SCRIPT_URL, {
-
-
-
             method: "POST",
-
-
-
             headers: { "Content-Type": "text/plain;charset=utf-8" },
-
-
-
             body: JSON.stringify(payload)
-
-
-
           }).then(res => res.json()).then(res => {
-
-
-
             console.log('Online rating sync response:', res);
-
-
-
           }).catch(err => {
-
-
-
             console.warn('Sync rating error:', err);
-
-
-
           });
-
-
-
         } catch (err) {
-
-
-
           console.warn('Gagal sinkronisasi rating ke Google Sheet, rating tersimpan di lokal:', err);
-
-
-
         }
-
-
-
       }
-
-
-
     }
-
-
 
     function createPhotoCardElement(box, site, isAllView = false) {
-
-
-
       const isAll = Boolean(isAllView) || ((dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL'));
-
-
-
       const card = document.createElement('div');
-
-
-
       const hasPhoto = Boolean(box.has_photo && box.file_url);
-
-
-
       const safeCatatan = (box.catatan && box.catatan !== '-') ? escapeHtml(box.catatan).toUpperCase() : '';
-
-
-
       const driveUrl = box.drive_url || (box.file_id ? ('https://drive.google.com/file/d/' + box.file_id + '/view?usp=sharing') : '#');
-
-
-
       const fileSizeLabel = box.file_size ? `${(box.file_size / 1024).toFixed(0)} KB` : '';
-
-
-
-      const normalBoxName = (box.name || 'Area').replace(/tampak\s+/gi, '').replace(/\btampak\b/gi, '').trim();
-
-
-
+      const normalBoxName = box.name || 'Area';
       const isLocalData = Boolean(box.file_url && box.file_url.startsWith('data:'));
-
-
-
       const siteCode = (site && site.code) ? site.code : ((box && box.site_code) ? box.site_code : '');
-
-
-
       const boxUid = siteCode ? `${siteCode}_${box.key}` : box.key;
-
-
-
       const isAdmin = Boolean(appState.currentUser && (
-
-
-
         appState.currentUser.site_code === 'ALL' || 
-
-
-
         appState.currentUser.site_code === 'ADMIN' || 
-
-
-
         appState.currentUser.role === 'ADMIN' || 
-
-
-
         appState.currentUser.role === 'admin'
-
-
-
       ));
-
       const isReadOnlyNote = Boolean(appState.isLocked || (!isAdmin && isAll));
-
-
-
       const currentRating = (typeof box.rating !== 'undefined' && box.rating !== null && box.rating > 0)
-
-
-
         ? parseInt(box.rating)
-
-
-
         : getBoxRating(siteCode, appState.selectedWeekKey, box.key);
 
-
-
       if (hasPhoto) {
-
-
-
         // Card with photo
-
-
-
         card.className = 'photo-card p-[1mm] card-pad-1mm flex flex-col justify-between';
-
-
-
         card.innerHTML = `
-
-
-
           <div>
-
-
-
             <!-- Photo Thumbnail with Container ID -->
-
-
-
             <div id="box_preview_${boxUid}">
-
-
-
-              <div class="relative w-full h-[calc(8rem+15mm)] bg-slate-100 card-box overflow-hidden group mb-1.5 cursor-pointer" onclick="handleCardClick('${box.key}', '${siteCode}')">
-
-
-
+              <div class="relative w-full h-[calc(8rem+10mm)] bg-slate-100 card-box overflow-hidden group mb-1.5 cursor-pointer" onclick="handleCardClick('${box.key}', '${siteCode}')">
                 ${!isLocalData ? `
-
-
-
                   <!-- Animasi Loading Bulat Berputar saat Ambil dari Database (Tanpa Tulisan) -->
-
-
-
                   <div id="loader_img_${boxUid}" class="absolute inset-0 bg-slate-100 flex items-center justify-center text-slate-500 z-10">
-
-
-
                     <svg class="animate-spin h-7 w-7 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-
-
-
                       <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-
-
-
                       <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-
-
-
                     </svg>
-
-
-
                   </div>
-
-
-
                 ` : ''}
-
-
-
                 <img src="${box.link_gambar || box.file_url}" alt="${normalBoxName}" crossorigin="anonymous"
-
-
-
                      class="w-full h-full object-cover ${!isLocalData ? 'opacity-0 transition-opacity duration-200' : ''}"
-
-
-
                      onload="handlePhotoLoaded('${boxUid}', this)"
-
-
-
                      onerror="handlePhotoError('${boxUid}', this, '${box.file_id || ''}')">
-
-
-
                 <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 z-20">
-
-
-
                   <span class="p-1.5 bg-white text-slate-800 text-[10px] font-bold card-box shadow">Perbesar</span>
-
-
-
                 </div>
-
-
-
               </div>
-
-
-
             </div>
-
-
 
             <!-- Title & File Size -->
-
-
-
             <div class="flex items-center justify-between gap-1 mb-1">
-
-
-
               <h4 class="text-xs font-bold text-slate-900 leading-tight">${normalBoxName}</h4>
-
-
-
               ${!isAll ? `<span class="text-[10px] font-mono text-slate-400">${fileSizeLabel}</span>` : ''}
-
-
-
             </div>
-
-
 
             ${!isAll ? `
-
-
-
               <!-- Waktu Upload & Tombol Ganti Foto (Hanya Tampil di Single Site) -->
-
-
-
               <div class="flex items-center justify-between gap-1 mb-1.5 min-h-[18px]">
-
-
-
                 ${!appState.isLocked ? `
-
-
-
                   <button type="button" onclick="triggerFileInput('${box.key}', '${siteCode}')" class="text-[11px] text-blue-600 hover:underline font-semibold cursor-pointer shrink-0">
-
-
-
                     Ganti Foto
-
-
-
                   </button>
-
-
-
                 ` : '<span></span>'}
-
-
-
                 ${box.upload_time ? `
-
-
-
                   <span class="text-[10px] text-slate-500 font-mono text-right truncate" title="Waktu Upload: ${formatUploadDateTime(box.upload_time)}">
-
-
-
                     ${formatUploadDateTime(box.upload_time)}
-
-
-
                   </span>
-
-
-
                 ` : ''}
-
-
-
               </div>
-
-
 
               <!-- MENU DOWNLOAD & DELETE FOTO (Hanya Tampil di Single Site) -->
-
-
-
               <div class="mb-2 flex items-stretch gap-1.5">
-
-
-
                 <button type="button" onclick="handleDownloadBoxPhoto('${box.key}', '${siteCode}')"
-
-
-
                    class="flex-1 h-7 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 hover:text-emerald-800 text-[11px] font-semibold card-box border border-emerald-300 flex items-center justify-center gap-1 transition cursor-pointer"
-
-
-
                    title="Download foto ini">
-
-
-
                   <i data-lucide="download" class="w-3 h-3 text-emerald-600"></i>
-
-
-
                   <span>Download Foto</span>
-
-
-
                 </button>
-
-
-
                 ${!appState.isLocked ? `
-
-
-
                   <button type="button" onclick="handleDeleteBoxPhoto('${box.key}', '${siteCode}')"
-
-
-
                      class="w-8 h-7 px-2 bg-rose-50 hover:bg-rose-100 text-rose-600 hover:text-rose-700 border border-rose-200 text-[11px] font-semibold card-box flex items-center justify-center transition cursor-pointer shrink-0"
-
-
-
                      title="Hapus foto ini">
-
-
-
                     <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-
-
-
                   </button>
-
-
-
                 ` : ''}
-
-
-
               </div>
-
-
-
             ` : ''}
 
-
-
             <!-- Kotak Catatan (Selalu Tampil) -->
-
-
-
-            <div class="photo-note-divider ${!isAll ? 'mt-2 pt-2' : 'mt-1 pt-1'}">
-
-
-
+            <div class="${!isAll ? 'mt-2 pt-2 border-t border-slate-100' : 'mt-1 pt-1 border-t border-slate-100'}">
               <div class="flex items-center justify-between gap-1 mb-1 min-h-[20px]">
-
-
-
                 <label class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Catatan:</label>
-
-
-
                 <div id="rating_container_${boxUid}" class="flex items-center gap-0.5">
-
-
-
                   ${renderStarRatingHtml(boxUid, box.key, siteCode, currentRating, isAdmin, true)}
-
-
-
                 </div>
-
-
-
               </div>
-
-
-
-              <textarea id="note_${boxUid}" name="catatan_${boxUid}" rows="2" ${isReadOnlyNote ? 'readonly disabled' : ''} placeholder="${isReadOnlyNote ? 'Read-only (hanya baca)' : 'Tulis catatan kondisi...'}"
-                autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-form-type="other"
-                class="w-full text-xs text-slate-900 ${isReadOnlyNote ? 'bg-slate-100 text-slate-500 border-slate-300 cursor-not-allowed select-text' : 'bg-white border-slate-400 focus:border-slate-800 focus:ring-1 focus:ring-slate-800'} rounded-[5px] p-2 focus:outline-none font-normal input-uppercase resize-none leading-relaxed transition shadow-2xs"
+              <textarea id="note_${boxUid}" rows="2" ${isReadOnlyNote ? 'readonly disabled' : ''} placeholder="${isReadOnlyNote ? 'Read-only (hanya baca)' : 'Tulis catatan kondisi...'}"
+                class="w-full text-xs text-slate-900 ${isReadOnlyNote ? 'bg-slate-100 text-slate-500 border-slate-300 cursor-not-allowed select-text' : 'bg-white border-slate-400 focus:border-slate-800 focus:ring-1 focus:ring-slate-800'} rounded-[5px] p-2 focus:outline-none font-normal uppercase resize-none leading-relaxed transition shadow-2xs"
+                style="text-transform: uppercase;"
+                oninput="this.value = this.value.toUpperCase()"
                 ${isReadOnlyNote ? '' : `onchange="saveNoteOnline('${box.key}', this.value.toUpperCase(), '${siteCode}')"`}>${safeCatatan}</textarea>
-
-
-
             </div>
-
-
-
           </div>
 
-
-
           ${!isAll ? `
-
-
-
             <!-- Hidden File Input for Overwrite -->
-
-
-
             <input type="file" id="fileInput_${boxUid}" accept="image/*" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
             <input type="file" id="fileInput_cam_${boxUid}" accept="image/*" capture="environment" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
-
-
-
           ` : ''}
-
-
-
         `;
-
-
-
       } else {
-
-
-
         // NOTIFIKASI BELUM UPLOAD
-
-
-
         card.className = 'photo-card p-[1mm] card-pad-1mm flex flex-col justify-between';
-
-
-
         card.innerHTML = `
-
-
-
           <div>
-
-
-
             <!-- Dashed Box Container ID -->
-
-
-
             <div id="box_preview_${boxUid}">
-
-
-
-              <div class="dashed-box w-full h-[calc(8rem+15mm)] flex flex-col items-center justify-center p-[1mm] card-pad-1mm ${isAll ? 'cursor-default' : 'cursor-pointer'} group mb-1.5" onclick="${(appState.isLocked || isAll) ? '' : `triggerFileInput('${box.key}', '${siteCode}')`}">
-
-
-
+              <div class="dashed-box w-full h-[calc(8rem+10mm)] flex flex-col items-center justify-center p-[1mm] card-pad-1mm ${isAll ? 'cursor-default' : 'cursor-pointer'} group mb-1.5" onclick="${(appState.isLocked || isAll) ? '' : `triggerFileInput('${box.key}', '${siteCode}')`}">
                 <i data-lucide="camera" class="w-6 h-6 text-slate-400 group-hover:text-slate-600 mb-1"></i>
-
-
-
                 <span class="text-xs font-semibold text-slate-500 group-hover:text-slate-700">Belum ada foto</span>
-
-
-
-                ${!isAll ? `<span class="text-[9px] text-slate-400 mt-0.5">Auto-Kompres</span>` : ''}
-
-
-
+                
               </div>
-
-
-
             </div>
-
-
 
             <!-- Title -->
-
-
-
             <div class="mb-1">
-
-
-
               <h4 class="text-xs font-bold text-slate-900 leading-tight">${normalBoxName}</h4>
-
-
-
             </div>
-
-
 
             <!-- NOTIFIKASI BELUM UPLOAD -->
-
-
-
             <div class="flex items-center justify-between mb-2">
-
-
-
               <span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 card-box border border-rose-200">
-
-
-
                 <i data-lucide="alert-circle" class="w-3 h-3 text-rose-600"></i>
-
-
-
                 <span>Belum upload</span>
-
-
-
               </span>
-
-
-
             </div>
-
-
 
             <!-- Kotak Catatan (Selalu Tampil) -->
-
-
-
-            <div class="photo-note-divider ${!isAll ? 'mt-2 pt-2' : 'mt-1 pt-1'}">
-
-
-
+            <div class="${!isAll ? 'mt-2 pt-2 border-t border-slate-100' : 'mt-1 pt-1 border-t border-slate-100'}">
               <div class="flex items-center justify-between gap-1 mb-1 min-h-[20px]">
-
-
-
                 <label class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Catatan:</label>
-
-
-
                 <div id="rating_container_${boxUid}" class="flex items-center gap-0.5">
-
-
-
                   ${renderStarRatingHtml(boxUid, box.key, siteCode, currentRating, isAdmin, false)}
-
-
-
                 </div>
-
-
-
               </div>
-
-
-
-              <textarea id="note_${boxUid}" name="catatan_${boxUid}" rows="2" ${isReadOnlyNote ? 'readonly disabled' : ''} placeholder="${isReadOnlyNote ? 'Read-only (hanya baca)' : 'Tulis catatan kondisi...'}"
-                autocomplete="off" autocorrect="off" autocapitalize="none" spellcheck="false" data-lpignore="true" data-form-type="other"
-                class="w-full text-xs text-slate-900 ${isReadOnlyNote ? 'bg-slate-100 text-slate-500 border-slate-300 cursor-not-allowed select-text' : 'bg-white border-slate-400 focus:border-slate-800 focus:ring-1 focus:ring-slate-800'} rounded-[5px] p-2 focus:outline-none font-normal input-uppercase resize-none leading-relaxed transition shadow-2xs"
+              <textarea id="note_${boxUid}" rows="2" ${isReadOnlyNote ? 'readonly disabled' : ''} placeholder="${isReadOnlyNote ? 'Read-only (hanya baca)' : 'Tulis catatan kondisi...'}"
+                class="w-full text-xs text-slate-900 ${isReadOnlyNote ? 'bg-slate-100 text-slate-500 border-slate-300 cursor-not-allowed select-text' : 'bg-white border-slate-400 focus:border-slate-800 focus:ring-1 focus:ring-slate-800'} rounded-[5px] p-2 focus:outline-none font-normal uppercase resize-none leading-relaxed transition shadow-2xs"
+                style="text-transform: uppercase;"
+                oninput="this.value = this.value.toUpperCase()"
                 ${isReadOnlyNote ? '' : `onchange="saveNoteOnline('${box.key}', this.value.toUpperCase(), '${siteCode}')"`}>${safeCatatan}</textarea>
-
-
-
             </div>
-
-
-
           </div>
-
-
 
           ${!isAll ? `
-
-
-
             <!-- Hidden File Input -->
-
-
-
             <input type="file" id="fileInput_${boxUid}" accept="image/*" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
             <input type="file" id="fileInput_cam_${boxUid}" accept="image/*" capture="environment" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
-
-
-
           ` : ''}
-
-
-
         `;
-
-
-
       }
-
-
-
       return card;
-
-
-
     }
-
-
 
     function renderPhotoCards(boxes, site) {
-
-
-
       dom.cardsGrid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5';
-
-
-
       dom.cardsGrid.innerHTML = '';
-
-
 
       boxes.forEach((box) => {
-
-
-
         const card = createPhotoCardElement(box, site, false);
-
-
-
         dom.cardsGrid.appendChild(card);
-
-
-
       });
 
-
-
       if (window.lucide) lucide.createIcons();
-
-
-
     }
-
-
 
     function renderAllSitesPhotoCards(realSites, isMobilMode) {
-
-
-
       dom.cardsGrid.className = 'flex flex-col space-y-6 w-full';
-
-
-
       dom.cardsGrid.innerHTML = '';
-
-
-
       const allBoxes = [];
 
-
-
       realSites.forEach((site, index) => {
-
-
-
         let siteBoxes = [];
-
-
-
         if (!isMobilMode) {
-
-
-
           const sitePhotos = appState.drivePhotos.filter(p => 
-
-
-
             p.site_code === site.code && 
-
-
-
             p.week_key === appState.selectedWeekKey &&
-
-
-
             !p.category_key.startsWith('mobil_') &&
-
-
-
             p.category_key !== 'audit_mobil'
-
-
-
           );
 
-
-
-          siteBoxes = appState.categoriesGedung.map(cat => {
-
-
-
+          siteBoxes = (() => {
+            const hasPantryAll = siteHasPantry(site.code);
+            const activeCatsAll = (appState.categoriesGedung || []).filter(c => c.key !== 'pantry' || hasPantryAll);
+            return activeCatsAll.map(cat => {
             const found = sitePhotos.find(p => p.category_key === cat.key);
-
-
-
             let rawLink = found ? (found.link_gambar || found.thumbnail_url || found.file_url) : null;
-
-
-
             let fileId = found ? found.file_id : null;
-
-
-
             let linkGambar = convertToDirectImageLink(rawLink, fileId);
-
-
-
             const hasPhoto = Boolean(found && linkGambar && linkGambar.trim() !== '');
 
-
-
             return {
-
-
-
               key: cat.key,
-
-
-
               base_key: cat.key,
-
-
-
               site_code: site.code,
-
-
-
               site_name: site.name,
-
-
-
               name: cat.name,
-
-
-
               desc: cat.desc,
-
-
-
               has_photo: hasPhoto,
-
-
-
               file_id: fileId,
-
-
-
               drive_url: found ? (found.drive_url || null) : null,
-
-
-
               link_gambar: hasPhoto ? linkGambar : null,
-
-
-
               file_url: hasPhoto ? linkGambar : null,
-
-
-
               catatan: (found && found.catatan && found.catatan !== '-') ? found.catatan : "",
-
-
-
               upload_time: (found && found.timestamp) ? found.timestamp : null,
-
-
-
               file_size: found ? (found.file_size || 0) : 0
-
-
-
             };
-
-
-
           });
-
-
-
+          })();
         } else {
-
-
-
           const currentPlats = appState.registeredPlats.filter(p => p.site_code.toUpperCase() === site.code.toUpperCase());
-
-
-
           if (currentPlats.length > 0) {
-
-
-
             currentPlats.forEach(platObj => {
-
-
-
               const cleanPlat = platObj.no_plat.replace(/[^a-zA-Z0-9]/g, '');
-
-
-
               const platBoxes = appState.categoriesMobil.map(cat => {
-
-
-
                 const expectedKey = 'mobil_' + cleanPlat + '_' + cat.key;
-
-
-
                 let found = appState.drivePhotos.find(p => {
-
-
-
                   if (p.site_code !== site.code || p.week_key !== appState.selectedWeekKey) return false;
-
-
-
                   if (!matchPhotoToCategory(p, cat, true)) return false;
-
-
-
                   const photoPlat = (p.no_plat || p.plat || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-
-
-
                   if (photoPlat && photoPlat === cleanPlat.toUpperCase()) return true;
-
-
-
                   const pKey = (p.category_key || '').toUpperCase();
-
-
-
                   if (pKey.includes(cleanPlat.toUpperCase())) return true;
-
-
-
                   if (currentPlats.length === 1) return true;
-
-
-
                   return false;
-
-
-
                 });
-
-
-
                 let rawLink = found ? (found.link_gambar || found.thumbnail_url || found.file_url) : null;
-
-
-
                 let fileId = found ? found.file_id : null;
-
-
-
                 let linkGambar = convertToDirectImageLink(rawLink, fileId);
-
-
-
                 const hasPhoto = Boolean(found && linkGambar && linkGambar.trim() !== '');
 
-
-
                 return {
-
-
-
                   key: expectedKey,
-
-
-
                   base_key: cat.key,
-
-
-
                   site_code: site.code,
-
-
-
                   site_name: site.name,
-
-
-
                   plat: platObj.no_plat,
-
-
-
                   driver: platObj.nama_driver,
-
-
-
                   name: `${cat.name} (${platObj.no_plat})`,
-
-
-
                   desc: cat.desc,
-
-
-
                   has_photo: hasPhoto,
-
-
-
                   file_id: fileId,
-
-
-
                   drive_url: found ? (found.drive_url || null) : null,
-
-
-
                   link_gambar: hasPhoto ? linkGambar : null,
-
-
-
                   file_url: hasPhoto ? linkGambar : null,
-
-
-
                   catatan: (found && found.catatan && found.catatan !== '-') ? found.catatan : "",
-
-
-
                   upload_time: (found && found.timestamp) ? found.timestamp : null,
-
-
-
                   file_size: found ? (found.file_size || 0) : 0
-
-
-
                 };
-
-
-
               });
-
-
-
               siteBoxes.push(...platBoxes);
-
-
-
             });
-
-
-
           }
-
-
-
         }
-
-
 
         allBoxes.push(...siteBoxes);
-
-
-
         const siteUploadedCount = siteBoxes.filter(b => b.has_photo).length;
 
-
-
         // Container section for site
-
-
-
         const siteSection = document.createElement('div');
-
-
-
         siteSection.className = 'pds-site-group w-full';
-
-
-
         siteSection.setAttribute('data-site-code', site.code);
 
-
-
         // Header Title PDS (Warna Abu-Abu Elegan di Setiap Tema, Bebas Hitam Pekat)
-
-
-
         const headerEl = document.createElement('div');
-
-
-
-        headerEl.className = 'pds-site-header bg-slate-600 text-white p-[1mm] px-2 rounded-[5px] flex items-center justify-between gap-2 shadow-xs border-l-4 border-blue-400 mb-1.5 leading-none';
-
-
-
+        headerEl.className = 'pds-site-header bg-slate-600 text-white px-4 py-2.5 rounded-[5px] flex flex-wrap items-center justify-between gap-3 shadow-xs border-l-4 border-blue-400 mb-2.5';
         headerEl.innerHTML = `
-
-
-
-          <div class="flex items-center gap-2 min-w-0">
-
-
-
-            <span class="bg-blue-600 text-white text-[11px] font-black px-1.5 py-0.5 rounded-[3px] tracking-wider uppercase shrink-0">${site.code}</span>
-
-
-
-            <div class="leading-tight truncate">
-
-
-
-              <h3 class="text-xs sm:text-sm font-bold text-white tracking-wide truncate leading-tight">PDS ${site.code} - ${site.name}</h3>
-
-
-
-              <div class="text-[10px] text-slate-200 leading-tight">HoDS: <strong class="text-white">${site.pic || '-'}</strong></div>
-
-
-
+          <div class="flex items-center gap-3">
+            <span class="bg-blue-600 text-white text-xs font-black px-2.5 py-1 rounded-[4px] tracking-wider uppercase">${site.code}</span>
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-white tracking-wide">PDS ${site.code} - ${site.name}</h3>
+              <div class="text-[11px] text-slate-200">HoDS: <strong class="text-white">${site.pic || '-'}</strong></div>
             </div>
-
-
-
           </div>
-
-
-
-          <div class="flex items-center gap-1.5 shrink-0">
-
-
-
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-[3px] text-[10px] font-bold ${siteUploadedCount === siteBoxes.length && siteBoxes.length > 0 ? 'bg-emerald-600 text-white' : 'bg-slate-700 text-amber-200 border border-slate-500'}">
-
-
-
-              <i data-lucide="${siteUploadedCount === siteBoxes.length && siteBoxes.length > 0 ? 'check-circle' : 'camera'}" class="w-3 h-3"></i>
-
-
-
+          <div class="flex items-center gap-2">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-[4px] text-xs font-bold ${siteUploadedCount === siteBoxes.length && siteBoxes.length > 0 ? 'bg-emerald-600 text-white' : 'bg-slate-700 text-amber-200 border border-slate-500'}">
+              <i data-lucide="${siteUploadedCount === siteBoxes.length && siteBoxes.length > 0 ? 'check-circle' : 'camera'}" class="w-3.5 h-3.5"></i>
               <span>${siteUploadedCount} dari ${siteBoxes.length} Foto Terupload</span>
-
-
-
             </span>
-
-
-
           </div>
-
-
-
         `;
-
-
-
         siteSection.appendChild(headerEl);
 
-
-
         // Grid for cards
-
-
-
         const innerGrid = document.createElement('div');
-
-
-
         innerGrid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5';
 
-
-
         if (siteBoxes.length === 0) {
-
-
-
           innerGrid.innerHTML = `
-
-
-
             <div class="col-span-full py-6 px-4 bg-slate-50 border border-slate-200 rounded-[5px] text-center text-xs text-slate-500">
-
-
-
               Belum ada foto atau data untuk PDS ${site.code} pada periode ini.
-
-
-
             </div>
-
-
-
           `;
-
-
-
         } else {
-
-
-
           siteBoxes.forEach(box => {
-
-
-
             const card = createPhotoCardElement(box, site, true);
-
-
-
             innerGrid.appendChild(card);
-
-
-
           });
-
-
-
         }
-
-
-
         siteSection.appendChild(innerGrid);
 
-
-
         // Divider Line (semua pds di pisah ddengan tanda garis yang terlihat)
-
-
-
         if (index < realSites.length - 1) {
-
-
-
           const dividerEl = document.createElement('div');
-
-
-
           dividerEl.className = 'pt-8 pb-4';
-
-
-
           dividerEl.innerHTML = `
-
-
-
             <div class="w-full border-t-4 border-slate-300 rounded-full"></div>
-
-
-
           `;
-
-
-
           siteSection.appendChild(dividerEl);
-
-
-
         }
 
-
-
         dom.cardsGrid.appendChild(siteSection);
-
-
-
       });
 
-
-
       appState.currentBoxes = allBoxes;
-
-
-
       const totalUploaded = allBoxes.filter(b => b.has_photo).length;
-
-
-
       if (dom.sitePhotoCounter) {
-
-
-
         dom.sitePhotoCounter.textContent = `${totalUploaded} dari ${allBoxes.length} foto`;
-
-
-
       }
-
-
-
       if (window.lucide) lucide.createIcons();
-
-
-
     }
-
-
 
     let pendingPhotoTarget = null;
 
@@ -22930,262 +20209,169 @@
       pendingPhotoTarget = null;
     }
 
-    function triggerFileInput(key, siteCode) {
-      openPhotoSourceModal(key, siteCode);
+    function selectPhotoSource(sourceType) {
+      if (!pendingPhotoTarget) {
+        closePhotoSourceModal();
+        return;
+      }
+      const { key, siteCode } = pendingPhotoTarget;
+      closePhotoSourceModal();
+
+      const inputId = (sourceType === 'camera')
+        ? (siteCode ? `fileInput_cam_${siteCode}_${key}` : `fileInput_cam_${key}`)
+        : (siteCode ? `fileInput_${siteCode}_${key}` : `fileInput_${key}`);
+
+      let input = document.getElementById(inputId);
+      if (!input) {
+        input = document.getElementById(sourceType === 'camera' ? `fileInput_cam_${key}` : `fileInput_${key}`);
+      }
+
+      if (input) {
+        input.value = '';
+        input.click();
+      } else {
+        console.warn('Target file input tidak ditemukan:', inputId);
+        showToast('Peringatan', 'Input kamera/file tidak ditemukan pada kartu ini.', 'warning');
+      }
     }
 
+    function triggerFileInput(key, siteCode) {
+      if (appState.isLocked) {
+        showToast('Terkunci', 'Periode week ini telah berakhir. Foto dan catatan bersifat hanya-baca (read-only).', 'warning', 3000);
+        return;
+      }
 
+      // Deteksi layar kecil (HP: < 1024px) vs Layar Lebar (Laptop/Desktop: >= 1024px)
+      const isMobile = (window.innerWidth < 1024);
+      if (isMobile) {
+        // Tampilan HP: Munculkan popup pilihan Kamera Langsung atau Galeri/File
+        openPhotoSourceModal(key, siteCode);
+      } else {
+        // Tampilan Laptop: Langsung mengarah ke pilih file/gambar tanpa popup pilihan
+        const targetSite = siteCode || (appState.sites && appState.sites.find(s => s.id === appState.selectedSiteId)?.code) || '';
+        let input = (targetSite ? document.getElementById(`fileInput_${targetSite}_${key}`) : null) ||
+                    document.getElementById(`fileInput_${key}`) ||
+                    document.querySelector(`input[type="file"][id*="${key}"]:not([id*="cam"])`);
+        if (input) {
+          input.value = '';
+          input.click();
+        } else {
+          // Fallback dinamis jika input file tersembunyi belum terender di DOM
+          const genericInput = document.createElement('input');
+          genericInput.type = 'file';
+          genericInput.accept = 'image/*';
+          genericInput.className = 'hidden';
+          genericInput.onchange = (e) => handleFilePicked(key, e, targetSite);
+          document.body.appendChild(genericInput);
+          genericInput.click();
+          setTimeout(() => genericInput.remove(), 1000);
+        }
+      }
+    }
 
         // ----------------- DOWNLOAD FOTO LANGSUNG DARI DATABASE (ROCK SOLID) ----------------- //
-
-
+    
+    function compressImageForUpload(file, maxDimension = 1600, quality = 0.82) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const rawResult = e.target.result;
+          const img = new Image();
+          img.onload = () => {
+            let width = img.width;
+            let height = img.height;
+            if (width > maxDimension || height > maxDimension) {
+              if (width > height) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              } else {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = () => resolve(rawResult);
+          img.src = rawResult;
+        };
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(file);
+      });
+    }
 
     function dataURLtoBlob(dataUrl) {
-
-
-
       try {
-
-
-
         const parts = dataUrl.split(';base64,');
-
-
-
         const contentType = (parts[0].split(':')[1]) || 'image/jpeg';
-
-
-
         const raw = window.atob(parts[1]);
-
-
-
         const rawLength = raw.length;
-
-
-
         const uInt8Array = new Uint8Array(rawLength);
-
-
-
         for (let i = 0; i < rawLength; ++i) {
-
-
-
           uInt8Array[i] = raw.charCodeAt(i);
-
-
-
         }
-
-
-
         return new Blob([uInt8Array], { type: contentType });
-
-
-
       } catch (e) {
-
-
-
         console.error('dataURLtoBlob error:', e);
-
-
-
         return null;
-
-
-
       }
-
-
-
     }
-
-
 
     async function downloadSinglePhotoFromDrive(fileId, fileUrl, fileName) {
-
-
-
       const safeName = fileName || 'foto_standarisasi.jpg';
 
-
-
       // 1. Jika ada DataURL Base64, unduh sebagai file biner asli (Anti-SmartScreen)
-
-
-
       if (fileUrl && fileUrl.startsWith('data:image')) {
-
-
-
         const blob = dataURLtoBlob(fileUrl);
-
-
-
         if (blob) {
-
-
-
           triggerBlobDownload(blob, safeName);
-
-
-
           return;
-
-
-
         }
-
-
-
       }
-
-
 
       // 2. Ambil Base64 murni dari sistem agar menghasilkan biner JPEG asli (bukan HTML 1 KB)
-
-
-
       if (fileId) {
-
-
-
         try {
-
-
-
           const b64 = await resolveImageAsBase64({ file_id: fileId, file_url: fileUrl });
-
-
-
           if (b64 && b64.startsWith('data:image') && b64.length > 500) {
-
-
-
             const blob = dataURLtoBlob(b64);
-
-
-
             if (blob) {
-
-
-
               triggerBlobDownload(blob, safeName);
-
-
-
               return;
-
-
-
             }
-
-
-
           }
-
-
-
         } catch (e) {}
-
-
-
       }
-
-
 
       // 3. Fallback unduh langsung jika base64 tidak tersedia
-
-
-
       if (fileId) {
-
-
-
         window.open(`https://drive.google.com/uc?export=download&id=${fileId}&confirm=t`, '_blank');
-
-
-
         showToast('Download Foto', `${safeName} sedang diunduh.`, 'info', 3000);
-
-
-
         return;
-
-
-
       }
-
-
-
       if (fileUrl) {
-
-
-
         window.open(fileUrl, '_blank');
-
-
-
       }
-
-
-
     }
-
-
 
     function triggerBlobDownload(blob, fileName) {
-
-
-
       const blobUrl = URL.createObjectURL(blob);
-
-
-
       const a = document.createElement('a');
-
-
-
       a.href = blobUrl;
-
-
-
       a.download = fileName;
-
-
-
       document.body.appendChild(a);
-
-
-
       a.click();
-
-
-
       a.remove();
-
-
-
       setTimeout(() => URL.revokeObjectURL(blobUrl), 4000);
-
-
-
       showToast('Download Berhasil', `File ${fileName} berhasil diunduh!`, 'success', 3000);
-
-
-
     }
 
-
-
     // ----------------- SIMPAN CATATAN ONLINE KE DATABASE ----------------- //
-
-
-
     async function saveNoteOnline(categoryKey, text, siteCode) {
-
       if (appState.isLocked) {
         showToast('Terkunci', 'Periode ini telah terkunci. Catatan tidak dapat diubah.', 'warning');
         return;
@@ -23203,621 +20389,195 @@
         return;
       }
 
-
-
       let currentSite = null;
-
-
-
       if (siteCode) {
-
-
-
         currentSite = appState.sites.find(s => s.code.toUpperCase() === siteCode.toUpperCase());
-
-
-
       }
-
-
-
       if (!currentSite) {
-
-
-
         currentSite = appState.sites.find(s => s.id === appState.selectedSiteId);
-
-
-
       }
-
-
-
       if (!currentSite || currentSite.code === 'ALL') {
-
-
-
         currentSite = appState.sites.find(s => s.code !== 'ALL') || appState.sites[0];
-
-
-
       }
-
-
-
       if (!currentSite) return;
 
-
-
-      const catDef = appState.categories.find(c => c.key === categoryKey);
-
-
-
+      const isMobil = (appState.auditType === 'mobil');
+      const catList = isMobil ? appState.categoriesMobil : appState.categoriesGedung;
+      const catDef = (catList && catList.find(c => c.key === categoryKey)) || (appState.categories && appState.categories.find(c => c.key === categoryKey));
       const catName = catDef ? catDef.name : categoryKey;
-
-
-
       const rawCatatan = (text || '').trim();
-
-
-
       const catatan = rawCatatan || '-';
 
-
-
       // 1. Update cache lokal seketika
-
-
-
       let existing = appState.drivePhotos.find(p => 
-
-
-
         p.site_code === currentSite.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
-
-
-
       );
-
-
 
       const nowFormatted = new Date().toISOString().replace('T', ' ').substring(0, 19);
 
-
-
       if (existing) {
-
-
-
         existing.catatan = catatan;
-
-
-
         existing.timestamp = nowFormatted;
-
-
-
       } else {
-
-
-
         existing = {
-
-
-
           timestamp: nowFormatted,
-
-
-
           site_code: currentSite.code,
-
-
-
           site_name: currentSite.name,
-
-
-
           week_key: appState.selectedWeekKey,
-
-
-
           category_name: catName,
-
-
-
           category_key: categoryKey,
-
-
-
           file_id: null,
-
-
-
           drive_url: null,
-
-
-
           thumbnail_url: null,
-
-
-
           file_size: 0,
-
-
-
           catatan: catatan,
-
-
-
           uploader: "ODS",
-
-
-
           status: "CATATAN_ONLY"
-
-
-
         };
-
-
-
         appState.drivePhotos.push(existing);
-
-
-
       }
 
-
+      try {
+        localStorage.setItem(`local_catatan_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`, catatan);
+      } catch(e) {}
 
       saveLocalCache();
 
-
-
-      // Menyimpan otomatis tanpa popup
-
-
-
-      // 2. Kirim update ke Database secara online
-
-
-
+      // 2. Masukkan ke Antrian Sinkronisasi Background (appSyncQueue)
       if (APPS_SCRIPT_URL) {
-
-
-
         try {
-
-
-
           const payload = {
-
-
-
             action: "save_catatan",
-
-
-
             site_code: currentSite.code,
-
-
-
             site_name: currentSite.name,
-
-
-
             week_key: appState.selectedWeekKey,
-
-
-
             category_key: categoryKey,
-
-
-
             category_name: catName,
-
-
-
             catatan: catatan,
-
-
-
             actor: "ODS"
-
-
-
           };
 
-
-
-          const res = await directFetch(APPS_SCRIPT_URL, {
-
-
-
-            method: "POST",
-
-
-
-            headers: { "Content-Type": "text/plain;charset=utf-8" },
-
-
-
-            body: JSON.stringify(payload)
-
-
-
-          });
-
-
-
-          const result = await res.json();
-
-
-
-          if (result && result.success) {
-
-
-
-            // Catatan tersimpan
-
-
-
+          if (typeof appSyncQueue !== 'undefined') {
+            appSyncQueue.enqueue({
+              type: 'save_catatan',
+              description: `Simpan catatan ${catName} (${currentSite.code})`,
+              execute: async () => {
+                const res = await directFetch(APPS_SCRIPT_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "text/plain;charset=utf-8" },
+                  body: JSON.stringify(payload)
+                });
+                if (!res) throw new Error("Jaringan offline");
+                if (!res.ok && res.status !== 200) throw new Error(`HTTP ${res.status}`);
+                const result = await res.json();
+                if (!result || !result.success) throw new Error(result?.message || 'Gagal menyimpan catatan');
+                console.log('Catatan berhasil disinkronkan ke Database Google Sheet:', categoryKey);
+                return true;
+              }
+            });
           }
-
-
-
         } catch (err) {
-
-
-
-          console.warn('Simpan catatan online:', err);
-
-
-
-          // Catatan tersimpan lokal
-
-
-
+          console.warn('Background save note initiation note:', err);
         }
-
-
-
       }
-
-
-
     }
 
-
-
     // ----------------- DOWNLOAD SEMUA FOTO DENGAN FILTER AKTIF (ZIP) ----------------- //
-
-
-
     async function downloadAllPhotosActiveFilter() {
-
-
-
       const activeSiteId = dom.selectSite.value;
-
-
-
       const activeWeekKey = dom.selectWeek.value;
-
-
-
       const statusFilter = dom.selectStatusUpload ? dom.selectStatusUpload.value : 'ALL';
-
-
-
       const currentSite = appState.sites.find(s => s.id === parseInt(activeSiteId));
-
-
 
       // Notifikasi awal disederhanakan
 
-
-
       // Filter matching photos
-
-
-
       let matchingPhotos = appState.drivePhotos.filter(p => p.week_key === activeWeekKey);
-
-
-
       if (activeSiteId !== 'ALL' && currentSite) {
-
-
-
         matchingPhotos = matchingPhotos.filter(p => p.site_code === currentSite.code);
-
-
-
       }
-
-
 
       if (matchingPhotos.length === 0) {
-
-
-
         showToast('Tidak Ada Foto', 'Belum ada foto yang terupload untuk filter ini.', 'warning');
-
-
-
         return;
-
-
-
       }
-
-
 
       if (typeof JSZip === 'undefined') {
-
-
-
         showToast('Download Single', 'Membuka unduhan foto...', 'info');
-
-
-
         matchingPhotos.forEach(p => {
-
-
-
           if (p.file_id) window.open(`https://drive.google.com/uc?export=download&id=${p.file_id}`, '_blank');
-
-
-
         });
-
-
-
         return;
-
-
-
       }
-
-
 
       try {
-
-
-
         const zip = new JSZip();
-
-
-
         let addedCount = 0;
 
-
-
         for (const p of matchingPhotos) {
-
-
-
           const baseName = `${p.site_code}_${p.category_key}_${p.week_key}`;
-
-
-
           const rawUrl = p.thumbnail_url || p.file_url;
 
-
-
           // 1. Prioritaskan base64 data dari cache lokal (Zero network request, 100% anti-CORS)
-
-
-
           if (rawUrl && rawUrl.startsWith('data:')) {
-
-
-
             try {
-
-
-
               const parts = rawUrl.split(';base64,');
-
-
-
               const ext = parts[0].includes('png') ? 'png' : 'jpg';
-
-
-
               zip.file(`${baseName}.${ext}`, parts[1], { base64: true });
-
-
-
               addedCount++;
-
-
-
               continue;
-
-
-
             } catch (bErr) {
-
-
-
               console.warn('Base64 zip error:', bErr);
-
-
-
             }
-
-
-
           }
-
-
 
           // 2. Ambil Base64 via proxy aman bebas CORS
-
-
-
           try {
-
-
-
             const b64Data = await resolveImageAsBase64(p);
-
-
-
             if (b64Data && b64Data.startsWith('data:')) {
-
-
-
               const parts = b64Data.split(';base64,');
-
-
-
               const ext = parts[0].includes('png') ? 'png' : 'jpg';
-
-
-
               zip.file(`${baseName}.${ext}`, parts[1], { base64: true });
-
-
-
               addedCount++;
-
-
-
             }
-
-
-
           } catch (b64Err) {
-
-
-
             console.warn('Zip b64 note:', b64Err);
-
-
-
           }
-
-
-
         }
-
-
 
         // Jika fetch blob diblokir browser, fallback unduh langsung file-file dari Database
-
-
-
         if (addedCount === 0) {
-
-
-
           // Notifikasi disederhanakan
-
-
-
           matchingPhotos.forEach((p, idx) => {
-
-
-
             setTimeout(() => {
-
-
-
               downloadSinglePhotoFromDrive(p.file_id, p.thumbnail_url || p.file_url, `Foto_${p.site_code}_${p.category_key}_${p.week_key}.jpg`);
-
-
-
             }, idx * 400);
-
-
-
           });
-
-
-
           return;
-
-
-
         }
 
-
-
         const content = await zip.generateAsync({ type: 'blob' });
-
-
-
         const a = document.createElement('a');
-
-
-
         a.href = URL.createObjectURL(content);
-
-
-
         a.download = `Foto_Filter_${currentSite ? currentSite.code : 'ALL'}_${activeWeekKey}.zip`;
-
-
-
         document.body.appendChild(a);
-
-
-
         a.click();
-
-
-
         a.remove();
-
-
-
         showToast('Download Berhasil', `Berhasil mengunduh ${addedCount} foto!`, 'success', 3500);
-
-
-
       } catch (e) {
-
-
-
         console.error(e);
-
-
-
         showToast('Download Gagal', 'Gagal membuat file ZIP: ' + e.message, 'error');
-
-
-
       }
-
-
-
     }
 
-
-
     // ----------------- STRICT 2MB VALIDATION & OVERWRITE CONFIRMATION ----------------- //
-
-
-
     async function handleFilePicked(categoryKey, event, siteCode) {
-
       let file = event.target.files[0];
-
       if (!file) return;
 
       const MAX_BYTES = 2 * 1024 * 1024; // 2MB
-
-      // Otomatis kompres jika ukuran file dari HP lebih dari 2MB
+      // Kompres otomatis foto HP jika berukuran > 2MB
       if (file.size > MAX_BYTES) {
-        const sizeMb = (file.size / (1024 * 1024)).toFixed(2);
-        showToast(
-          'Mengompres Foto Otomatis...',
-          `Foto kamera Anda (${sizeMb} MB) sedang dikompres otomatis agar hemat kuota & cepat terunggah...`,
-          'info',
-          3000
-        );
         try {
           const compressedDataUrl = await compressImageForUpload(file, 1600, 0.82);
           if (compressedDataUrl && compressedDataUrl.startsWith('data:image')) {
@@ -23832,779 +20592,186 @@
         }
       }
 
-
-
       let currentSite = null;
-
-
-
       if (typeof siteCode !== 'undefined' && siteCode) {
-
-
-
         currentSite = appState.sites.find(s => s.code.toUpperCase() === siteCode.toUpperCase());
-
-
-
       }
-
-
-
       if (!currentSite) {
-
-
-
         currentSite = appState.sites.find(s => s.id === appState.selectedSiteId);
-
-
-
       }
-
-
-
       if (!currentSite || currentSite.code === 'ALL') {
-
-
-
         currentSite = appState.sites.find(s => s.code !== 'ALL') || appState.sites[0];
-
-
-
       }
-
-
-
       const existing = appState.drivePhotos.find(p => 
-
-
-
         p.site_code === currentSite?.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
-
-
-
       );
 
-
-
-      const catDef = appState.categories.find(c => c.key === categoryKey) ||
-
-                     (appState.categoriesMobil && appState.categoriesMobil.find(c => c.key === categoryKey || categoryKey.endsWith(c.key))) ||
-
-                     (appState.categoriesGedung && appState.categoriesGedung.find(c => c.key === categoryKey));
-
-
+      const catDef = appState.categories.find(c => c.key === categoryKey);
 
       if (existing) {
-
-
-
         const detailsHtml = `
-
-
-
           <div><strong>Area:</strong> ${catDef?.name || categoryKey}</div>
-
-
-
           <div><strong>File Baru:</strong> ${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-
-
-
           <div class="text-rose-600 font-semibold mt-1">⚠️ Foto lama akan otomatis digantikan dengan file foto baru.</div>
-
-
-
         `;
 
-
-
         showConfirm(
-
-
-
           'Konfirmasi Ganti Foto',
-
-
-
           `Foto untuk "${catDef?.name || categoryKey}" sudah ada. Lanjutkan ganti foto?`,
-
-
-
           detailsHtml,
-
-
-
           () => uploadPhotoDirectToDrive(categoryKey, file, true)
-
-
-
         );
-
-
-
       } else {
-
-
-
         uploadPhotoDirectToDrive(categoryKey, file, false);
-
-
-
       }
-
-
 
       event.target.value = '';
-
-
-
     }
 
-
-
-    function compressImageForUpload(file, maxDimension = 1600, quality = 0.85) {
-
-      return new Promise((resolve) => {
-
-        const reader = new FileReader();
-
-        reader.onload = (e) => {
-
-          const rawResult = e.target.result;
-
-          const img = new Image();
-
-          img.onload = () => {
-
-            let width = img.width;
-
-            let height = img.height;
-
-            if (width > maxDimension || height > maxDimension) {
-
-              if (width > height) {
-
-                height = Math.round((height * maxDimension) / width);
-
-                width = maxDimension;
-
-              } else {
-
-                width = Math.round((width * maxDimension) / height);
-
-                height = maxDimension;
-
-              }
-
-            }
-
-            const canvas = document.createElement('canvas');
-
-            canvas.width = width;
-
-            canvas.height = height;
-
-            const ctx = canvas.getContext('2d');
-
-            ctx.drawImage(img, 0, 0, width, height);
-
-            try {
-
-              const dataUrl = canvas.toDataURL('image/jpeg', quality);
-
-              resolve(dataUrl);
-
-            } catch (err) {
-
-              resolve(rawResult);
-
-            }
-
-          };
-
-          img.onerror = () => resolve(rawResult);
-
-          img.src = rawResult;
-
-        };
-
-        reader.onerror = () => resolve(null);
-
-        reader.readAsDataURL(file);
-
-      });
-
-    }
-
-
-
-    async function uploadPhotoDirectToDrive(categoryKey, file, wasOverwrite) {
-
-
-
+        async function uploadPhotoDirectToDrive(categoryKey, file, wasOverwrite) {
       const currentSite = appState.sites.find(s => s.id === appState.selectedSiteId);
-
-
-
       if (!currentSite) return;
-
-
-
-      const catDef = appState.categories.find(c => c.key === categoryKey) ||
-
-                     (appState.categoriesMobil && appState.categoriesMobil.find(c => c.key === categoryKey || categoryKey.endsWith(c.key))) ||
-
-                     (appState.categoriesGedung && appState.categoriesGedung.find(c => c.key === categoryKey));
-
-
-
-      const noteInput = document.getElementById(`note_${currentSite.code}_${categoryKey}`) || document.getElementById(`note_${categoryKey}`);
-
-
-
+      const catDef = appState.categories.find(c => c.key === categoryKey);
+      const noteInput = document.getElementById(`note_${categoryKey}`);
       const rawCatatan = noteInput ? noteInput.value.trim() : '';
-
-
-
       const catatan = rawCatatan || '-';
 
+      // Baca file lokal seketika dengan FileReader agar tampil instan tanpa jeda
+      const reader = new FileReader();
+      reader.onload = async function() {
+        const fullDataUrl = reader.result;
+        const base64Only = fullDataUrl.split(',')[1];
 
-
-      // Kompres dan optimasi foto secara lokal agar hemat storage & cepat upload
-
-      const fullDataUrl = await compressImageForUpload(file);
-
-      if (!fullDataUrl) return;
-
-
-
-      const base64Only = fullDataUrl.split(',')[1];
-
-
-
-      // 1. TAMPILKAN FOTO LANGSUNG DARI PENYIMPANAN LOKAL (0 ms, super cepat)
-
-
-
-      const isMobil = (appState.activeAuditType === 'mobil' || appState.auditType === 'mobil' || categoryKey.startsWith('mobil_'));
-
-
-
-      let activePlat = '';
-
-
-
-      let activeDriver = '';
-
-
-
-      if (isMobil) {
-
-
-
-        const curPlats = appState.registeredPlats.filter(p => p.site_code.toUpperCase() === currentSite.code.toUpperCase());
-
-
-
-        let platObj = curPlats.find(p => p.no_plat === appState.selectedPlat);
-
-
-
-        if (!platObj && categoryKey.startsWith('mobil_')) {
-
-
-
-          const parts = categoryKey.split('_');
-
-
-
-          if (parts.length >= 3) {
-
-
-
-            const cleanPlatStr = parts[1].toUpperCase();
-
-
-
-            platObj = curPlats.find(p => p.no_plat.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() === cleanPlatStr);
-
-
-
+        // 1. TAMPILKAN FOTO LANGSUNG DARI PENYIMPANAN LOKAL (0 ms, super cepat)
+        const isMobil = (appState.activeAuditType === 'mobil' || appState.auditType === 'mobil' || categoryKey.startsWith('mobil_'));
+        let activePlat = '';
+        let activeDriver = '';
+        if (isMobil) {
+          const curPlats = appState.registeredPlats.filter(p => p.site_code.toUpperCase() === currentSite.code.toUpperCase());
+          const platObj = curPlats.find(p => p.no_plat === appState.selectedPlat) || curPlats[0];
+          if (platObj) {
+            activePlat = platObj.no_plat;
+            activeDriver = platObj.nama_driver;
           }
-
-
-
         }
 
-
-
-        if (!platObj) platObj = curPlats[0];
-
-
-
-        if (platObj) {
-
-
-
-          activePlat = platObj.no_plat;
-
-
-
-          activeDriver = platObj.nama_driver;
-
-
-
-        }
-
-
-
-      }
-
-
-
-      const nowUploadIso = new Date().toISOString();
-
-
-
-      const localPhotoObj = {
-
-
-
-        timestamp: nowUploadIso,
-
-
-
-        site_code: currentSite.code,
-
-
-
-        site_name: currentSite.name,
-
-
-
-        week_key: appState.selectedWeekKey,
-
-
-
-        category_name: catDef ? catDef.name : categoryKey,
-
-
-
-        category_key: categoryKey,
-
-
-
-        no_plat: activePlat,
-
-
-
-        nama_driver: activeDriver,
-
-
-
-        plat: activePlat,
-
-
-
-        driver: activeDriver,
-
-
-
-        file_id: '',
-
-
-
-        drive_url: '',
-
-
-
-        link_gambar: fullDataUrl,
-
-
-
-        thumbnail_url: fullDataUrl,
-
-
-
-        direct_view_url: fullDataUrl,
-
-
-
-        file_size: file.size,
-
-
-
-        catatan: catatan,
-
-
-
-        uploader: 'ODS',
-
-
-
-        status: 'TERSIMPAN',
-
-
-
-        unique_file_name: `${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}_${Date.now()}.jpg`
-
-
-
-      };
-
-
-
-      const existingIdx = appState.drivePhotos.findIndex(p =>
-
-
-
-        p.site_code === currentSite.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
-
-
-
-      );
-
-
-
-      if (existingIdx >= 0) {
-
-
-
-        appState.drivePhotos[existingIdx] = localPhotoObj;
-
-
-
-      } else {
-
-
-
-        appState.drivePhotos.push(localPhotoObj);
-
-
-
-      }
-
-
-
-      // Pasang upload lock agar delta sync tidak menimpa foto yang baru diganti
-
-      const lockKey = `${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
-
-      appState.recentUploadLocks = appState.recentUploadLocks || {};
-
-      appState.recentUploadLocks[lockKey] = {
-
-        timestamp: Date.now(),
-
-        iso: nowUploadIso,
-
-        fullDataUrl: fullDataUrl,
-
-        fileId: null,
-
-        categoryKey: categoryKey
-
-      };
-
-
-
-      // Simpan waktu upload terbaru dan data foto ke localStorage agar persist seketika (dengan proteksi kuota)
-
-
-
-      try {
-
-
-
-        localStorage.setItem('local_time_' + categoryKey, nowUploadIso);
-
-
-
-        if (fullDataUrl.length < 1500000) {
-
-          localStorage.setItem('local_photo_' + categoryKey, fullDataUrl);
-
-          const scopedKey = `local_photo_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
-
-          localStorage.setItem(scopedKey, fullDataUrl);
-
-        }
-
-
-
-      } catch (e) {
-
-        // Jika kuota penyimpanan browser penuh, bersihkan cache lama terlebih dahulu
-
-        try {
-
-          for (let i = localStorage.length - 1; i >= 0; i--) {
-
-            const k = localStorage.key(i);
-
-            if (k && (k.startsWith('local_drive_b64_') || k.startsWith('local_photo_'))) {
-
-              localStorage.removeItem(k);
-
-            }
-
-          }
-
-          localStorage.setItem('local_photo_' + categoryKey, fullDataUrl);
-
-        } catch (innerErr) {}
-
-      }
-
-
-
-      saveLocalCache();
-
-
-
-      loadAuditPerSite(); // Foto langsung tampil di kartu seketika!
-
-
-
-      renderRekapTable();
-
-
-
-      showToast('Foto Tersimpan', `Foto ${catDef ? catDef.name : categoryKey} berhasil disimpan!`, 'success', 2500);
-
-
-
-      // 2. PROSES PENGIRIMAN KE SERVER BERJALAN DI LATAR BELAKANG (BACKGROUND SYNC)
-
-
-
-      try {
-
-
-
-        const payload = {
-
-
-
-          action: "upload",
-
-
-
+        const nowUploadIso = new Date().toISOString();
+        const localPhotoObj = {
+          timestamp: nowUploadIso,
           site_code: currentSite.code,
-
-
-
           site_name: currentSite.name,
-
-
-
           week_key: appState.selectedWeekKey,
-
-
-
-          category_key: categoryKey,
-
-
-
           category_name: catDef ? catDef.name : categoryKey,
-
-
-
-          catatan: catatan,
-
-
-
-          actor: "ODS",
-
-
-
+          category_key: categoryKey,
           no_plat: activePlat,
-
-
-
           nama_driver: activeDriver,
-
-
-
           plat: activePlat,
-
-
-
           driver: activeDriver,
-
-
-
-          mime_type: "image/jpeg",
-
-
-
-          file_base64: base64Only
-
-
-
+          file_id: '',
+          drive_url: '',
+          link_gambar: fullDataUrl,
+          thumbnail_url: fullDataUrl,
+          direct_view_url: fullDataUrl,
+          file_size: file.size,
+          catatan: catatan,
+          uploader: 'ODS',
+          status: 'TERSIMPAN',
+          unique_file_name: `${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}_${Date.now()}.jpg`
         };
 
-
-
-        directFetch(APPS_SCRIPT_URL, {
-
-
-
-          method: "POST",
-
-
-
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-
-
-
-          body: JSON.stringify(payload)
-
-
-
-        }).then(res => res.json()).then(result => {
-
-
-
-          if (result && result.success) {
-
-
-
-            if (result.file_id) {
-
-
-
-              try {
-
-
-
-                localStorage.setItem('local_drive_b64_' + result.file_id, fullDataUrl);
-
-
-
-              } catch (e) {}
-
-
-
-            }
-
-
-
-            const match = appState.drivePhotos.find(p =>
-
-
-
-              p.site_code === currentSite.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
-
-
-
-            );
-
-
-
-            if (match) {
-
-
-
-              if (result.file_id) match.file_id = result.file_id;
-
-
-
-              match.direct_view_url = result.direct_view_url || result.link_gambar;
-
-
-
-              match.link_gambar = fullDataUrl; // Pertahankan base64 lokal agar bebas reload/flicker
-
-
-
-              match.thumbnail_url = fullDataUrl;
-
-
-
-              match.drive_url = result.drive_url || match.drive_url;
-
-
-
-              match.timestamp = result.upload_time ? new Date(result.upload_time).toISOString() : nowUploadIso;
-
-
-
-              try {
-
-
-
-                localStorage.setItem('local_time_' + categoryKey, match.timestamp);
-
-
-
-              } catch (e) {}
-
-
-
-              saveLocalCache();
-
-
-
-            }
-
-
-
-            if (appState.recentUploadLocks && appState.recentUploadLocks[lockKey]) {
-
-
-
-              appState.recentUploadLocks[lockKey].fileId = result.file_id;
-
-
-
-            }
-
-
-
+        const existingIdx = appState.drivePhotos.findIndex(p =>
+          p.site_code === currentSite.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
+        );
+        if (existingIdx >= 0) {
+          appState.drivePhotos[existingIdx] = localPhotoObj;
+        } else {
+          appState.drivePhotos.push(localPhotoObj);
+        }
+
+        // Simpan waktu upload terbaru dan data foto ke localStorage agar persist seketika
+        try {
+          localStorage.setItem('local_time_' + categoryKey, nowUploadIso);
+          localStorage.setItem('local_photo_' + categoryKey, fullDataUrl);
+          const scopedKey = `local_photo_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
+          localStorage.setItem(scopedKey, fullDataUrl);
+        } catch (e) {}
+
+        saveLocalCache();
+        loadAuditPerSite(); // Foto langsung tampil di kartu seketika!
+        renderRekapTable();
+        showToast('Foto Tersimpan', `Foto ${catDef ? catDef.name : categoryKey} berhasil disimpan!`, 'success', 2500);
+
+        // 2. MASUKKAN KE ANTRIAN SINKRONISASI BACKGROUND (appSyncQueue)
+        try {
+          const payload = {
+            action: "upload",
+            site_code: currentSite.code,
+            site_name: currentSite.name,
+            week_key: appState.selectedWeekKey,
+            category_key: categoryKey,
+            category_name: catDef ? catDef.name : categoryKey,
+            catatan: catatan,
+            actor: "ODS",
+            no_plat: activePlat,
+            nama_driver: activeDriver,
+            plat: activePlat,
+            driver: activeDriver,
+            mime_type: file.type || "image/jpeg",
+            file_base64: base64Only
+          };
+
+          if (typeof appSyncQueue !== 'undefined') {
+            appSyncQueue.enqueue({
+              type: 'upload_photo',
+              description: `Upload foto ${catDef ? catDef.name : categoryKey} (${currentSite.code})`,
+              execute: async () => {
+                if (!APPS_SCRIPT_URL) return true;
+                const res = await directFetch(APPS_SCRIPT_URL, {
+                  method: "POST",
+                  headers: { "Content-Type": "text/plain;charset=utf-8" },
+                  body: JSON.stringify(payload)
+                });
+                if (!res) throw new Error("Jaringan offline atau server tidak merespons");
+                if (!res.ok && res.status !== 200) throw new Error(`HTTP ${res.status}: Server Google Apps Script sibuk`);
+                const result = await res.json();
+                if (!result || !result.success) throw new Error(result?.message || 'Server Google Apps Script mengembalikan status gagal');
+
+                if (result.file_id) {
+                  try {
+                    localStorage.setItem('local_drive_b64_' + result.file_id, fullDataUrl);
+                  } catch (e) {}
+                }
+                const match = appState.drivePhotos.find(p =>
+                  p.site_code === currentSite.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
+                );
+                if (match) {
+                  if (result.file_id) match.file_id = result.file_id;
+                  if (result.direct_view_url || result.link_gambar) {
+                    match.direct_view_url = result.direct_view_url || result.link_gambar;
+                    match.link_gambar = result.direct_view_url || result.link_gambar;
+                    match.thumbnail_url = result.direct_view_url || result.link_gambar;
+                  }
+                  match.timestamp = nowUploadIso;
+                  try {
+                    localStorage.setItem('local_time_' + categoryKey, nowUploadIso);
+                  } catch (e) {}
+                  saveLocalCache();
+                }
+                return true;
+              }
+            });
           }
+        } catch (err) {
+          console.warn('Background upload initiation note:', err);
+        }
+      };
 
-
-
-        }).catch(err => {
-
-
-
-          console.warn('Background sync upload note:', err);
-
-
-
-        });
-
-
-
-      } catch (err) {
-
-
-
-        console.warn('Background upload initiation note:', err);
-
-
-
-      }
-
-
-
+      reader.readAsDataURL(file);
     }
-
-
 
     // saveNoteLocally digantikan oleh saveNoteOnline di atas
 
-
-
     
-
-
-
-        // ==============================================================================
-
-
 
     // REKAPITULASI SEMUA SITE & STATUS KEPATUHAN PDS (DYNAMIC GEDUNG & MOBIL)
 
@@ -25108,78 +21275,35 @@
 
 
 
+        const siteHasPan = isMobil ? false : siteHasPantry(s.code);
+        const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || siteHasPan);
+        const siteTotal = siteCats.length || (isMobil ? 5 : 9);
+
         const catMap = {};
-
-
-
         let uploadedCount = 0;
 
-
-
         categories.forEach(cat => {
-
-
-
+          if (!isMobil && cat.key === 'pantry' && !siteHasPan) {
+            catMap[cat.key] = 'N/A';
+            return;
+          }
           const hasUploaded = sitePhotos.some(p => matchPhotoToCategory(p, cat, isMobil));
-
-
-
           catMap[cat.key] = hasUploaded;
-
-
-
           if (hasUploaded) uploadedCount++;
-
-
-
         });
 
-
-
-        const isComplete = (uploadedCount === totalCat);
-
-
+        const isComplete = (uploadedCount === siteTotal);
 
         return {
-
-
-
           site: s,
-
-
-
           code: s.code,
-
-
-
           name: s.name,
-
-
-
           pic: s.pic || '-',
-
-
-
           catMap: catMap,
-
-
-
           uploadedCount: uploadedCount,
-
-
-
-          totalCount: totalCat,
-
-
-
+          totalCount: siteTotal,
           isComplete: isComplete,
-
-
-
-          scoreLabel: `${uploadedCount}/${totalCat}`
-
-
-
+          scoreLabel: `${uploadedCount}/${siteTotal}`
         };
 
 
@@ -25445,33 +21569,18 @@
 
 
             categories.forEach(cat => {
-
-
-
               const ok = row.catMap[cat.key];
-
-
-
-              trHtml += `<td class="py-2 px-2 text-center">
-
-
-
-                ${ok 
-
-
-
-                  ? '<span class="text-emerald-600 font-black text-sm">✓</span>' 
-
-
-
-                  : '<span class="text-rose-600 font-black text-sm">✕</span>'}
-
-
-
-              </td>`;
-
-
-
+              if (ok === 'N/A') {
+                trHtml += `<td class="py-2 px-2 text-center">
+                  <span class="text-slate-400 font-bold text-xs" title="Site ${row.code} tidak memiliki fasilitas Pantry">-</span>
+                </td>`;
+              } else {
+                trHtml += `<td class="py-2 px-2 text-center">
+                  ${ok 
+                    ? '<span class="text-emerald-600 font-black text-sm">✓</span>' 
+                    : '<span class="text-rose-600 font-black text-sm">✕</span>'}
+                </td>`;
+              }
             });
 
 
@@ -30353,7 +26462,9 @@
 
 
 
-        boxes = (appState.categoriesGedung || []).map(cat => {
+        const hasPantryExp = siteHasPantry(sCode);
+        const activeCatsExp = (appState.categoriesGedung || []).filter(c => c.key !== 'pantry' || hasPantryExp);
+        boxes = activeCatsExp.map(cat => {
 
           const found = sitePhotos.find(p => p.category_key === cat.key || (typeof matchPhotoToCategory === 'function' && matchPhotoToCategory(p, cat, false)));
 
@@ -33135,42 +29246,14 @@
 
 
 
+    // Event Listener Modal Pilih Sumber Foto (Kamera vs Galeri)
+    document.getElementById('btnCloseModalSumberFoto')?.addEventListener('click', () => closePhotoSourceModal());
+    document.getElementById('btnPilihKameraLangsung')?.addEventListener('click', () => selectPhotoSource('camera'));
+    document.getElementById('btnPilihGaleriFile')?.addEventListener('click', () => selectPhotoSource('gallery'));
+
     // Event Listener Modal Pilih Format Laporan
 
 
-
-        // Modal Pilih Sumber Foto Handlers (Kamera vs Galeri)
-    const btnCloseModalSumber = document.getElementById('btnCloseModalSumberFoto');
-    if (btnCloseModalSumber) btnCloseModalSumber.addEventListener('click', () => closePhotoSourceModal(false));
-
-    const btnBatalSumber = document.getElementById('btnBatalSumberFoto');
-    if (btnBatalSumber) btnBatalSumber.addEventListener('click', () => closePhotoSourceModal(false));
-
-    const btnCam = document.getElementById('btnPilihKameraLangsung');
-    if (btnCam) {
-      btnCam.addEventListener('click', () => {
-        if (!pendingPhotoTarget) return;
-        const { key, siteCode } = pendingPhotoTarget;
-        const targetCamId = siteCode ? `fileInput_cam_${siteCode}_${key}` : `fileInput_cam_${key}`;
-        let camInput = document.getElementById(targetCamId);
-        if (!camInput) camInput = document.getElementById(`fileInput_cam_${key}`);
-        closePhotoSourceModal(false);
-        if (camInput) camInput.click();
-      });
-    }
-
-    const btnGal = document.getElementById('btnPilihGaleriFile');
-    if (btnGal) {
-      btnGal.addEventListener('click', () => {
-        if (!pendingPhotoTarget) return;
-        const { key, siteCode } = pendingPhotoTarget;
-        const targetId = siteCode ? `fileInput_${siteCode}_${key}` : `fileInput_${key}`;
-        let galInput = document.getElementById(targetId);
-        if (!galInput) galInput = document.getElementById(`fileInput_${key}`);
-        closePhotoSourceModal(false);
-        if (galInput) galInput.click();
-      });
-    }
 
     const btnCloseFormat = document.getElementById('btnCloseModalFormatLaporan');
 
@@ -34800,7 +30883,7 @@
 
 
 
-      if (headerUserStatus) headerUserStatus.textContent = isAdmin ? 'ADMIN' : u.site_code;
+      if (headerUserStatus) headerUserStatus.textContent = u.pic_name || (isAdmin ? 'Administrator' : u.site_code);
 
 
 
@@ -35525,6 +31608,15 @@
 
 
       if (newPw || confirmPw) {
+        if (newPw && newPw.startsWith('0')) {
+          if (errBox) {
+            errBox.textContent = 'Sandi baru tidak boleh diawali dengan angka 0!';
+            errBox.classList.remove('hidden');
+          }
+          showToast('Peringatan', 'Sandi baru tidak boleh diawali dengan angka 0!', 'warning');
+          return;
+        }
+
 
         if (!oldPw) {
 
@@ -35552,15 +31644,6 @@
 
           return;
 
-        }
-
-        if (newPw.startsWith('0')) {
-          if (errBox) {
-            errBox.textContent = 'Password baru tidak boleh diawali dengan angka 0!';
-            errBox.classList.remove('hidden');
-          }
-          showToast('Peringatan', 'Password baru tidak boleh diawali dengan angka 0!', 'warning', 3500);
-          return;
         }
 
         if (newPw.length < 3) {
@@ -36064,6 +32147,7 @@
 
 
       appState.currentUser = null;
+      updateSliderAdminActionButtons();
 
 
 
@@ -36304,6 +32388,14 @@
 
 
     window.addEventListener('popstate', (e) => {
+      // 0. Jika popup pilih sumber foto sedang terbuka di HP, tutup seketika saat tombol back HP ditekan
+      const modalPilihSumber = document.getElementById('modalPilihSumberFoto');
+      if (modalPilihSumber && !modalPilihSumber.classList.contains('hidden')) {
+        closePhotoSourceModal(true);
+        try { history.pushState({ isRoot: true, page: 'dashboard' }, ''); } catch(err) {}
+        return;
+      }
+
 
 
 
@@ -36371,9 +32463,11 @@
 
 
 
+        } else if (topModalId === 'modalPilihSumberFoto') {
+
+          closePhotoSourceModal(true);
+
         } else if (topModalId === 'modalInputPlat') {
-
-
 
           closeModalInputPlat(true);
 
@@ -36495,7 +32589,7 @@
 
 
 
-        const topId = openDomModals.includes('changePasswordModal') ? 'changePasswordModal' : (openDomModals.includes('modalDaftarNopol') ? 'modalDaftarNopol' : openDomModals[openDomModals.length - 1]);
+        const topId = openDomModals.includes('confirmModal') ? 'confirmModal' : (openDomModals.includes('changePasswordModal') ? 'changePasswordModal' : (openDomModals.includes('modalDaftarNopol') ? 'modalDaftarNopol' : openDomModals[openDomModals.length - 1]));
 
 
 
@@ -36736,6 +32830,7 @@
 
 
     dom.selectSite.addEventListener('change', (e) => {
+      if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
 
 
 
