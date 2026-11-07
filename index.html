@@ -14,11 +14,17 @@
 
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Monitoring HODs">
+  <meta name="theme-color" content="#2563eb">
 
 
 
-  <link rel="icon" href="data:,">
+    <link rel="icon" type="image/png" href="data:image/png;base64,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">
+  <link rel="apple-touch-icon" href="data:image/png;base64,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">
 
 
 
@@ -133,6 +139,23 @@
     html.dark #filterControlsCard {
       background-color: #334155 !important;
       border-color: #475569 !important;
+    }
+    body.dark-theme #inputSearchSiteAll {
+      background-color: #0f172a !important;
+      border-color: #334155 !important;
+      color: #f1f5f9 !important;
+    }
+    body.dark-theme #dropdownSearchSiteResults {
+      background-color: #1e293b !important;
+      border-color: #334155 !important;
+      color: #f1f5f9 !important;
+    }
+    #dropdownSearchSiteResults::-webkit-scrollbar {
+      width: 5px;
+    }
+    #dropdownSearchSiteResults::-webkit-scrollbar-thumb {
+      background-color: rgba(148, 163, 184, 0.5);
+      border-radius: 4px;
     }
 
     :root {
@@ -670,9 +693,8 @@
 
 
     #mainAppHeader span,
-
-
-
+    #mainAppHeader #headerWeekPeriod,
+    #mainAppHeader #headerSiteCode,
     #mainAppHeader #headerUserStatus {
 
 
@@ -693,6 +715,8 @@
 
 
 
+    #mainAppHeader #headerSiteCode:hover,
+    #mainAppHeader #headerWeekPeriod:hover,
     #mainAppHeader #headerUserStatus:hover {
 
 
@@ -717,6 +741,8 @@
 
 
 
+    body.dark-theme #mainAppHeader #headerSiteCode:hover,
+    body.dark-theme #mainAppHeader #headerWeekPeriod:hover,
     body.dark-theme #mainAppHeader #headerUserStatus:hover {
 
 
@@ -1048,6 +1074,7 @@
 
 
     body.dark-theme #mainAppHeader #headerWeekPeriod,
+    body.dark-theme #mainAppHeader #headerSiteCode,
     body.dark-theme #mainAppHeader #headerUserStatus,
 
 
@@ -3672,6 +3699,8 @@
 
 
 
+        
+
         <!-- Judul & Subjudul (Mepet Rata Kiri di Sebelah Strip-3) -->
 
 
@@ -3715,7 +3744,12 @@
       <!-- Sisi Kanan: Periode Week, Nama HODs & Tombol Fullscreen di Pojok Kanan Atas -->
       <div class="flex items-center gap-2 shrink-0 cursor-default">
 
-        <!-- Kotak Periode Week di Sebelah Kiri Nama HODs -->
+        <!-- Kotak Kode Site di Sebelah Kiri Periode (Kode Saja, Tinggi Sama) -->
+        <div id="headerSiteCode" class="h-8 px-3 rounded-[5px] bg-blue-700 text-white flex items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default whitespace-nowrap uppercase tracking-wider" title="Kode Site Aktif">
+          -
+        </div>
+
+        <!-- Kotak Periode Week di Sebelah Kanan Kode Site -->
         <div id="headerWeekPeriod" class="h-8 px-3 rounded-[5px] bg-blue-700 text-white flex items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default whitespace-nowrap uppercase tracking-wider" title="Periode Week Aktif">
           -
         </div>
@@ -3774,6 +3808,8 @@
         <div class="p-2 space-y-2 flex-1 overflow-y-auto">
 
 
+
+          
 
           <div class="px-2 py-1.5 flex items-center gap-2 border-b border-slate-800/80 mb-1">
 
@@ -4259,6 +4295,22 @@
                 <button id="btnNextWeek" class="w-7 sm:w-8 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs rounded-[4px] transition cursor-pointer shadow-2xs h-[34px] sm:h-[36px] flex items-center justify-center font-bold" title="Minggu Berikutnya">
                   &gt;
                 </button>
+              </div>
+
+              <!-- Kotak Pencarian Site (Hanya Muncul Jika Site = ALL - Ukuran Seragam & Non-Agresif) -->
+              <div id="filterSearchSiteGroup" class="relative hidden items-center">
+                <div class="relative flex items-center">
+                  <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2 pointer-events-none"></i>
+                  <input type="text" id="inputSearchSiteAll" placeholder="Cari Site..."
+                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                         data-form-type="other" data-lpignore="true" data-1p-ignore="true"
+                         readonly onfocus="this.removeAttribute('readonly');"
+                         class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm pl-7 pr-6 py-1 w-[130px] sm:w-[145px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none font-semibold transition h-[34px] sm:h-[36px] placeholder:text-slate-400 dark:placeholder:text-slate-500">
+                  <button type="button" id="btnClearSearchSiteAll" class="hidden absolute right-1.5 w-4 h-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 items-center justify-center text-xs font-bold cursor-pointer" title="Hapus Pencarian">&times;</button>
+                </div>
+                <!-- Custom Dropdown Hasil Pencarian (Non-Agresif, Tanpa Autofill Browser) -->
+                <div id="dropdownSearchSiteResults" class="absolute left-0 top-full mt-1 w-64 max-h-60 overflow-y-auto bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-[5px] shadow-xl z-50 hidden py-1 text-xs select-none">
+                </div>
               </div>
 
               <!-- Checkbox Fasilitas Pantry (Khusus Form Gedung - Ukuran Seragam) -->
@@ -8175,7 +8227,9 @@
 
 
 
-          <div class="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white font-black text-sm tracking-tight">ODS</div>
+          <div class="w-9 h-9 rounded-[6px] bg-white flex items-center justify-center shadow-xs border border-slate-200 shrink-0 p-1 select-none" title="Logo PDS">
+            <img src="data:image/png;base64,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" alt="Logo PDS" class="h-full w-auto object-contain pointer-events-none">
+          </div>
 
 
 
@@ -9226,6 +9280,10 @@
 
 
       btnNextWeek: document.getElementById('btnNextWeek'),
+      filterSearchSiteGroup: document.getElementById('filterSearchSiteGroup'),
+      inputSearchSiteAll: document.getElementById('inputSearchSiteAll'),
+      btnClearSearchSiteAll: document.getElementById('btnClearSearchSiteAll'),
+      dropdownSearchSiteResults: document.getElementById('dropdownSearchSiteResults'),
 
 
 
@@ -13024,7 +13082,18 @@
 
 
 
+    
+    function clearSiteFilterSearchText() {
+      const inputSearch = document.getElementById('inputSearchSiteAll') || (dom && dom.inputSearchSiteAll);
+      const btnClear = document.getElementById('btnClearSearchSiteAll') || (dom && dom.btnClearSearchSiteAll);
+      const dropdown = document.getElementById('dropdownSearchSiteResults') || (dom && dom.dropdownSearchSiteResults);
+      if (inputSearch) inputSearch.value = '';
+      if (btnClear) btnClear.classList.add('hidden');
+      if (dropdown) dropdown.classList.add('hidden');
+    }
+
     function setActiveAppView(viewName) {
+      clearSiteFilterSearchText();
 
 
 
@@ -13581,6 +13650,7 @@
     function applyResponsiveSliderState() {
       const slider = document.getElementById('leftSlider');
       if (!slider) return;
+      // Saat layar kecil (mobile/HP < 1024px), saat pertama buka / refresh, slider = sembunyi
       if (window.innerWidth < 1024) {
         slider.classList.add('hidden');
       } else {
@@ -15667,6 +15737,8 @@
       initSliderNavigation();
       if (typeof applyResponsiveSliderState === 'function') applyResponsiveSliderState();
       if (typeof setupPasswordInputProtection === 'function') setupPasswordInputProtection();
+      if (typeof setupSearchSiteAllFeature === 'function') setupSearchSiteAllFeature();
+      if (typeof updateSearchSiteVisibility === 'function') updateSearchSiteVisibility();
 
       // --- EVENT LISTENER WA REMINDER DARI DASHBOARD (DENGAN POPUP KONFIRMASI) --- //
       const btnRemGedung = document.getElementById('sliderBtnReminderGedung');
@@ -17274,12 +17346,14 @@
 
     function updateSitePicHeader() {
       const headerUserStatus = document.getElementById('headerUserStatus');
+      const headerSiteCode = document.getElementById('headerSiteCode');
       const lblPic = document.getElementById('labelSitePic');
       const val = dom.selectSite ? dom.selectSite.value : 'ALL';
 
       if (val === 'ALL' || appState.selectedSiteId === 'ALL') {
         const adminName = (appState.currentUser && appState.currentUser.pic_name) ? appState.currentUser.pic_name : 'Administrator';
         if (headerUserStatus) headerUserStatus.textContent = adminName;
+        if (headerSiteCode) headerSiteCode.textContent = 'ALL';
         if (lblPic) lblPic.textContent = adminName;
         return;
       }
@@ -17287,7 +17361,10 @@
       const realSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
       const site = realSites.find(s => String(s.id) === String(val) || (s.code && s.code.toUpperCase() === String(val).toUpperCase()));
       const pic = (site && site.pic) ? site.pic : (appState.currentUser && appState.currentUser.pic_name ? appState.currentUser.pic_name : '-');
+      const code = (site && site.code) ? site.code.toUpperCase() : String(val).toUpperCase();
+
       if (headerUserStatus) headerUserStatus.textContent = pic;
+      if (headerSiteCode) headerSiteCode.textContent = code;
       if (lblPic) lblPic.textContent = pic;
     }
 
@@ -17363,6 +17440,152 @@
       if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
     }
 
+    
+    // ----------------- FITUR PENCARIAN SITE PADA MODE ALL (UKURAN SERAGAM & NON-AGRESIF) ----------------- //
+    function updateSearchSiteVisibility() {
+      const searchGroup = document.getElementById('filterSearchSiteGroup') || (dom && dom.filterSearchSiteGroup);
+      if (!searchGroup) return;
+
+      const selSite = document.getElementById('selectSite') || (dom && dom.selectSite);
+      const isAll = (selSite && selSite.value === 'ALL') || (appState && appState.selectedSiteId === 'ALL');
+
+      if (isAll) {
+        searchGroup.classList.remove('hidden');
+        searchGroup.classList.add('flex');
+      } else {
+        searchGroup.classList.add('hidden');
+        searchGroup.classList.remove('flex');
+        const dropdown = document.getElementById('dropdownSearchSiteResults') || (dom && dom.dropdownSearchSiteResults);
+        if (dropdown) dropdown.classList.add('hidden');
+        const inputSearch = document.getElementById('inputSearchSiteAll') || (dom && dom.inputSearchSiteAll);
+        if (inputSearch) inputSearch.value = '';
+        const btnClear = document.getElementById('btnClearSearchSiteAll') || (dom && dom.btnClearSearchSiteAll);
+        if (btnClear) btnClear.classList.add('hidden');
+      }
+    }
+
+    function setupSearchSiteAllFeature() {
+      const searchGroup = document.getElementById('filterSearchSiteGroup') || (dom && dom.filterSearchSiteGroup);
+      const inputSearch = document.getElementById('inputSearchSiteAll') || (dom && dom.inputSearchSiteAll);
+      const btnClear = document.getElementById('btnClearSearchSiteAll') || (dom && dom.btnClearSearchSiteAll);
+      const dropdown = document.getElementById('dropdownSearchSiteResults') || (dom && dom.dropdownSearchSiteResults);
+
+      if (!inputSearch || !dropdown) return;
+      if (inputSearch.dataset.searchInitialized === 'true') return;
+      inputSearch.dataset.searchInitialized = 'true';
+
+      function renderDropdownResults(query) {
+        const q = (query || '').trim().toLowerCase();
+        // Ambil daftar site nyata yang terdaftar (kecuali ALL)
+        const availableSites = (appState && appState.sites ? appState.sites : []).filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
+        const filtered = availableSites.filter(s => {
+          if (!q) return true;
+          const codeMatch = (s.code || '').toLowerCase().includes(q);
+          const nameMatch = (s.name || '').toLowerCase().includes(q);
+          const picMatch = (s.pic || '').toLowerCase().includes(q);
+          return codeMatch || nameMatch || picMatch;
+        });
+
+        dropdown.innerHTML = '';
+        if (filtered.length === 0) {
+          dropdown.innerHTML = `
+            <div class="px-3 py-2.5 text-slate-400 dark:text-slate-400 text-center text-xs">
+              Site tidak ditemukan
+            </div>
+          `;
+        } else {
+          filtered.forEach(s => {
+            const item = document.createElement('div');
+            item.className = 'px-3 py-2 hover:bg-blue-50 dark:hover:bg-slate-700/80 cursor-pointer flex items-center justify-between border-b border-slate-100 dark:border-slate-700/50 last:border-0 transition-colors';
+            item.setAttribute('data-target-site', s.code);
+            item.innerHTML = `
+              <div class="flex items-center gap-2 overflow-hidden">
+                <span class="bg-blue-600 text-white font-bold px-1.5 py-0.5 rounded-[3px] text-[10px] tracking-wider shrink-0">${s.code}</span>
+                <span class="font-semibold text-slate-800 dark:text-slate-100 truncate text-xs">${s.name}</span>
+              </div>
+              <span class="text-[10px] text-slate-400 dark:text-slate-400 shrink-0 ml-2">${s.pic || ''}</span>
+            `;
+            // Gunakan mousedown agar diproses sebelum blur
+            item.addEventListener('mousedown', (e) => {
+              e.preventDefault();
+              selectAndJumpToSite(s.code, s.name);
+            });
+            dropdown.appendChild(item);
+          });
+        }
+        dropdown.classList.remove('hidden');
+      }
+
+      function selectAndJumpToSite(siteCode, siteName) {
+        inputSearch.value = siteCode;
+        if (btnClear) btnClear.classList.remove('hidden');
+        dropdown.classList.add('hidden');
+
+        // Cari elemen site di tampilan Mode ALL
+        const targetEl = document.querySelector(`.pds-site-group[data-site-code="${siteCode}"]`);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // Highlight visual yang jelas
+          targetEl.classList.add('ring-4', 'ring-blue-500', 'ring-offset-2', 'transition-all', 'duration-300');
+          setTimeout(() => {
+            targetEl.classList.remove('ring-4', 'ring-blue-500', 'ring-offset-2');
+          }, 2200);
+        } else {
+          if (typeof showToast === 'function') {
+            showToast('Pencarian Site', `Site ${siteCode} tidak ditemukan pada halaman ini`, 'info', 2000);
+          }
+        }
+      }
+
+      // Saat input fokus atau diklik, tampilkan daftar saran
+      inputSearch.addEventListener('focus', () => {
+        renderDropdownResults(inputSearch.value);
+      });
+      inputSearch.addEventListener('click', () => {
+        renderDropdownResults(inputSearch.value);
+      });
+
+      // Filter saat mengetik
+      inputSearch.addEventListener('input', (e) => {
+        const val = e.target.value;
+        if (btnClear) {
+          btnClear.classList.toggle('hidden', !val);
+        }
+        renderDropdownResults(val);
+      });
+
+      // Navigasi keyboard Enter / Escape
+      inputSearch.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          const firstItem = dropdown.querySelector('[data-target-site]');
+          if (firstItem) {
+            const code = firstItem.getAttribute('data-target-site');
+            selectAndJumpToSite(code, code);
+          }
+        } else if (e.key === 'Escape') {
+          dropdown.classList.add('hidden');
+        }
+      });
+
+      // Tombol bersihkan pencarian
+      if (btnClear) {
+        btnClear.addEventListener('click', () => {
+          inputSearch.value = '';
+          btnClear.classList.add('hidden');
+          dropdown.classList.add('hidden');
+          inputSearch.focus();
+        });
+      }
+
+      // Tutup dropdown jika klik di luar
+      document.addEventListener('click', (e) => {
+        if (searchGroup && !searchGroup.contains(e.target)) {
+          dropdown.classList.add('hidden');
+        }
+      });
+    }
+
     function updateSiteFilterViewMode() {
 
 
@@ -17384,6 +17607,7 @@
 
 
       }
+      if (typeof updateSearchSiteVisibility === 'function') updateSearchSiteVisibility();
 
 
 
@@ -17536,6 +17760,7 @@
 
 
     function switchAuditType(type) {
+      if (typeof clearSiteFilterSearchText === 'function') clearSiteFilterSearchText();
 
 
 
@@ -20216,6 +20441,13 @@
       }
       const { key, siteCode } = pendingPhotoTarget;
       closePhotoSourceModal();
+
+      // Sinkronisasi pilihan sumber ke Native Android APK jika dijalankan via WebView APK
+      try {
+        if (window.AndroidApp && typeof window.AndroidApp.setNextUploadSource === 'function') {
+          window.AndroidApp.setNextUploadSource(sourceType);
+        }
+      } catch (e) {}
 
       const inputId = (sourceType === 'camera')
         ? (siteCode ? `fileInput_cam_${siteCode}_${key}` : `fileInput_cam_${key}`)
@@ -30803,7 +31035,14 @@
 
 
 
-      if (aside) aside.classList.remove('hidden');
+      // Saat layar kecil (mobile/HP), saat pertama buka / refresh, slider = sembunyi
+      if (aside) {
+        if (window.innerWidth < 1024) {
+          aside.classList.add('hidden');
+        } else {
+          aside.classList.remove('hidden');
+        }
+      }
 
 
 
@@ -30885,7 +31124,8 @@
 
       if (headerUserStatus) headerUserStatus.textContent = u.pic_name || (isAdmin ? 'Administrator' : u.site_code);
 
-
+      const headerSiteCode = document.getElementById('headerSiteCode');
+      if (headerSiteCode) headerSiteCode.textContent = (u.site_code || 'ALL').toUpperCase();
 
       if (sliderSiteBadge) sliderSiteBadge.textContent = isAdmin ? 'ROLE: ADMIN' : `SITE: ${u.site_code}`;
 
@@ -30923,7 +31163,7 @@
 
 
 
-        if (!appState.selectedSiteId || (appState.selectedSiteId !== 'ALL' && !realSites.some(s => s.id === appState.selectedSiteId))) {
+        if (u.site_code === 'ALL' || !appState.selectedSiteId || (appState.selectedSiteId !== 'ALL' && !realSites.some(s => s.id === appState.selectedSiteId))) {
 
 
 
@@ -32830,6 +33070,7 @@
 
 
     dom.selectSite.addEventListener('change', (e) => {
+      if (typeof clearSiteFilterSearchText === 'function') clearSiteFilterSearchText();
       if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
 
 
