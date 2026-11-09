@@ -18,7 +18,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Monitoring HODs">
+  <meta name="apple-mobile-web-app-title" content="Laporan Visual PDS">
   <meta name="theme-color" content="#2563eb">
 
 
@@ -28,7 +28,7 @@
 
 
 
-  <title>LAPORAN VISUAL PDS - HODs & ODS Monitoring Dashboard</title>
+  <title>Laporan Visual PDS</title>
 
 
 
@@ -661,6 +661,9 @@
 
 
     #mainAppHeader {
+      height: 40px !important;
+      padding-top: 1mm !important;
+      padding-bottom: 1mm !important;
 
 
 
@@ -695,29 +698,81 @@
     #mainAppHeader span,
     #mainAppHeader #headerWeekPeriod,
     #mainAppHeader #headerSiteCode,
-    #mainAppHeader #headerUserStatus {
-
-
+    #mainAppHeader #headerSiteCodeBadge {
 
       cursor: default !important;
 
-
-
       user-select: none !important;
 
-
-
       -webkit-user-select: none !important;
-
-
 
     }
 
 
 
-    #mainAppHeader #headerSiteCode:hover,
-    #mainAppHeader #headerWeekPeriod:hover,
+    
+    /* Sembunyikan Logo P saat dibuka di layar HP / Mobile (< 640px) */
+    @media (max-width: 639px) {
+      #mainAppHeaderLogo,
+      #mainAppHeader div[title="Logo PDS"] {
+        display: none !important;
+      }
+    }
+
+    /* Kotak Periode Tanggal di Header Sebelah Nama HODS: Lebar Elastis & Rapi */
+    #mainAppHeader #headerWeekPeriod {
+      width: auto !important;
+      min-width: max-content !important;
+      max-width: none !important;
+      white-space: nowrap !important;
+    }
+
+    /* Keseragaman tinggi kotak Header Kanan: Kode Site, Periode, HoDS, Refresh, Fullscreen */
+    #mainAppHeader #headerUserStatus,
+    #mainAppHeader #headerWeekPeriod,
+    #mainAppHeader #headerSiteCodeBadge,
+    #mainAppHeader #btnRefreshSync,
+    #mainAppHeader #btnToggleFullscreen {
+      height: 24px !important;
+      box-sizing: border-box !important;
+    }
+    @media (min-width: 640px) {
+      #mainAppHeader #headerUserStatus,
+      #mainAppHeader #headerWeekPeriod,
+      #mainAppHeader #headerSiteCodeBadge,
+      #mainAppHeader #btnRefreshSync,
+      #mainAppHeader #btnToggleFullscreen {
+        height: 28px !important;
+      }
+    }
+
+    /* Kotak Nama HoDS: Lebar elastis mengikuti teks, rapi tidak terpotong, dan bisa diklik untuk edit profil */
+    #mainAppHeader #headerUserStatus {
+      width: auto !important;
+      min-width: max-content !important;
+      max-width: none !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      text-overflow: clip !important;
+      cursor: pointer !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      transition: background-color 0.15s ease, border-color 0.15s ease !important;
+    }
     #mainAppHeader #headerUserStatus:hover {
+      background-color: #1e40af !important; /* bg-blue-800 saat di-hover */
+      border-color: #60a5fa !important;
+      cursor: pointer !important;
+    }
+    body.dark-theme #mainAppHeader #headerUserStatus:hover {
+      background-color: #475569 !important;
+      border-color: #94a3b8 !important;
+      cursor: pointer !important;
+    }
+
+    #mainAppHeader #headerSiteCode:hover,
+    #mainAppHeader #headerSiteCodeBadge:hover,
+    #mainAppHeader #headerWeekPeriod:hover {
 
 
 
@@ -742,8 +797,7 @@
 
 
     body.dark-theme #mainAppHeader #headerSiteCode:hover,
-    body.dark-theme #mainAppHeader #headerWeekPeriod:hover,
-    body.dark-theme #mainAppHeader #headerUserStatus:hover {
+    body.dark-theme #mainAppHeader #headerWeekPeriod:hover {
 
 
 
@@ -1079,6 +1133,7 @@
 
 
 
+    body.dark-theme #mainAppHeader #btnRefreshSync,
     body.dark-theme #mainAppHeader #btnToggleFullscreen,
 
 
@@ -1103,6 +1158,7 @@
 
 
 
+    body.dark-theme #mainAppHeader #btnRefreshSync:hover,
     body.dark-theme #mainAppHeader #btnToggleFullscreen:hover,
 
 
@@ -3651,6 +3707,13 @@
 
 
 
+
+    /* Tampilan HP: siteActionGroup (Download & Counter foto) disembunyikan agar filter strictly 2 baris rapi */
+    @media (max-width: 639px) {
+      #siteActionGroup {
+        display: none !important;
+      }
+    }
 </style>
 
 
@@ -3675,112 +3738,46 @@
 
 
 
-    <header id="mainAppHeader" class="w-full h-[52px] bg-blue-600 border-b border-blue-700 px-3 shadow-xs shrink-0 z-40 flex items-center justify-between gap-3 select-none cursor-default">
-
-
-
+    <header id="mainAppHeader" class="w-full h-[40px] py-[1mm] px-2.5 sm:px-3 bg-blue-600 border-b border-blue-700 shadow-xs shrink-0 z-40 flex items-center justify-between gap-2.5 select-none cursor-default">
       <div class="flex items-center gap-2.5 min-w-0 cursor-default">
-
-
-
-        <!-- Tombol Strip-3 (Mepet Rata Kiri di Pojok Kiri Atas) -->
-
-
-
-        <button id="btnToggleSlider" type="button" class="w-8 h-8 rounded-[5px] bg-blue-700 hover:bg-blue-800 text-white flex items-center justify-center transition cursor-pointer shadow-xs border border-blue-500 shrink-0" title="Tutup / Buka Slider Menu">
-
-
-
+        <!-- Tombol Strip-3 (Tutup / Buka Slider Menu) -->
+        <button id="btnToggleSlider" type="button" onclick="toggleSlider(event)" class="w-7 h-7 sm:w-8 sm:h-8 rounded-[5px] bg-blue-700 hover:bg-blue-800 text-white flex items-center justify-center transition cursor-pointer shadow-xs border border-blue-500 shrink-0" title="Tutup / Buka Slider Menu">
           <i data-lucide="menu" class="w-4 h-4"></i>
-
-
-
         </button>
 
-
-
-        
-
-        <!-- Judul & Subjudul (Mepet Rata Kiri di Sebelah Strip-3) -->
-
-
-
-        <div class="hidden md:block leading-tight min-w-0 cursor-default select-none">
-
-
-
-          <h1 class="text-base sm:text-lg font-black text-white tracking-tight uppercase leading-tight truncate cursor-default select-none">
-
-
-
-            LAPORAN VISUAL PDS
-
-
-
-          </h1>
-
-
-
-          <p class="text-[10px] sm:text-[11px] font-semibold text-blue-100 tracking-wide mt-0.5 leading-tight truncate cursor-default select-none">
-
-
-
-            STANDARISASI FASILITAS & ARMADA
-
-
-
-          </p>
-
-
-
+        <!-- Logo Gedung P Merah (PDS) Kotak Putih Rapi -->
+        <div id="mainAppHeaderLogo" class="hidden sm:flex w-7 h-7 sm:w-8 sm:h-8 rounded-[6px] bg-white items-center justify-center shadow-xs border border-white/40 shrink-0 p-1 select-none cursor-default" title="Logo PDS">
+          <img src="data:image/png;base64,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" alt="Logo PDS" class="h-full w-auto object-contain pointer-events-none">
         </div>
 
-
-
+        <!-- Judul & Subtitle Aplikasi Kompak, Rapi & Seimbang -->
+        <div class="min-w-0 leading-tight select-none cursor-default">
+          <h1 class="text-xs sm:text-sm md:text-base font-black text-white tracking-wide uppercase truncate leading-none">LAPORAN VISUAL PDS</h1>
+          <p class="text-[8.5px] sm:text-[9.5px] text-blue-100 font-semibold tracking-wide truncate leading-tight mt-0.5">STANDARISASI FASILITAS &amp; ARMADA</p>
+        </div>
       </div>
 
+      <!-- Kanan: Status Online & User Info & Fullscreen (Urutan dari Kanan: Fullscreen, Refresh, Kode Site, Periode, Nama HODS) -->
+      <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-default">
+        <!-- 5. Nama HODS (Paling Kiri di Kumpulan Kanan) -->
+        <div id="headerUserStatus" onclick="openChangePasswordModal()" class="hidden sm:inline-flex items-center justify-center h-6 sm:h-7 px-2.5 rounded-[4px] text-xs font-semibold bg-blue-700 hover:bg-blue-800 text-white border border-blue-500 shadow-2xs whitespace-nowrap w-auto min-w-max cursor-pointer transition" title="Klik untuk lihat / ubah Nama HoDS &amp; Profil">Administrator</div>
 
+        <!-- 4. Periode Week -->
+        <div id="headerWeekPeriod" class="hidden sm:inline-flex items-center justify-center h-6 sm:h-7 px-2.5 rounded-[4px] text-xs font-semibold bg-blue-700 text-white border border-blue-500 shadow-2xs whitespace-nowrap w-auto min-w-max" title="Periode">-</div>
 
-      <!-- Sisi Kanan: Periode Week, Nama HODs & Tombol Fullscreen di Pojok Kanan Atas -->
-      <div class="flex items-center gap-2 shrink-0 cursor-default">
+        <!-- 3. Badge Site Code / ALL -->
+        <div id="headerSiteCodeBadge" class="inline-flex items-center justify-center h-6 sm:h-7 px-2 rounded-[4px] text-[11px] font-black bg-blue-800 text-white border border-blue-500 shadow-2xs tracking-wider uppercase shrink-0">ALL</div>
 
-        <!-- Kotak Kode Site di Sebelah Kiri Periode (Kode Saja, Tinggi Sama) -->
-        <div id="headerSiteCode" class="h-8 px-3 rounded-[5px] bg-blue-700 text-white flex items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default whitespace-nowrap uppercase tracking-wider" title="Kode Site Aktif">
-          -
-        </div>
-
-        <!-- Kotak Periode Week di Sebelah Kanan Kode Site -->
-        <div id="headerWeekPeriod" class="h-8 px-3 rounded-[5px] bg-blue-700 text-white flex items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default whitespace-nowrap uppercase tracking-wider" title="Periode Week Aktif">
-          -
-        </div>
-
-        <!-- Kotak Nama HODs (Langsung Nama Saja) -->
-        <div id="headerUserStatus" class="hidden md:flex h-8 px-3 rounded-[5px] bg-blue-700 text-white items-center justify-center text-xs font-bold border border-blue-500 shadow-2xs shrink-0 select-none cursor-default truncate max-w-[220px]" title="Nama HODs / User">
-          -
-        </div>
-
-
-
-        <!-- Tombol Full Screen di Sebelah Kanan Pojok Atas -->
-
-
-
-        <button id="btnToggleFullscreen" type="button" class="h-8 w-8 rounded-[5px] bg-blue-700 hover:bg-blue-800 text-white flex items-center justify-center transition cursor-pointer shadow-2xs border border-blue-500 shrink-0" title="Layar Penuh (Full Screen)">
-
-
-
-          <i id="iconFullscreen" data-lucide="maximize" class="w-4 h-4"></i>
-
-
-
+        <!-- 2. Tombol Refresh Sync Otomatis / Manual di Header -->
+        <button id="btnRefreshSync" type="button" class="h-6 w-6 sm:h-7 sm:w-7 rounded-[4px] bg-blue-700 hover:bg-blue-800 text-white flex items-center justify-center transition cursor-pointer shadow-2xs border border-blue-500 shrink-0" title="Refresh & Sinkronisasi Data">
+          <svg id="iconRefreshSync" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-3.5 h-3.5"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
         </button>
 
-
-
+        <!-- 1. Tombol Fullscreen (Paling Kanan) -->
+        <button id="btnToggleFullscreen" class="hidden sm:flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-[4px] text-white hover:bg-blue-700 border border-blue-400/60 focus:outline-none transition cursor-pointer shrink-0" title="Layar Penuh (Fullscreen)">
+          <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
+        </button>
       </div>
-
-
-
     </header>
 
 
@@ -4256,7 +4253,7 @@
 
 
 
-      <div id="mainScrollContainer" class="flex-1 flex flex-col min-w-0 p-[1mm] space-y-[1mm] overflow-y-auto">
+      <div id="mainScrollContainer" class="flex-1 flex flex-col min-w-0 px-[1mm] pb-[1mm] pt-0 space-y-[1mm] overflow-y-auto">
 
 
 
@@ -4264,145 +4261,100 @@
 
 
 
-      <section id="topGlobalFilterSection" class="w-full px-0 shrink-0">
-
-
-
-        <div class="bg-white border border-slate-200 card-box p-[1mm] card-pad-1mm shadow-xs">
-
-
-
-          <div class="flex flex-wrap items-end justify-between gap-3">
-
-
+      <!-- FILTER & CONTROL BAR -->
+      <section id="topGlobalFilterSection" class="w-full px-0 shrink-0 relative sm:sticky sm:top-0 sm:z-30 bg-slate-100 dark:bg-slate-900 pb-0.5 sm:pt-0">
+        <div class="bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 card-box p-1 card-pad-1mm shadow-xs">
+          <div class="flex flex-wrap items-center justify-between gap-1.5 sm:gap-2">
 
             <!-- Filters Group: Card Dropdown Pres Bersudut Halus & Kontras Tema Terang/Gelap -->
-            <div id="filterControlsCard" class="bg-slate-300 dark:bg-slate-700 border border-slate-400/80 dark:border-slate-600 rounded-[5px] py-1 px-1.5 sm:px-2 shadow-2xs flex flex-wrap items-center gap-2 sm:gap-2.5 transition-colors">
+            <div id="filterControlsCard" class="bg-slate-300 dark:bg-slate-700 border border-slate-400/80 dark:border-slate-600 rounded-[5px] p-1 sm:p-1.5 shadow-2xs flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-1 sm:gap-1.5 transition-colors w-full sm:w-auto">
 
-              <!-- Filter Site (Dropdown Kode Site Saja - Ukuran Seragam) -->
-              <div id="filterSiteGroup" class="flex items-center">
-                <select id="selectSite" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm px-2.5 py-1 w-[125px] sm:w-[130px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold transition h-[34px] sm:h-[36px]">
-                </select>
-              </div>
-
-              <!-- Filter Week (Prev, Dropdown Week, Next - Ukuran Seragam) -->
-              <div class="flex items-center gap-1">
-                <button id="btnPrevWeek" class="w-7 sm:w-8 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs rounded-[4px] transition cursor-pointer shadow-2xs h-[34px] sm:h-[36px] flex items-center justify-center font-bold" title="Minggu Sebelumnya">
-                  &lt;
-                </button>
-                <select id="selectWeek" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm px-2.5 py-1 w-[125px] sm:w-[130px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold transition h-[34px] sm:h-[36px]">
-                </select>
-                <button id="btnNextWeek" class="w-7 sm:w-8 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs rounded-[4px] transition cursor-pointer shadow-2xs h-[34px] sm:h-[36px] flex items-center justify-center font-bold" title="Minggu Berikutnya">
-                  &gt;
-                </button>
-              </div>
-
-              <!-- Kotak Pencarian Site (Hanya Muncul Jika Site = ALL - Ukuran Seragam & Non-Agresif) -->
-              <div id="filterSearchSiteGroup" class="relative hidden items-center">
-                <div class="relative flex items-center">
-                  <i data-lucide="search" class="w-3.5 h-3.5 text-slate-400 dark:text-slate-500 absolute left-2 pointer-events-none"></i>
-                  <input type="text" id="inputSearchSiteAll" placeholder="Cari Site..."
-                         autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
-                         data-form-type="other" data-lpignore="true" data-1p-ignore="true"
-                         readonly onfocus="this.removeAttribute('readonly');"
-                         class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm pl-7 pr-6 py-1 w-[130px] sm:w-[145px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none font-semibold transition h-[34px] sm:h-[36px] placeholder:text-slate-400 dark:placeholder:text-slate-500">
-                  <button type="button" id="btnClearSearchSiteAll" class="hidden absolute right-1.5 w-4 h-4 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 items-center justify-center text-xs font-bold cursor-pointer" title="Hapus Pencarian">&times;</button>
+              <!-- BARIS 1 MOBILE: SITE & WEEK (ATAS 2 KOTAK) -->
+              <div id="filterRowMobile1" class="flex items-center gap-1 sm:gap-1.5 w-full sm:w-auto sm:contents">
+                <!-- Filter Site: lebar disamakan dengan Status Upload -->
+                <div id="filterSiteGroup" class="flex items-center w-[105px] sm:w-[155px] shrink-0 sm:shrink">
+                  <select id="selectSite" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs px-2 py-0.5 w-full sm:w-[155px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold transition h-[28px] sm:h-[30px]">
+                  </select>
                 </div>
-                <!-- Custom Dropdown Hasil Pencarian (Non-Agresif, Tanpa Autofill Browser) -->
-                <div id="dropdownSearchSiteResults" class="absolute left-0 top-full mt-1 w-64 max-h-60 overflow-y-auto bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-[5px] shadow-xl z-50 hidden py-1 text-xs select-none">
+
+                <!-- Filter Week (Prev, Dropdown Week, Next): lebar disamakan dengan Cari Site -->
+                <div id="filterWeekGroup" class="flex items-center gap-0.5 sm:gap-1 flex-1 min-w-0 sm:flex-initial sm:w-auto">
+                  <button id="btnPrevWeek" class="w-6 sm:w-7 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs rounded-[4px] transition cursor-pointer shadow-2xs h-[28px] sm:h-[30px] flex items-center justify-center font-bold shrink-0" title="Minggu Sebelumnya">
+                    &lt;
+                  </button>
+                  <select id="selectWeek" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs px-1.5 sm:px-2 py-0.5 flex-1 min-w-0 sm:w-[155px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-semibold transition h-[28px] sm:h-[30px]">
+                  </select>
+                  <button id="btnNextWeek" class="w-6 sm:w-7 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs rounded-[4px] transition cursor-pointer shadow-2xs h-[28px] sm:h-[30px] flex items-center justify-center font-bold shrink-0" title="Minggu Berikutnya">
+                    &gt;
+                  </button>
                 </div>
               </div>
 
-              <!-- Checkbox Fasilitas Pantry (Khusus Form Gedung - Ukuran Seragam) -->
-              <div id="kontrolPantryGedung" class="flex items-center">
-                <label id="labelCheckboxPantry" class="flex items-center justify-between px-3 py-1 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 rounded-[4px] cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none w-[125px] sm:w-[130px] h-[34px] sm:h-[36px] shadow-2xs" title="Centang jika site ini memiliki fasilitas Pantry">
+              <!-- BARIS 2 MOBILE: STATUS & CARI SITE (BAWAH 2 KOTAK) -->
+              <div id="filterRowMobile2" class="hidden sm:flex items-center gap-1 sm:gap-1.5 w-full sm:w-auto sm:contents">
+                <!-- Filter Status Upload: lebar sama persis dengan Site (105px di HP) -->
+                <div id="filterStatusUploadGroup" class="hidden items-center w-[105px] sm:w-[155px] shrink-0 sm:shrink">
+                  <select id="selectStatusUpload" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs px-2 py-0.5 w-full sm:w-[155px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-bold transition h-[28px] sm:h-[30px]" title="Filter Kotak Foto Berdasarkan Status Upload">
+                    <option value="SUDAH" selected>SUDAH</option>
+                    <option value="ALL">SEMUA</option>
+                    <option value="BELUM">BELUM</option>
+                  </select>
+                </div>
+
+                <!-- Kotak Pencarian Site: lebar sama persis dengan Week Group (flex-1 dari < sampai > di HP) -->
+                <div id="filterSearchSiteGroup" class="relative hidden items-center flex-1 min-w-0 sm:flex-initial sm:w-[155px]">
+                  <div class="relative flex items-center w-full">
+                    <i data-lucide="search" class="w-3 h-3 text-slate-400 dark:text-slate-500 absolute left-2 pointer-events-none"></i>
+                    <input type="text" id="inputSearchSiteAll" placeholder="Cari Site..."
+                           autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+                           class="w-full flex-1 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs pl-6 pr-6 py-0.5 rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none transition h-[28px] sm:h-[30px]" />
+                    <button type="button" id="btnClearSearchSiteAll" class="hidden absolute right-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 text-xs p-0.5">
+                      <i data-lucide="x" class="w-3 h-3"></i>
+                    </button>
+                  </div>
+                  <!-- Dropdown Hasil Pencarian Site -->
+                  <div id="dropdownSearchSiteResults" class="hidden absolute top-full left-0 mt-1 w-64 max-h-60 overflow-y-auto bg-white dark:bg-slate-900 border border-slate-300 dark:border-slate-700 rounded-md shadow-lg z-50 py-1 text-xs">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Checkbox Fasilitas Pantry (Khusus Form Gedung - Ukuran Seragam & Full 1 Baris di HP) -->
+              <div id="kontrolPantryGedung" class="hidden items-center w-full sm:w-auto">
+                <label id="labelCheckboxPantry" class="flex items-center justify-between px-2.5 py-0.5 bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 rounded-[4px] cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition select-none w-full sm:w-[120px] h-[28px] sm:h-[30px] shadow-2xs" title="Centang jika site ini memiliki fasilitas Pantry">
                   <span class="text-xs font-bold text-slate-800 dark:text-slate-100">PANTRY</span>
                   <input type="checkbox" id="checkboxHasPantry" class="w-3.5 h-3.5 text-blue-600 rounded-[3px] border-slate-400 focus:ring-blue-500 cursor-pointer accent-blue-600">
                 </label>
               </div>
 
               <!-- Kontrol Tambahan Audit Mobil (Plat & + Input Plat) -->
-              <div id="kontrolKhususMobil" class="hidden flex flex-wrap items-center gap-2">
-                <select id="selectPlatMobil" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs sm:text-sm px-2.5 py-1 min-w-[130px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-bold h-[34px] sm:h-[36px]">
+              <div id="kontrolKhususMobil" class="hidden flex flex-wrap items-center gap-1.5 sm:gap-2 w-full sm:w-auto">
+                <select id="selectPlatMobil" class="bg-white dark:bg-slate-900 border border-slate-400/70 dark:border-slate-700 text-slate-800 dark:text-slate-100 text-xs px-2 py-0.5 min-w-[120px] rounded-[4px] shadow-2xs focus:ring-1 focus:ring-slate-800 focus:outline-none cursor-pointer font-bold h-[28px] sm:h-[30px]">
                 </select>
-                <button id="btnOpenModalInputPlat" type="button" class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[4px] shadow-xs flex items-center gap-1.5 transition cursor-pointer h-[34px] sm:h-[36px]" title="Daftarkan Nomor Plat & Driver Baru">
+                <button id="btnOpenModalInputPlat" type="button" class="px-2.5 py-0.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[4px] shadow-xs flex items-center gap-1 transition cursor-pointer h-[28px] sm:h-[30px]" title="Daftarkan Nomor Plat & Driver Baru">
                   <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
-                  <span>+ Input Daftar NOPOL</span>
+                  <span>+ NOPOL</span>
                 </button>
               </div>
 
             </div>
 
-
-
-            <!-- Download & Export Action Group in Filter Bar -->
-
-
-
-            <div id="siteActionGroup" class="flex items-center gap-2">
-
-
-
-              <span id="sitePhotoCounter" class="text-xs font-semibold text-slate-700 bg-slate-100 border border-slate-200 px-3 py-1.5 subtle-box">
-
-
-
+            <!-- Download & Export Action Group: HANYA MUNCUL DI LAPTOP (hidden sm:flex), TIDAK MEMBUAT BARIS KE-3 DI HP -->
+            <div id="siteActionGroup" class="hidden sm:flex items-center gap-1.5 sm:gap-2">
+              <span id="sitePhotoCounter" class="text-xs font-semibold text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 px-2 py-0.5 rounded-[4px] shadow-2xs h-[28px] sm:h-[30px] flex items-center">
                 0 dari 9 foto
-
-
-
               </span>
-
-
-
-              <!-- Tombol Unduh PowerPoint Langsung Sesuai Filter Dashboard (Disembunyikan, format dipilih via popup) -->
-
-
-
-              <button id="btnDirectExportPptxSite" type="button" class="hidden px-3 py-1.5 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-[5px] items-center gap-1.5 shadow-xs transition cursor-pointer" title="Download laporan PowerPoint (.pptx) dengan foto dan catatan sesuai filter aktif">
-
-
-
+              <button id="btnDirectExportPptxSite" type="button" class="hidden px-2.5 py-1 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-[4px] items-center gap-1 shadow-xs transition cursor-pointer h-[28px] sm:h-[30px]" title="Unduh PowerPoint">
                 <i data-lucide="presentation" class="w-3.5 h-3.5"></i>
-
-
-
-                <span>Unduh PowerPoint</span>
-
-
-
+                <span class="hidden sm:inline">PPTX</span>
               </button>
-
-
-
-              <button id="btnDownloadMenu" class="px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold subtle-box flex items-center gap-1.5 shadow-xs transition cursor-pointer border border-emerald-500" title="Download foto atau pilihan format laporan (PPTX, DOCX, PDF, XLSX)">
-
-
-
+              <button id="btnDownloadMenu" class="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold rounded-[4px] flex items-center gap-1 shadow-xs transition cursor-pointer h-[28px] sm:h-[30px]" title="Download foto atau pilihan format laporan">
                 <i data-lucide="download" class="w-3.5 h-3.5"></i>
-
-
-
                 <span>Download</span>
-
-
-
               </button>
-
-
-
             </div>
 
-
-
           </div>
-
-
-
         </div>
-
-
-
       </section>
 
 
@@ -5007,10 +4959,17 @@
 
 
 
+          <!-- Filter Tipe Site: PDS vs PSR (Default PDS) -->
+          <div class="flex items-center gap-1.5">
+            <label for="selectRekapNilaiSiteType" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Tipe:</label>
+            <select id="selectRekapNilaiSiteType" onchange="renderRekapNilaiTable()" class="bg-white border border-slate-300 text-slate-800 text-xs px-2.5 py-1.5 rounded-[5px] font-bold focus:outline-none focus:ring-1 focus:ring-slate-800 cursor-pointer shadow-2xs" title="Filter Tipe Site: PDS (3 digit) atau PSR (>3 digit)">
+              <option value="PDS" selected>PDS</option>
+              <option value="PSR">PSR</option>
+              <option value="ALL">SEMUA</option>
+            </select>
+          </div>
+
           <div class="relative">
-
-
-
             <input type="text" id="rekapNilaiSearchInput" oninput="renderRekapNilaiTable()" placeholder="Cari site / PIC..." autocomplete="off"
 
 
@@ -5331,10 +5290,17 @@
 
 
 
+            <!-- Filter Tipe Site: PDS vs PSR (Default PDS) -->
+            <div class="flex items-center gap-1.5">
+              <label for="selectRekapSiteType" class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Tipe:</label>
+              <select id="selectRekapSiteType" onchange="renderRekapTable()" class="bg-white border border-slate-300 text-slate-800 text-xs px-2.5 py-1.5 rounded-[5px] font-bold focus:outline-none focus:ring-1 focus:ring-slate-800 cursor-pointer shadow-2xs" title="Filter Tipe Site: PDS (3 digit) atau PSR (>3 digit)">
+                <option value="PDS" selected>PDS</option>
+                <option value="PSR">PSR</option>
+                <option value="ALL">SEMUA</option>
+              </select>
+            </div>
+
             <div class="relative">
-
-
-
               <input type="text" id="rekapSearchInput" placeholder="Cari kode site / nama..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
 
 
@@ -5503,7 +5469,7 @@
 
 
 
-            <p id="pdsBelumKirimSubtitle" class="text-[10px] text-slate-500 font-medium">Monitoring Kepatuhan Seluruh PDS - Week XX</p>
+            <p id="pdsBelumKirimSubtitle" class="text-[10px] text-slate-500 font-medium">Audit Kepatuhan Seluruh PDS - Week XX</p>
 
 
 
@@ -6028,33 +5994,13 @@
 
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-200">
-
-
-
-          <button id="btnCancelLogout" type="button" class="px-3 py-1.5 text-xs font-bold rounded-[5px] bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
-
-
-
-            Batal
-
-
-
+          <button id="btnCancelLogout" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold rounded-[5px] bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 cursor-pointer flex items-center justify-center">
+            BATAL
           </button>
-
-
-
-          <button id="btnConfirmLogout" type="button" class="px-3 py-1.5 text-xs font-bold rounded-[5px] bg-rose-600 hover:bg-rose-700 text-white cursor-pointer shadow-xs">
-
-
-
-            Ya, Keluar
-
-
-
+          <button id="btnConfirmLogout" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold rounded-[5px] bg-rose-600 hover:bg-rose-700 text-white cursor-pointer shadow-xs flex items-center justify-center gap-1.5">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>KELUAR</span>
           </button>
-
-
-
         </div>
 
 
@@ -6207,30 +6153,12 @@
 
 
 
-          <button id="btnOpenGalleryFromChart" type="button" class="px-3 py-1.5 text-xs font-bold rounded-[5px] bg-blue-600 hover:bg-blue-700 text-white flex items-center gap-1.5 cursor-pointer shadow-xs">
-
-
-
+          <button id="btnOpenGalleryFromChart" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold rounded-[5px] bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
             <i data-lucide="image" class="w-3.5 h-3.5"></i>
-
-
-
-            <span>Buka Galeri Site Ini</span>
-
-
-
+            <span>GALERI</span>
           </button>
-
-
-
-          <button id="btnDismissChartDetail" type="button" class="px-3 py-1.5 text-xs font-bold rounded-[5px] bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer">
-
-
-
-            Tutup
-
-
-
+          <button id="btnDismissChartDetail" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold rounded-[5px] bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 cursor-pointer flex items-center justify-center">
+            TUTUP
           </button>
 
 
@@ -6451,14 +6379,8 @@
 
 
 
-        <button type="button" id="btnCancelSettingsModal" class="px-3.5 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer">
-
-
-
-          Tutup
-
-
-
+        <button type="button" id="btnCancelSettingsModal" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center">
+          TUTUP
         </button>
 
 
@@ -6619,30 +6541,12 @@
 
 
 
-        <button id="btnTambahPlatFromDaftar" type="button" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold subtle-box transition cursor-pointer flex items-center gap-1.5 shadow-2xs">
-
-
-
+        <button id="btnTambahPlatFromDaftar" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center gap-1.5 shadow-2xs">
           <i data-lucide="plus" class="w-3.5 h-3.5"></i>
-
-
-
-          <span>+ Tambah Nopol Baru</span>
-
-
-
+          <span>TAMBAH</span>
         </button>
-
-
-
-        <button id="btnTutupModalDaftarNopol" type="button" class="px-4 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold subtle-box transition cursor-pointer">
-
-
-
-          Tutup
-
-
-
+        <button id="btnTutupModalDaftarNopol" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center">
+          TUTUP
         </button>
 
 
@@ -6720,21 +6624,13 @@
         </div>
 
         <div class="flex items-center justify-end gap-2 pt-2 border-t border-slate-100">
-
-          <button id="btnBatalHapusNopol" type="button" class="px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-100 border border-slate-300 rounded-[5px] transition cursor-pointer">
-
-            Batal
-
+          <button id="btnBatalHapusNopol" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold text-slate-600 hover:bg-slate-100 border border-slate-300 rounded-[5px] transition cursor-pointer flex items-center justify-center">
+            BATAL
           </button>
-
-          <button id="btnEksekusiHapusNopol" type="button" class="px-3.5 py-1.5 text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-[5px] transition cursor-pointer flex items-center gap-1.5 shadow-xs">
-
+          <button id="btnEksekusiHapusNopol" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 rounded-[5px] transition cursor-pointer flex items-center justify-center gap-1.5 shadow-xs">
             <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-
-            <span>Hapus Nopol</span>
-
+            <span>HAPUS</span>
           </button>
-
         </div>
 
       </div>
@@ -6917,54 +6813,21 @@
 
 
 
-          <button id="btnBukaDaftarNopol" type="button" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold subtle-box transition cursor-pointer flex items-center gap-1.5 border border-slate-300">
-
-
-
+          <button id="btnBukaDaftarNopol" type="button" class="h-[36px] px-3 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center gap-1.5 border border-slate-300">
             <i data-lucide="list" class="w-3.5 h-3.5 text-blue-600"></i>
-
-
-
-            <span>Daftar Nopol</span>
-
-
-
+            <span>DAFTAR NOPOL</span>
           </button>
 
 
 
           <div class="flex items-center gap-2">
-
-
-
-            <button id="btnCancelInputPlat" type="button" class="px-3.5 py-1.5 bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-semibold subtle-box transition cursor-pointer">
-
-
-
-              Batal
-
-
-
+            <button id="btnCancelInputPlat" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-white border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center">
+              BATAL
             </button>
-
-
-
-            <button type="submit" id="btnSubmitInputPlat" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold subtle-box shadow-xs transition cursor-pointer flex items-center gap-1.5">
-
-
-
+            <button type="submit" id="btnSubmitInputPlat" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[5px] shadow-xs transition cursor-pointer flex items-center justify-center gap-1.5">
               <i data-lucide="save" class="w-3.5 h-3.5"></i>
-
-
-
-              <span>Simpan Nopol</span>
-
-
-
+              <span>SIMPAN</span>
             </button>
-
-
-
           </div>
 
 
@@ -7054,33 +6917,12 @@
 
 
       <div class="bg-slate-100 px-5 py-3 border-t border-slate-200 flex justify-end gap-2">
-
-
-
-        <button id="btnCancelConfirm" class="px-3.5 py-1.5 bg-white hover:bg-slate-50 text-slate-700 text-xs font-medium border border-slate-300 subtle-box transition">
-
-
-
-          Batal
-
-
-
+        <button id="btnCancelConfirm" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-white hover:bg-slate-50 text-slate-700 text-xs font-bold border border-slate-300 rounded-[5px] transition flex items-center justify-center cursor-pointer">
+          BATAL
         </button>
-
-
-
-        <button id="btnProceedConfirm" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold subtle-box shadow-xs transition">
-
-
-
-          Lanjutkan
-
-
-
+        <button id="btnProceedConfirm" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[5px] shadow-xs transition flex items-center justify-center gap-1.5 cursor-pointer">
+          LANJUT
         </button>
-
-
-
       </div>
 
 
@@ -7658,21 +7500,9 @@
 
 
       <div class="bg-slate-50 px-5 py-3 border-t border-slate-200 flex justify-end">
-
-
-
-        <button type="button" id="btnCancelDownloadChoice" class="px-4 py-1.5 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer">
-
-
-
-          Batal
-
-
-
+        <button type="button" id="btnCancelDownloadChoice" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center">
+          BATAL
         </button>
-
-
-
       </div>
 
 
@@ -7966,21 +7796,9 @@
 
 
         <div class="pt-2 flex justify-end">
-
-
-
-          <button type="button" id="btnCancelModalFormatLaporan" class="px-4 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold rounded-[5px] transition cursor-pointer">
-
-
-
-            Batal
-
-
-
+          <button type="button" id="btnCancelModalFormatLaporan" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center border border-slate-300">
+            BATAL
           </button>
-
-
-
         </div>
 
 
@@ -8012,14 +7830,14 @@
       <div class="p-4 space-y-2.5">
         <p class="text-xs text-slate-600 mb-2 font-medium">Silakan pilih cara pengambilan foto dokumentasi:</p>
         
-        <button type="button" id="btnPilihKameraLangsung" onclick="selectPhotoSource('camera')" class="w-full py-3 px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 shadow-xs transition cursor-pointer">
+        <button type="button" id="btnPilihKameraLangsung" onclick="selectPhotoSource('camera')" class="w-full h-[42px] px-4 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold text-xs sm:text-sm rounded-[5px] flex items-center justify-center gap-2 shadow-xs transition cursor-pointer tracking-wider">
           <i data-lucide="camera" class="w-4 h-4"></i>
-          <span>Ambil Foto Langsung (Kamera HP)</span>
+          <span>KAMERA</span>
         </button>
 
-        <button type="button" id="btnPilihGaleriFile" onclick="selectPhotoSource('gallery')" class="w-full py-3 px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-bold text-xs rounded-[5px] flex items-center justify-center gap-2.5 transition cursor-pointer border border-slate-300">
+        <button type="button" id="btnPilihGaleriFile" onclick="selectPhotoSource('gallery')" class="w-full h-[42px] px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-bold text-xs sm:text-sm rounded-[5px] flex items-center justify-center gap-2 transition cursor-pointer border border-slate-300 tracking-wider">
           <i data-lucide="image" class="w-4 h-4 text-slate-600"></i>
-          <span>Pilih dari Galeri / File Foto</span>
+          <span>GALERI</span>
         </button>
 
 
@@ -8237,7 +8055,7 @@
 
 
 
-            <h3 class="text-sm font-bold tracking-tight">Login Monitoring ODS</h3>
+            <h3 class="text-sm font-bold tracking-tight">Login Audit Visual</h3>
 
 
 
@@ -8340,6 +8158,14 @@
         </div>
 
 
+
+                <!-- Checkbox Ingat User dan Sandi -->
+        <div class="flex items-center justify-between pt-0.5 pb-1">
+          <label for="checkRememberLogin" class="flex items-center gap-2 cursor-pointer select-none text-xs font-semibold text-slate-700 dark:text-slate-300 hover:text-slate-900 transition-colors">
+            <input type="checkbox" id="checkRememberLogin" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 border-slate-300 dark:border-slate-600 accent-blue-600 cursor-pointer">
+            <span>Ingat user &amp; sandi</span>
+          </label>
+        </div>
 
         <div id="loginErrorMessage" class="text-xs text-rose-600 font-semibold hidden bg-rose-50 border border-rose-200 p-2 subtle-box"></div>
 
@@ -8754,37 +8580,13 @@
 
 
       <div class="pt-3 mt-4 border-t border-slate-200 flex justify-end gap-2 shrink-0">
-
-
-
-        <button type="button" id="btnCancelChangePassword" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold subtle-box cursor-pointer">
-
-
-
-          Batal
-
-
-
+        <button type="button" id="btnCancelChangePassword" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-[5px] transition cursor-pointer flex items-center justify-center border border-slate-300">
+          BATAL
         </button>
-
-
-
-        <button type="submit" id="btnSaveNewPassword" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold subtle-box flex items-center gap-1.5 shadow-xs transition cursor-pointer">
-
-
-
+        <button type="submit" id="btnSaveNewPassword" class="min-w-[95px] sm:min-w-[105px] h-[36px] bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-[5px] flex items-center justify-center gap-1.5 shadow-xs transition cursor-pointer">
           <i data-lucide="save" class="w-3.5 h-3.5"></i>
-
-
-
-          <span>Simpan Perubahan</span>
-
-
-
+          <span>SIMPAN</span>
         </button>
-
-
-
       </div>
 
 
@@ -9918,7 +9720,7 @@
 
 
 
-        const weekTitle = `Week ${String(weekNum).padStart(2, '0')}`;
+        const weekTitle = `WEEK ${String(weekNum).padStart(2, '0')}`;
 
 
 
@@ -10047,7 +9849,7 @@
       }
 
       dom.selectWeek.innerHTML = appState.availableWeeks.map(w => 
-        `<option value="${w.week_key}" ${w.week_key === curr.week_key ? 'selected' : ''}>${w.week_title || ('Week ' + w.week_number)}</option>`
+        `<option value="${w.week_key}" ${w.week_key === curr.week_key ? 'selected' : ''}>${(w.week_title || ('WEEK ' + w.week_number)).toUpperCase()}</option>`
       ).join('');
 
       if (dom.selectWeek.value !== appState.selectedWeekKey && curr) {
@@ -10702,14 +10504,8 @@
 
 
     function updateFullscreenButtonState() {
-
-
-
-      const btn = document.getElementById('btnToggleFullscreen');
-
-
-
-      if (!btn) return;
+      // Tombol di pojok kanan atas telah diganti menjadi tombol Refresh Auto Singkron
+      return;
 
 
 
@@ -11545,7 +11341,8 @@
 
 
 
-      const validSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
+const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.value || 'PDS').toUpperCase();
+      const validSites = filterSitesByPdsPsr(appState.sites, siteTypeFilter);
 
 
 
@@ -12402,49 +12199,32 @@
 
 
 
-      const validSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
-
-
+      const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.value || 'PDS').toUpperCase();
+      const validSites = filterSitesByPdsPsr(appState.sites, siteTypeFilter);
 
       // Hitung skor akhir setiap site (tidak ada foto / belum dinilai = 0 bintang)
-
       const chartData = validSites.map(site => {
-
         const siteCode = site.code.toUpperCase();
+        const hasPantrySite = isMobil ? false : siteHasPantry(siteCode);
+        const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || hasPantrySite);
 
         let totalCatSum = 0;
-
         let hasExplicit = false;
 
-
-
-        categories.forEach(cat => {
-
+        siteCats.forEach(cat => {
           let sumWeekStars = 0;
-
           selectedWeeks.forEach(w => {
-
             const r = getBoxRating(siteCode, w, cat.key);
-
             if (r > 0) {
-
               sumWeekStars += r;
-
               hasExplicit = true;
-
             }
-
           });
-
           const avg = selectedWeeks.length > 0 ? (sumWeekStars / selectedWeeks.length) : 0;
-
           totalCatSum += avg;
-
         });
 
-
-
-        const finalScore = categories.length > 0 ? (totalCatSum / categories.length) : 0;
+        const finalScore = siteCats.length > 0 ? (totalCatSum / siteCats.length) : 0;
 
         return {
 
@@ -13356,6 +13136,9 @@
 
         switchAuditType('gedung');
         if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
+        const _statSel = document.getElementById('selectStatusUpload');
+        if (_statSel && !_statSel.value) _statSel.value = 'SUDAH';
+        updateSearchSiteVisibility();
 
 
 
@@ -13430,6 +13213,7 @@
 
 
         if (secRekap) secRekap.classList.remove('hidden');
+      updateSearchSiteVisibility();
 
 
 
@@ -13482,6 +13266,7 @@
 
 
         if (secRekap) secRekap.classList.remove('hidden');
+      updateSearchSiteVisibility();
 
 
 
@@ -13647,6 +13432,25 @@
       }
     }
 
+    // Deteksi lingkungan APK Android untuk menyembunyikan Logo P di samping judul
+    function checkAndRemoveLogoForApk() {
+      try {
+        const isAndroidApk = Boolean(
+          window.AndroidApp || 
+          (window.location && window.location.href && window.location.href.includes('android_asset')) ||
+          (navigator.userAgent && /android/i.test(navigator.userAgent) && window.location && window.location.protocol === 'file:')
+        );
+        if (isAndroidApk) {
+          const logo = document.querySelector('#mainAppHeader div[title="Logo PDS"], #mainAppHeader div[title="Polytron"]');
+          if (logo) logo.style.display = 'none';
+        }
+      } catch (e) {
+        console.warn('checkAndRemoveLogoForApk error:', e);
+      }
+    }
+    window.checkAndRemoveLogoForApk = checkAndRemoveLogoForApk;
+    checkAndRemoveLogoForApk();
+
     function applyResponsiveSliderState() {
       const slider = document.getElementById('leftSlider');
       if (!slider) return;
@@ -13662,27 +13466,22 @@
 
 
 
-    function toggleSlider() {
-
-
-
+    let __lastSliderToggle = 0;
+    function toggleSlider(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (e && e.stopPropagation) e.stopPropagation();
+      const now = Date.now();
+      if (now - __lastSliderToggle < 200) return;
+      __lastSliderToggle = now;
       const slider = document.getElementById('leftSlider');
-
-
-
       if (!slider) return;
-
-
-
       slider.classList.toggle('hidden');
-
-
-
-      lucide.createIcons();
-
-
-
+      if (window.lucide && typeof lucide.createIcons === 'function') {
+        lucide.createIcons();
+      }
     }
+    window.toggleSlider = toggleSlider;
+    window.toggleSidebar = toggleSlider;
 
 
 
@@ -13831,45 +13630,57 @@
 
         if (siteInfoBox) siteInfoBox.classList.add('hidden');
 
-        siteSelectBox.innerHTML = realSites.map(s => `<option value="${s.code}" ${s.code === effectiveSiteCode ? 'selected' : ''}>${s.code} - ${s.name}</option>`).join('');
+        // Tambahkan opsi ALL - HEAD OFFICE / ADMINISTRATOR di urutan teratas agar admin bisa melihat/merubah profil ALL
+        let opts = `<option value="ALL">ALL - HEAD OFFICE / ADMINISTRATOR</option>`;
+        opts += realSites.map(s => `<option value="${s.code}">${s.code} - ${s.name}</option>`).join('');
+        siteSelectBox.innerHTML = opts;
+
+        // Tentukan pilihan awal: jika dashboard sedang membuka site tertentu, pilih site tsb, jika ALL pilih ALL
+        const currentActiveSite = (dom && dom.selectSite) ? String(dom.selectSite.value || '').toUpperCase() : '';
+        if (currentActiveSite && currentActiveSite !== 'ALL' && realSites.some(s => s.code.toUpperCase() === currentActiveSite || String(s.id) === currentActiveSite)) {
+          const matched = realSites.find(s => s.code.toUpperCase() === currentActiveSite || String(s.id) === currentActiveSite);
+          siteSelectBox.value = matched ? matched.code : 'ALL';
+        } else {
+          siteSelectBox.value = 'ALL';
+        }
 
         siteSelectBox.onchange = function() {
 
           const chosenCode = this.value;
 
-          const targetS = realSites.find(s => s.code === chosenCode);
+          if (chosenCode === 'ALL') {
+            const rawSavedAll = localStorage.getItem('hods_pic_ALL') || (appState.currentUser ? appState.currentUser.pic_name : '') || 'Administrator'; const savedAllPic = (typeof formatCleanPersonName === 'function') ? formatCleanPersonName(rawSavedAll) : rawSavedAll;
+            if (picInput) picInput.value = savedAllPic;
+            const savedAllEmail = localStorage.getItem('hods_email_ALL') || (appState.currentUser ? appState.currentUser.email : '') || '';
+            if (emailInput) emailInput.value = savedAllEmail;
+            const savedAllPhone = localStorage.getItem('hods_phone_ALL') || (appState.currentUser ? appState.currentUser.phone : '') || '';
+            if (phoneInput) phoneInput.value = savedAllPhone;
+          } else {
+            const targetS = realSites.find(s => s.code === chosenCode);
 
-          if (picInput) {
+            if (picInput) {
+              const savedPic = localStorage.getItem('hods_pic_' + chosenCode);
+              const val = (savedPic !== null && savedPic !== undefined) ? savedPic : (targetS ? targetS.pic || '' : '');
+              picInput.value = (val && val.toLowerCase() !== 'edit di profil' ? val : '').toUpperCase();
+            }
 
-            const savedPic = localStorage.getItem('hods_pic_' + chosenCode);
+            if (emailInput) {
+              const savedEmail = localStorage.getItem('hods_email_' + chosenCode);
+              const val = (savedEmail !== null && savedEmail !== undefined) ? savedEmail : (targetS ? targetS.email || '' : '');
+              emailInput.value = (val && !val.toLowerCase().includes('example.com') ? val : '').toUpperCase();
+            }
 
-            const val = (savedPic !== null && savedPic !== undefined) ? savedPic : (targetS ? targetS.pic || '' : '');
-
-            picInput.value = (val && val.toLowerCase() !== 'edit di profil' ? val : '').toUpperCase();
-
-          }
-
-          if (emailInput) {
-
-            const savedEmail = localStorage.getItem('hods_email_' + chosenCode);
-
-            const val = (savedEmail !== null && savedEmail !== undefined) ? savedEmail : (targetS ? targetS.email || '' : '');
-
-            emailInput.value = (val && !val.toLowerCase().includes('example.com') ? val : '').toUpperCase();
-
-          }
-
-          if (phoneInput) {
-
-            const savedPhone = localStorage.getItem('hods_phone_' + chosenCode);
-
-            const val = (savedPhone !== null && savedPhone !== undefined) ? savedPhone : (targetS ? targetS.phone || '' : '');
-
-            phoneInput.value = (val && !val.startsWith('08123456789') ? val : '').toUpperCase();
-
+            if (phoneInput) {
+              const savedPhone = localStorage.getItem('hods_phone_' + chosenCode);
+              const val = (savedPhone !== null && savedPhone !== undefined) ? savedPhone : (targetS ? targetS.phone || '' : '');
+              phoneInput.value = (val && !val.startsWith('08123456789') ? val : '').toUpperCase();
+            }
           }
 
         };
+
+        // Langsung jalankan pengisian data awal
+        siteSelectBox.onchange();
 
       } else {
 
@@ -14829,14 +14640,76 @@
 
 
 
-      if (btnToggleSlider) btnToggleSlider.addEventListener('click', toggleSlider);
+      // btnToggleSlider uses inline onclick="toggleSlider(event)" with debounce
 
 
 
+
+    // ----------------- PEMBERSIH NAMA DARI TULISAN (HODS...) ----------------- //
+    function formatCleanPersonName(name) {
+      if (!name) return '';
+      let n = String(name).trim();
+      // 1. Hapus segala kurung yang berisi kata hods, e.g. "(HODS TASIK)", "(HODS)", "(hods-bgr)", "(HoDS Jawa Barat)", dsb.
+      n = n.replace(/\s*\(\s*hods[^\)]*\)/gi, '');
+      n = n.replace(/\s*\[\s*hods[^\]]*\]/gi, '');
+      // 2. Hapus awalan "HODS ... / " atau "HODS - " jika ada
+      n = n.replace(/^hods(?:\s+[a-z0-9]+)?\s*[-/:]\s*/gi, '');
+      n = n.replace(/^hods\s+/gi, '');
+      // 3. Hapus akhiran "- HODS..." jika ada
+      n = n.replace(/\s*[-/]\s*hods.*$/gi, '');
+      n = n.replace(/\s+/g, ' ').trim();
+      return n || name;
+    }
+    window.formatCleanPersonName = formatCleanPersonName;
+
+    // ----------------- REFRESH AUTO SINGKRON (DIAM TANPA NOTIFIKASI SAAT BERHASIL) ----------------- //
+    async function handleManualRefreshSync() {
+      const btn = document.getElementById('btnRefreshSync');
+      if (btn && btn.disabled) return;
+
+      const setSpinning = (isSpinning) => {
+        const curBtn = document.getElementById('btnRefreshSync');
+        if (curBtn) curBtn.disabled = isSpinning;
+        const icons = curBtn ? curBtn.querySelectorAll('#iconRefreshSync, svg, i') : document.querySelectorAll('#iconRefreshSync');
+        icons.forEach(el => {
+          if (isSpinning) el.classList.add('animate-spin');
+          else el.classList.remove('animate-spin');
+        });
+      };
+
+      setSpinning(true);
+
+      try {
+        const syncTask = (async () => {
+          let hasChanges = false;
+          if (typeof fetchLiveFromGoogleAppsScript === 'function') {
+            hasChanges = await fetchLiveFromGoogleAppsScript();
+          }
+          // Sinkronisasi & pembaruan menyeluruh untuk SEMUA data (foto, nama profil, driver, catatan, bintang):
+          if (typeof updateSitePicHeader === 'function') updateSitePicHeader();
+          if (typeof syncPlatDropdown === 'function') syncPlatDropdown();
+          if (typeof loadAuditPerSite === 'function') await loadAuditPerSite();
+          if (typeof refreshAllData === 'function') await refreshAllData();
+          if (typeof updateWeekDateRangeLabel === 'function') updateWeekDateRangeLabel();
+          return hasChanges;
+        })();
+
+        // Maksimal timeout 8 detik agar animasi tombol refresh SELALU berhenti muter dalam kondisi apapun
+        const timeoutTask = new Promise(resolve => setTimeout(resolve, 8000));
+        await Promise.race([syncTask, timeoutTask]);
+      } catch (err) {
+        console.warn('Manual refresh sync offline fallback:', err);
+      } finally {
+        setTimeout(() => {
+          setSpinning(false);
+        }, 300);
+      }
+    }
+    window.handleManualRefreshSync = handleManualRefreshSync;
+
+      const btnRefreshSync = document.getElementById('btnRefreshSync');
+      if (btnRefreshSync) btnRefreshSync.addEventListener('click', handleManualRefreshSync);
       const btnFullscreen = document.getElementById('btnToggleFullscreen');
-
-
-
       if (btnFullscreen) btnFullscreen.addEventListener('click', toggleFullscreen);
 
 
@@ -15734,6 +15607,8 @@
 
 
 
+      // Khusus APK Android: Hilangkan logo P di samping judul jika berjalan di aplikasi APK
+      if (typeof checkAndRemoveLogoForApk === 'function') checkAndRemoveLogoForApk();
       initSliderNavigation();
       if (typeof applyResponsiveSliderState === 'function') applyResponsiveSliderState();
       if (typeof setupPasswordInputProtection === 'function') setupPasswordInputProtection();
@@ -15892,19 +15767,16 @@
 
 
 
-      // 5. Sinkronisasi data live dari server di background (Smart Delta - diam jika data sama)
-
-
-
-      fetchLiveFromGoogleAppsScript().catch(err => {
-
-
-
-        console.warn('Background sync note:', err);
-
-
-
-      });
+      // 5. Jalankan fungsi tombol refresh secara otomatis saat halaman dimuat ulang (sinkronisasi lengkap dengan animasi putar)
+      if (typeof handleManualRefreshSync === 'function') {
+        handleManualRefreshSync().catch(err => {
+          console.warn('Initial load refresh note:', err);
+        });
+      } else {
+        fetchLiveFromGoogleAppsScript().catch(err => {
+          console.warn('Background sync note:', err);
+        });
+      }
 
 
 
@@ -15986,6 +15858,21 @@
 
 
     function loadLocalCache() {
+      // Bersihkan nilai di localStorage jika ada sisa (hods...) lama
+      try {
+        for (let i = 0; i < localStorage.length; i++) {
+          const k = localStorage.key(i);
+          if (k && k.startsWith('hods_pic_')) {
+            const val = localStorage.getItem(k);
+            if (val && typeof formatCleanPersonName === 'function') {
+              const cleaned = formatCleanPersonName(val);
+              if (cleaned !== val) {
+                localStorage.setItem(k, cleaned);
+              }
+            }
+          }
+        }
+      } catch (e) {}
 
 
 
@@ -16542,34 +16429,15 @@
 
 
     async function fetchLiveFromGoogleAppsScript() {
-
-
-
-      if (!APPS_SCRIPT_URL) return;
-
-
+      if (!APPS_SCRIPT_URL) return false;
+      let hasChanges = false;
 
       try {
-
-
-
         const nocacheUrl = APPS_SCRIPT_URL + '?action=getAll&_t=' + Date.now();
-
-
-
         const res = await directFetch(nocacheUrl);
-
-
-
         const data = await res.json();
 
-
-
         if (data && data.success) {
-
-
-
-          let hasChanges = false;
 
 
 
@@ -16583,7 +16451,7 @@
 
               const rawPic = s.pic ? String(s.pic).trim() : '';
 
-              const cleanPic = (rawPic && rawPic !== '-' && rawPic.toLowerCase() !== 'edit di profil') ? rawPic : '';
+              const cleanPic = (rawPic && rawPic !== '-' && rawPic.toLowerCase() !== 'edit di profil') ? ((typeof formatCleanPersonName === 'function') ? formatCleanPersonName(rawPic) : rawPic) : '';
 
               const rawEmail = s.email ? String(s.email).trim() : '';
 
@@ -16698,7 +16566,7 @@
 
 
             if (isPlatChanged) {
-
+              hasChanges = true;
               console.log('Sinkronisasi data plat & driver: data lokal diperbarui mengikuti Google Sheet');
 
               appState.registeredPlats = serverPlats;
@@ -16743,367 +16611,115 @@
 
 
 
-          // 2. SINKRONISASI DATA FOTO & CATATAN LANGSUNG MENGIKUTI GOOGLE SHEET (SINGLE SOURCE OF TRUTH)
-
-
-
+          // 2. SINKRONISASI DATA FOTO & CATATAN: SMART DELTA SYNC (GABUNGKAN DATA DATABASE & LOKAL)
           if (data.data && Array.isArray(data.data)) {
-
-
-
             const remoteList = data.data;
-
-
-
             const syncedPhotos = [];
-
-
-
             const handledKeys = new Set();
 
-
-
             remoteList.forEach(rem => {
-
-
-
               const itemLockKey = `${rem.site_code}_${rem.week_key}_${rem.category_key}`;
-
-
-
               handledKeys.add(itemLockKey);
 
-
-
               // 0. JIKA FOTO INI TELAH DIHAPUS OLEH PENGGUNA (PENDING DELETE LOCK), JANGAN PERNAH MUNCULKAN KEMBALI!
-
               if (appState.pendingDeleteLocks && appState.pendingDeleteLocks[itemLockKey]) {
-
                 if (Date.now() < appState.pendingDeleteLocks[itemLockKey]) {
-
-                  return; // Lewati baris cloud lama ini agar tidak membangkitkan foto yang sudah dihapus
-
+                  return; // Lewati baris cloud lama ini
                 } else {
-
                   delete appState.pendingDeleteLocks[itemLockKey];
-
                   try {
-
                     localStorage.setItem('hods_pending_deletes', JSON.stringify(appState.pendingDeleteLocks));
-
                   } catch (e) {}
-
                 }
-
               }
-
-
 
               const remoteLink = convertToDirectImageLink(rem.link_gambar || rem.thumbnail_url || rem.file_url, rem.file_id);
-
-
-
-              const hasFile = Boolean(rem.file_id || (remoteLink && remoteLink.trim() !== ''));
-
-
-
+              const hasRemoteFile = Boolean(rem.file_id || (remoteLink && remoteLink.trim() !== ''));
               const activeLock = (appState.recentUploadLocks && appState.recentUploadLocks[itemLockKey]);
-
-
-
               const localMatch = (appState.drivePhotos || []).find(p =>
-
-
-
                 p.site_code === rem.site_code && p.week_key === rem.week_key && p.category_key === rem.category_key
-
-
-
               );
 
+              // Sinkronisasi Catatan: Google Sheet adalah Single Source of Truth
+              // Jika di database Google Sheet diubah menjadi '-' (atau dikosongkan), maka catatan di aplikasi langsung berubah menjadi kosong/terhapus!
+              let finalCatatan = '-';
+              const rawRemCatatan = (rem.catatan !== undefined && rem.catatan !== null) ? String(rem.catatan).trim() : '';
+              if (rawRemCatatan && rawRemCatatan !== '-') {
+                finalCatatan = rawRemCatatan;
+              } else if (activeLock && activeLock.catatan && activeLock.catatan !== '-' && (Date.now() - activeLock.timestamp < 45000)) {
+                // Hanya lindungi catatan jika pengguna baru saja mengklik upload pada beberapa detik yang lalu
+                finalCatatan = activeLock.catatan;
+              }
 
+              // Simpan atau bersihkan cache catatan lokal mengikuti Google Sheet
+              try {
+                if (finalCatatan && finalCatatan !== '-') {
+                  localStorage.setItem(`local_catatan_${rem.site_code}_${rem.week_key}_${rem.category_key}`, finalCatatan);
+                } else {
+                  localStorage.removeItem(`local_catatan_${rem.site_code}_${rem.week_key}_${rem.category_key}`);
+                  localStorage.removeItem(`local_note_${rem.category_key}`);
+                }
+              } catch (e) {}
 
-              // Proteksi upload lokal baru (< 5 menit): jangan biarkan sheet lama menimpa foto yang baru diganti
-
-
-
+              // Proteksi upload lokal baru (< 5 menit): pertahankan foto & catatan lokal yang baru diupload
               if (activeLock && (Date.now() - activeLock.timestamp < 300000)) {
-
-
-
                 if (activeLock.fileId && rem.file_id === activeLock.fileId) {
-
-
-
                   delete appState.recentUploadLocks[itemLockKey];
-
-
-
-                  syncedPhotos.push({
-
-
-
-                    timestamp: rem.timestamp || activeLock.iso,
-
-
-
-                    site_code: rem.site_code,
-
-
-
-                    site_name: rem.site_name,
-
-
-
-                    week_key: rem.week_key,
-
-
-
-                    category_name: rem.category_name,
-
-
-
-                    category_key: rem.category_key,
-
-
-
-                    file_id: rem.file_id,
-
-
-
-                    drive_url: rem.drive_url || null,
-
-
-
-                    link_gambar: activeLock.fullDataUrl || remoteLink,
-
-
-
-                    thumbnail_url: activeLock.fullDataUrl || remoteLink,
-
-
-
-                    direct_view_url: remoteLink,
-
-
-
-                    file_url: activeLock.fullDataUrl || remoteLink,
-
-
-
-                    file_size: rem.file_size || 0,
-
-
-
-                    catatan: (rem.catatan && rem.catatan !== '-') ? rem.catatan : '-',
-
-
-
-                    uploader: rem.uploader || 'ODS',
-
-
-
-                    status: 'TERSIMPAN',
-
-
-
-                    rating: parseInt(rem.rating) || 0
-
-
-
-                  });
-
-
-
-                  return;
-
-
-
-                } else if (localMatch) {
-
-
-
-                  syncedPhotos.push(localMatch);
-
-
-
-                  return;
-
-
-
                 }
-
-
-
+                syncedPhotos.push({
+                  timestamp: rem.timestamp || activeLock.iso,
+                  site_code: rem.site_code,
+                  site_name: rem.site_name,
+                  week_key: rem.week_key,
+                  category_name: rem.category_name,
+                  category_key: rem.category_key,
+                  file_id: rem.file_id || activeLock.fileId || '',
+                  drive_url: rem.drive_url || null,
+                  link_gambar: activeLock.fullDataUrl || remoteLink,
+                  thumbnail_url: activeLock.fullDataUrl || remoteLink,
+                  direct_view_url: remoteLink,
+                  file_url: activeLock.fullDataUrl || remoteLink,
+                  file_size: rem.file_size || 0,
+                  catatan: finalCatatan,
+                  uploader: rem.uploader || 'ODS',
+                  status: 'TERSIMPAN',
+                  rating: parseInt(rem.rating) || 0
+                });
+                return;
               }
 
-
-
-              // Proteksi timestamp: jika data foto di lokal memiliki timestamp lebih baru daripada data cloud
-
-
-
-              if (localMatch && localMatch.timestamp && rem.timestamp) {
-
-
-
-                const tLocal = new Date(localMatch.timestamp).getTime();
-
-
-
-                const tRemote = new Date(rem.timestamp).getTime();
-
-
-
-                if (tLocal > tRemote + 2000) {
-
-
-
-                  syncedPhotos.push(localMatch);
-
-
-
-                  return;
-
-
-
-                }
-
-
-
-              }
-
-
+              // Pertahankan foto lokal jika remote belum memiliki file_id atau link gambar
+              let finalLink = hasRemoteFile ? remoteLink : (localMatch && localMatch.link_gambar ? localMatch.link_gambar : null);
+              let finalHasFile = Boolean(hasRemoteFile || (localMatch && (localMatch.link_gambar || localMatch.file_url)));
 
               syncedPhotos.push({
-
-
-
                 timestamp: rem.timestamp,
-
-
-
                 site_code: rem.site_code,
-
-
-
                 site_name: rem.site_name,
-
-
-
                 week_key: rem.week_key,
-
-
-
                 category_name: rem.category_name,
-
-
-
                 category_key: rem.category_key,
-
-
-
-                file_id: rem.file_id || null,
-
-
-
+                file_id: rem.file_id || (localMatch ? localMatch.file_id : null),
                 drive_url: rem.drive_url || null,
-
-
-
-                link_gambar: hasFile ? remoteLink : null,
-
-
-
-                thumbnail_url: hasFile ? remoteLink : null,
-
-
-
-                file_url: hasFile ? remoteLink : null,
-
-
-
-                file_size: rem.file_size || 0,
-
-
-
-                catatan: (rem.catatan && rem.catatan !== '-') ? rem.catatan : '-',
-
-
-
+                link_gambar: finalHasFile ? finalLink : null,
+                thumbnail_url: finalHasFile ? finalLink : null,
+                file_url: finalHasFile ? finalLink : null,
+                file_size: rem.file_size || (localMatch ? localMatch.file_size : 0),
+                catatan: finalCatatan,
                 uploader: rem.uploader || 'ODS',
-
-
-
-                status: hasFile ? 'TERSIMPAN' : 'CATATAN_ONLY',
-
-
-
-                rating: parseInt(rem.rating) || 0
-
-
-
+                status: finalHasFile ? 'TERSIMPAN' : 'CATATAN_ONLY',
+                rating: parseInt(rem.rating) || (localMatch ? localMatch.rating : 0)
               });
-
-
-
             });
 
-
-
-            // Sertakan foto lokal yang baru diupload tapi barisnya belum tercatat di Google Sheet
-
-
-
-            if (appState.recentUploadLocks) {
-
-
-
-              Object.keys(appState.recentUploadLocks).forEach(lockKey => {
-
-
-
-                const lock = appState.recentUploadLocks[lockKey];
-
-
-
-                if (lock && (Date.now() - lock.timestamp < 300000) && !handledKeys.has(lockKey)) {
-
-
-
-                  const localPending = (appState.drivePhotos || []).find(p =>
-
-
-
-                    `${p.site_code}_${p.week_key}_${p.category_key}` === lockKey
-
-
-
-                  );
-
-
-
-                  if (localPending) {
-
-
-
-                    syncedPhotos.push(localPending);
-
-
-
-                  }
-
-
-
-                }
-
-
-
-              });
-
-
-
-            }
+            // Sertakan foto/catatan lokal yang belum tercatat sama sekali di database Google Sheet
+            (appState.drivePhotos || []).forEach(localP => {
+              const localLockKey = `${localP.site_code}_${localP.week_key}_${localP.category_key}`;
+              if (!handledKeys.has(localLockKey)) {
+                syncedPhotos.push(localP);
+                handledKeys.add(localLockKey);
+              }
+            });
 
 
 
@@ -17234,17 +16850,7 @@
 
 
             } else {
-
-
-
-              // Data identik / tidak ada perubahan: diam tanpa re-render (bebas flicker)
-
-
-
-              hasChanges = false;
-
-
-
+              // Data identik / tidak ada perubahan foto: biarkan hasChanges (bisa true jika sites/plats berubah, atau false jika semua identik)
             }
 
 
@@ -17270,13 +16876,9 @@
 
 
         if (dom.txtDriveStatus) dom.txtDriveStatus.textContent = 'Mode Offline / Cache Lokal';
-
-
-
+        return false;
       }
-
-
-
+      return Boolean(hasChanges);
     }
 
 
@@ -17289,10 +16891,21 @@
       const headerWeekLbl = document.getElementById('headerWeekPeriod');
       const lbl = document.getElementById('labelWeekRange');
       const wInfo = appState.availableWeeks.find(w => w.week_key === appState.selectedWeekKey) || appState.currentWeek;
-      const rawTextVal = (wInfo && (wInfo.date_range || wInfo.label)) ? (wInfo.date_range || wInfo.label) : '-';
-      const textVal = typeof rawTextVal === 'string' ? rawTextVal.toUpperCase() : rawTextVal;
-      if (headerWeekLbl) headerWeekLbl.textContent = textVal;
-      if (lbl) lbl.textContent = textVal;
+      
+      let weekCapitalTitle = '-';
+      let fullRangeLabel = '-';
+      if (wInfo) {
+        weekCapitalTitle = (wInfo.week_title || (wInfo.week_number ? 'WEEK ' + wInfo.week_number : (wInfo.week_key ? 'WEEK ' + String(wInfo.week_key).replace(/.*W/i, '') : 'WEEK'))).toUpperCase();
+        const dateRange = (wInfo.date_range || '').toUpperCase();
+        fullRangeLabel = dateRange ? `${weekCapitalTitle} - ${dateRange}` : weekCapitalTitle;
+      }
+
+      if (headerWeekLbl) {
+        const periodText = (wInfo && wInfo.date_range) ? wInfo.date_range.toUpperCase() : weekCapitalTitle;
+        headerWeekLbl.textContent = periodText;
+        if (wInfo && wInfo.date_range) headerWeekLbl.title = `Periode: ${fullRangeLabel}`;
+      }
+      if (lbl) lbl.textContent = fullRangeLabel;
 
 
 
@@ -17347,24 +16960,31 @@
     function updateSitePicHeader() {
       const headerUserStatus = document.getElementById('headerUserStatus');
       const headerSiteCode = document.getElementById('headerSiteCode');
+      const headerSiteCodeBadge = document.getElementById('headerSiteCodeBadge');
       const lblPic = document.getElementById('labelSitePic');
       const val = dom.selectSite ? dom.selectSite.value : 'ALL';
 
       if (val === 'ALL' || appState.selectedSiteId === 'ALL') {
-        const adminName = (appState.currentUser && appState.currentUser.pic_name) ? appState.currentUser.pic_name : 'Administrator';
+        const savedAllPic = localStorage.getItem('hods_pic_ALL');
+        const rawAdminName = savedAllPic || ((appState.currentUser && appState.currentUser.pic_name) ? appState.currentUser.pic_name : 'Administrator');
+        const adminName = (typeof formatCleanPersonName === 'function') ? formatCleanPersonName(rawAdminName) : rawAdminName;
         if (headerUserStatus) headerUserStatus.textContent = adminName;
         if (headerSiteCode) headerSiteCode.textContent = 'ALL';
+        if (headerSiteCodeBadge) headerSiteCodeBadge.textContent = 'ALL';
         if (lblPic) lblPic.textContent = adminName;
         return;
       }
 
       const realSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
       const site = realSites.find(s => String(s.id) === String(val) || (s.code && s.code.toUpperCase() === String(val).toUpperCase()));
-      const pic = (site && site.pic) ? site.pic : (appState.currentUser && appState.currentUser.pic_name ? appState.currentUser.pic_name : '-');
       const code = (site && site.code) ? site.code.toUpperCase() : String(val).toUpperCase();
+      const savedSitePic = localStorage.getItem('hods_pic_' + code);
+      const rawPic = savedSitePic || ((site && site.pic) ? site.pic : ((appState.currentUser && appState.currentUser.pic_name) ? appState.currentUser.pic_name : '-'));
+      const pic = (typeof formatCleanPersonName === 'function') ? formatCleanPersonName(rawPic) : rawPic;
 
       if (headerUserStatus) headerUserStatus.textContent = pic;
       if (headerSiteCode) headerSiteCode.textContent = code;
+      if (headerSiteCodeBadge) headerSiteCodeBadge.textContent = code;
       if (lblPic) lblPic.textContent = pic;
     }
 
@@ -17444,23 +17064,44 @@
     // ----------------- FITUR PENCARIAN SITE PADA MODE ALL (UKURAN SERAGAM & NON-AGRESIF) ----------------- //
     function updateSearchSiteVisibility() {
       const searchGroup = document.getElementById('filterSearchSiteGroup') || (dom && dom.filterSearchSiteGroup);
-      if (!searchGroup) return;
-
+      const statusGroup = document.getElementById('filterStatusUploadGroup') || (dom && dom.filterStatusUploadGroup);
+      const rowMobile2 = document.getElementById('filterRowMobile2');
       const selSite = document.getElementById('selectSite') || (dom && dom.selectSite);
-      const isAll = (selSite && selSite.value === 'ALL') || (appState && appState.selectedSiteId === 'ALL');
+      const isRekapOrOther = appState && typeof appState.activeAppView === 'string' && (appState.activeAppView.startsWith('rekap') || appState.activeAppView === 'pengaturan');
+      const isAll = !isRekapOrOther && ((selSite && selSite.value === 'ALL') || (appState && appState.selectedSiteId === 'ALL'));
 
       if (isAll) {
-        searchGroup.classList.remove('hidden');
-        searchGroup.classList.add('flex');
+        if (rowMobile2) {
+          rowMobile2.classList.remove('hidden');
+          rowMobile2.classList.add('flex');
+        }
+        if (statusGroup) {
+          statusGroup.classList.remove('hidden');
+          statusGroup.classList.add('flex');
+        }
+        if (searchGroup) {
+          searchGroup.classList.remove('hidden');
+          searchGroup.classList.add('flex');
+        }
       } else {
-        searchGroup.classList.add('hidden');
-        searchGroup.classList.remove('flex');
-        const dropdown = document.getElementById('dropdownSearchSiteResults') || (dom && dom.dropdownSearchSiteResults);
-        if (dropdown) dropdown.classList.add('hidden');
-        const inputSearch = document.getElementById('inputSearchSiteAll') || (dom && dom.inputSearchSiteAll);
-        if (inputSearch) inputSearch.value = '';
-        const btnClear = document.getElementById('btnClearSearchSiteAll') || (dom && dom.btnClearSearchSiteAll);
-        if (btnClear) btnClear.classList.add('hidden');
+        if (rowMobile2) {
+          rowMobile2.classList.add('hidden');
+          rowMobile2.classList.remove('flex');
+        }
+        if (statusGroup) {
+          statusGroup.classList.add('hidden');
+          statusGroup.classList.remove('flex');
+        }
+        if (searchGroup) {
+          searchGroup.classList.add('hidden');
+          searchGroup.classList.remove('flex');
+          const dropdown = document.getElementById('dropdownSearchSiteResults') || (dom && dom.dropdownSearchSiteResults);
+          if (dropdown) dropdown.classList.add('hidden');
+          const inputSearch = document.getElementById('inputSearchSiteAll') || (dom && dom.inputSearchSiteAll);
+          if (inputSearch) inputSearch.value = '';
+          const btnClear = document.getElementById('btnClearSearchSiteAll') || (dom && dom.btnClearSearchSiteAll);
+          if (btnClear) btnClear.classList.add('hidden');
+        }
       }
     }
 
@@ -19787,11 +19428,35 @@
     // ----------------- RENDER 10 PHOTO CARDS (BERSIH & ANTI-SYNTAX-ERROR) ----------------- //
     function handleCardClick(key, siteCode) {
       let box;
+      const cleanBoxes = appState.currentBoxes || [];
       if (siteCode) {
-        box = appState.currentBoxes.find(b => b.key === key && b.site_code === siteCode);
+        box = cleanBoxes.find(b => (b.key === key || b.base_key === key) && b.site_code === siteCode);
       }
       if (!box) {
-        box = appState.currentBoxes.find(b => b.key === key);
+        box = cleanBoxes.find(b => b.key === key || b.base_key === key);
+      }
+      // Fallback cerdas jika belum sempat ter-index di currentBoxes (misal langsung klik setelah load ALL)
+      if (!box && siteCode) {
+        const found = (appState.drivePhotos || []).find(p => 
+          p.site_code === siteCode && 
+          p.week_key === appState.selectedWeekKey && 
+          (p.category_key === key || (p.category_key || '').endsWith('_' + key))
+        );
+        if (found) {
+          const rawLink = found.link_gambar || found.thumbnail_url || found.file_url;
+          const linkGambar = convertToDirectImageLink(rawLink, found.file_id);
+          box = {
+            key: found.category_key,
+            site_code: found.site_code,
+            name: found.category_name,
+            has_photo: Boolean(linkGambar),
+            file_url: linkGambar,
+            catatan: found.catatan,
+            upload_time: found.timestamp,
+            drive_url: found.drive_url,
+            file_id: found.file_id
+          };
+        }
       }
       if (!box || !box.has_photo || !box.file_url) return;
       const safeCatatan = box.catatan || '';
@@ -19803,11 +19468,31 @@
 
     function handleDownloadBoxPhoto(key, siteCode) {
       let box;
+      const cleanBoxes = appState.currentBoxes || [];
       if (siteCode) {
-        box = appState.currentBoxes.find(b => b.key === key && b.site_code === siteCode);
+        box = cleanBoxes.find(b => (b.key === key || b.base_key === key) && b.site_code === siteCode);
       }
       if (!box) {
-        box = appState.currentBoxes.find(b => b.key === key);
+        box = cleanBoxes.find(b => b.key === key || b.base_key === key);
+      }
+      if (!box && siteCode) {
+        const found = (appState.drivePhotos || []).find(p => 
+          p.site_code === siteCode && 
+          p.week_key === appState.selectedWeekKey && 
+          (p.category_key === key || (p.category_key || '').endsWith('_' + key))
+        );
+        if (found) {
+          const rawLink = found.link_gambar || found.thumbnail_url || found.file_url;
+          const linkGambar = convertToDirectImageLink(rawLink, found.file_id);
+          box = {
+            key: found.category_key,
+            site_code: found.site_code,
+            name: found.category_name,
+            has_photo: Boolean(linkGambar),
+            file_url: linkGambar,
+            file_id: found.file_id
+          };
+        }
       }
       if (!box) return;
       let currentSite = siteCode ? appState.sites.find(s => s.code === siteCode) : appState.sites.find(s => s.id === appState.selectedSiteId);
@@ -19861,21 +19546,31 @@
     function getBoxRating(siteCode, weekKey, categoryKey) {
       const sCode = (siteCode || (appState.currentSite ? appState.currentSite.code : '') || '').toUpperCase();
       const wKey = weekKey || appState.selectedWeekKey;
+      const cacheKey = `rating_${sCode}_${wKey}_${categoryKey}`;
       
-      // 1. Cek dari data Google Sheet / appState.drivePhotos
+      // Sumber Kebenaran Tunggal: Data Database Aktual / Google Sheets (appState.drivePhotos)
       if (appState.drivePhotos && Array.isArray(appState.drivePhotos)) {
         const found = appState.drivePhotos.find(p => 
           p.site_code && p.site_code.toUpperCase() === sCode &&
           p.week_key === wKey &&
           (p.category_key === categoryKey || (p.base_key && p.base_key === categoryKey))
         );
-        if (found && typeof found.rating !== 'undefined' && found.rating !== null && found.rating > 0) {
-          return parseInt(found.rating);
+        if (found) {
+          const r = (typeof found.rating !== 'undefined' && found.rating !== null) ? (parseInt(found.rating) || 0) : 0;
+          if (r > 0) {
+            localStorage.setItem(cacheKey, String(r));
+            return r;
+          } else {
+            localStorage.removeItem(cacheKey);
+            return 0;
+          }
+        } else {
+          localStorage.removeItem(cacheKey);
+          return 0;
         }
       }
 
-      // 2. Cek dari localStorage (sinkronisasi seketika)
-      const cacheKey = `rating_${sCode}_${wKey}_${categoryKey}`;
+      // Fallback lokal sementara jika drivePhotos belum dimuat
       const localVal = localStorage.getItem(cacheKey);
       if (localVal) {
         const parsed = parseInt(localVal);
@@ -20095,10 +19790,11 @@
         appState.currentUser.role === 'ADMIN' || 
         appState.currentUser.role === 'admin'
       ));
-      const isReadOnlyNote = Boolean(appState.isLocked || (!isAdmin && isAll));
-      const currentRating = (typeof box.rating !== 'undefined' && box.rating !== null && box.rating > 0)
-        ? parseInt(box.rating)
-        : getBoxRating(siteCode, appState.selectedWeekKey, box.key);
+      // Untuk login ALL / Admin: Catatan TIDAK PERNAH dikunci (bisa diedit walau lewat week atau beda bulan)
+      // Untuk login Site (non-admin): Catatan terkunci jika week telah lewat (appState.isLocked) atau sedang di view ALL
+      const isReadOnlyNote = isAdmin ? false : Boolean(appState.isLocked || isAll);
+      // Single source of truth: langsung ambil dari database via getBoxRating
+      const currentRating = getBoxRating(siteCode, appState.selectedWeekKey, box.key);
 
       if (hasPhoto) {
         // Card with photo
@@ -20121,8 +19817,8 @@
                      class="w-full h-full object-cover ${!isLocalData ? 'opacity-0 transition-opacity duration-200' : ''}"
                      onload="handlePhotoLoaded('${boxUid}', this)"
                      onerror="handlePhotoError('${boxUid}', this, '${box.file_id || ''}')">
-                <div class="absolute inset-0 bg-slate-950/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-1.5 z-20">
-                  <span class="p-1.5 bg-white text-slate-800 text-[10px] font-bold card-box shadow">Perbesar</span>
+                <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center pointer-events-none z-10">
+                  <span class="px-2 py-1 bg-white text-slate-800 text-[10px] font-bold rounded-[4px] shadow-md border border-slate-200">Perbesar</span>
                 </div>
               </div>
             </div>
@@ -20211,7 +19907,7 @@
             <div class="flex items-center justify-between mb-2">
               <span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-600 bg-rose-50 px-1.5 py-0.5 card-box border border-rose-200">
                 <i data-lucide="alert-circle" class="w-3 h-3 text-rose-600"></i>
-                <span>Belum upload</span>
+                <span>BELUM</span>
               </span>
             </div>
 
@@ -20258,6 +19954,9 @@
       dom.cardsGrid.innerHTML = '';
       const allBoxes = [];
 
+      const statusFilterEl = document.getElementById('selectStatusUpload') || (dom && dom.selectStatusUpload);
+      const statusFilter = (statusFilterEl ? statusFilterEl.value : 'SUDAH') || 'SUDAH';
+
       realSites.forEach((site, index) => {
         let siteBoxes = [];
         if (!isMobilMode) {
@@ -20268,10 +19967,9 @@
             p.category_key !== 'audit_mobil'
           );
 
-          siteBoxes = (() => {
-            const hasPantryAll = siteHasPantry(site.code);
-            const activeCatsAll = (appState.categoriesGedung || []).filter(c => c.key !== 'pantry' || hasPantryAll);
-            return activeCatsAll.map(cat => {
+          const hasPantryAll = siteHasPantry(site.code);
+          const activeCatsAll = (appState.categoriesGedung || []).filter(c => c.key !== 'pantry' || hasPantryAll);
+          siteBoxes = activeCatsAll.map(cat => {
             const found = sitePhotos.find(p => p.category_key === cat.key);
             let rawLink = found ? (found.link_gambar || found.thumbnail_url || found.file_url) : null;
             let fileId = found ? found.file_id : null;
@@ -20292,10 +19990,10 @@
               file_url: hasPhoto ? linkGambar : null,
               catatan: (found && found.catatan && found.catatan !== '-') ? found.catatan : "",
               upload_time: (found && found.timestamp) ? found.timestamp : null,
-              file_size: found ? (found.file_size || 0) : 0
+              file_size: found ? (found.file_size || 0) : 0,
+              rating: found ? (found.rating || 0) : 0
             };
           });
-          })();
         } else {
           const currentPlats = appState.registeredPlats.filter(p => p.site_code.toUpperCase() === site.code.toUpperCase());
           if (currentPlats.length > 0) {
@@ -20334,7 +20032,8 @@
                   file_url: hasPhoto ? linkGambar : null,
                   catatan: (found && found.catatan && found.catatan !== '-') ? found.catatan : "",
                   upload_time: (found && found.timestamp) ? found.timestamp : null,
-                  file_size: found ? (found.file_size || 0) : 0
+                  file_size: found ? (found.file_size || 0) : 0,
+                  rating: found ? (found.rating || 0) : 0
                 };
               });
               siteBoxes.push(...platBoxes);
@@ -20344,6 +20043,16 @@
 
         allBoxes.push(...siteBoxes);
         const siteUploadedCount = siteBoxes.filter(b => b.has_photo).length;
+
+        // Filter status upload: jika SUDAH / BELUM, hilangkan kotak dan judul site yang tidak sesuai
+        let displayedBoxes = siteBoxes;
+        if (statusFilter === 'SUDAH') {
+          displayedBoxes = siteBoxes.filter(b => b.has_photo);
+          if (displayedBoxes.length === 0) return; // Hilangkan judul dan kotak PDS jika tidak ada foto
+        } else if (statusFilter === 'BELUM') {
+          displayedBoxes = siteBoxes.filter(b => !b.has_photo);
+          if (displayedBoxes.length === 0) return; // Hilangkan judul dan kotak PDS jika sudah lengkap
+        }
 
         // Container section for site
         const siteSection = document.createElement('div');
@@ -20374,42 +20083,40 @@
         const innerGrid = document.createElement('div');
         innerGrid.className = 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5';
 
-        if (siteBoxes.length === 0) {
+        if (displayedBoxes.length === 0) {
           innerGrid.innerHTML = `
             <div class="col-span-full py-6 px-4 bg-slate-50 border border-slate-200 rounded-[5px] text-center text-xs text-slate-500">
               Belum ada foto atau data untuk PDS ${site.code} pada periode ini.
             </div>
           `;
         } else {
-          siteBoxes.forEach(box => {
+          displayedBoxes.forEach(box => {
             const card = createPhotoCardElement(box, site, true);
             innerGrid.appendChild(card);
           });
         }
+
         siteSection.appendChild(innerGrid);
-
-        // Divider Line (semua pds di pisah ddengan tanda garis yang terlihat)
-        if (index < realSites.length - 1) {
-          const dividerEl = document.createElement('div');
-          dividerEl.className = 'pt-8 pb-4';
-          dividerEl.innerHTML = `
-            <div class="w-full border-t-4 border-slate-300 rounded-full"></div>
-          `;
-          siteSection.appendChild(dividerEl);
-        }
-
         dom.cardsGrid.appendChild(siteSection);
       });
 
       appState.currentBoxes = allBoxes;
-      const totalUploaded = allBoxes.filter(b => b.has_photo).length;
+
       if (dom.sitePhotoCounter) {
-        dom.sitePhotoCounter.textContent = `${totalUploaded} dari ${allBoxes.length} foto`;
+        const totalExpected = allBoxes.length;
+        const totalUploaded = allBoxes.filter(b => b.has_photo).length;
+        if (statusFilter === 'SUDAH') {
+          dom.sitePhotoCounter.textContent = `${totalUploaded} foto terupload (total: ${totalExpected})`;
+        } else if (statusFilter === 'BELUM') {
+          const totalBelum = totalExpected - totalUploaded;
+          dom.sitePhotoCounter.textContent = `${totalBelum} foto belum upload (total: ${totalExpected})`;
+        } else {
+          dom.sitePhotoCounter.textContent = `${totalUploaded} dari ${totalExpected} foto`;
+        }
       }
+
       if (window.lucide) lucide.createIcons();
     }
-
-    let pendingPhotoTarget = null;
 
     function openPhotoSourceModal(key, siteCode) {
       if (appState.isLocked) {
@@ -20604,17 +20311,19 @@
 
     // ----------------- SIMPAN CATATAN ONLINE KE DATABASE ----------------- //
     async function saveNoteOnline(categoryKey, text, siteCode) {
-      if (appState.isLocked) {
-        showToast('Terkunci', 'Periode ini telah terkunci. Catatan tidak dapat diubah.', 'warning');
-        return;
-      }
-
       const isUserAdmin = Boolean(appState.currentUser && (
         appState.currentUser.site_code === 'ALL' || 
         appState.currentUser.site_code === 'ADMIN' || 
         appState.currentUser.role === 'ADMIN' || 
         appState.currentUser.role === 'admin'
       ));
+
+      // Untuk login ALL / Admin: Catatan tetap dapat disimpan walau periode week telah lewat/terkunci
+      if (appState.isLocked && !isUserAdmin) {
+        showToast('Terkunci', 'Periode ini telah terkunci. Catatan tidak dapat diubah.', 'warning');
+        return;
+      }
+
       const isAllSelected = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
       if (!isUserAdmin && isAllSelected) {
         showToast('Akses Terbatas', 'Saat posisi dropdown ALL, akun site hanya memiliki akses baca (Read-Only). Catatan tidak dapat diubah.', 'warning', 3500);
@@ -20851,21 +20560,49 @@
           'Konfirmasi Ganti Foto',
           `Foto untuk "${catDef?.name || categoryKey}" sudah ada. Lanjutkan ganti foto?`,
           detailsHtml,
-          () => uploadPhotoDirectToDrive(categoryKey, file, true)
+          () => uploadPhotoDirectToDrive(categoryKey, file, true, siteCode)
         );
       } else {
-        uploadPhotoDirectToDrive(categoryKey, file, false);
+        uploadPhotoDirectToDrive(categoryKey, file, false, siteCode);
       }
 
       event.target.value = '';
     }
 
-        async function uploadPhotoDirectToDrive(categoryKey, file, wasOverwrite) {
-      const currentSite = appState.sites.find(s => s.id === appState.selectedSiteId);
+    async function uploadPhotoDirectToDrive(categoryKey, file, wasOverwrite, siteCode) {
+      let currentSite = null;
+      if (typeof siteCode !== 'undefined' && siteCode) {
+        currentSite = appState.sites.find(s => s.code && s.code.toUpperCase() === siteCode.toUpperCase());
+      }
+      if (!currentSite) {
+        currentSite = appState.sites.find(s => s.id === appState.selectedSiteId || (s.code && s.code.toUpperCase() === String(appState.selectedSiteId).toUpperCase()));
+      }
+      if (!currentSite || currentSite.code === 'ALL') {
+        currentSite = appState.sites.find(s => s.code !== 'ALL') || appState.sites[0];
+      }
       if (!currentSite) return;
-      const catDef = appState.categories.find(c => c.key === categoryKey);
-      const noteInput = document.getElementById(`note_${categoryKey}`);
-      const rawCatatan = noteInput ? noteInput.value.trim() : '';
+
+      const catDef = (appState.categories || []).find(c => c.key === categoryKey) ||
+                     (appState.categoriesGedung || []).find(c => c.key === categoryKey) ||
+                     (appState.categoriesMobil || []).find(c => c.key === categoryKey);
+
+      const sCode = currentSite.code;
+      const boxUid = sCode ? `${sCode}_${categoryKey}` : categoryKey;
+      const noteInput = document.getElementById(`note_${boxUid}`) || document.getElementById(`note_${categoryKey}`);
+      let rawCatatan = noteInput ? noteInput.value.trim() : '';
+
+      // Jika belum diketik di textarea saat ini, gunakan catatan yang sudah tersimpan di database/cache
+      if (!rawCatatan) {
+        const existingP = (appState.drivePhotos || []).find(p =>
+          p.site_code === sCode && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
+        );
+        if (existingP && existingP.catatan && existingP.catatan !== '-') {
+          rawCatatan = existingP.catatan.trim();
+        } else {
+          const cachedNote = localStorage.getItem(`local_catatan_${sCode}_${appState.selectedWeekKey}_${categoryKey}`) || localStorage.getItem(`local_note_${categoryKey}`);
+          if (cachedNote && cachedNote !== '-') rawCatatan = cachedNote.trim();
+        }
+      }
       const catatan = rawCatatan || '-';
 
       // Baca file lokal seketika dengan FileReader agar tampil instan tanpa jeda
@@ -20888,6 +20625,15 @@
         }
 
         const nowUploadIso = new Date().toISOString();
+        const itemLockKey = `${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
+        if (!appState.recentUploadLocks) appState.recentUploadLocks = {};
+        appState.recentUploadLocks[itemLockKey] = {
+          timestamp: Date.now(),
+          iso: nowUploadIso,
+          fullDataUrl: fullDataUrl,
+          catatan: catatan
+        };
+
         const localPhotoObj = {
           timestamp: nowUploadIso,
           site_code: currentSite.code,
@@ -21221,6 +20967,23 @@
 
 
 
+    // Helper Filter Tipe Site: PDS (3 digit kode) vs PSR (> 3 digit kode)
+    function filterSitesByPdsPsr(sitesList, filterType = 'PDS') {
+      if (!sitesList || !Array.isArray(sitesList)) return [];
+      const f = (filterType || 'PDS').toUpperCase();
+      return sitesList.filter(s => {
+        if (!s || !s.code || s.code.toUpperCase() === 'ALL') return false;
+        const cleanCode = (s.code || '').replace(/[^a-zA-Z0-9]/g, '').trim();
+        if (f === 'ALL') return true;
+        if (f === 'PDS') {
+          return cleanCode.length === 3;
+        } else if (f === 'PSR') {
+          return cleanCode.length > 3;
+        }
+        return true; // ALL / SEMUA
+      });
+    }
+
     function renderRekapTable(forceMode) {
 
 
@@ -21491,7 +21254,8 @@
 
 
 
-      const validSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
+const siteTypeFilter = (document.getElementById('selectRekapSiteType')?.value || 'PDS').toUpperCase();
+      const validSites = filterSitesByPdsPsr(appState.sites, siteTypeFilter);
 
 
 
@@ -22294,429 +22058,161 @@
 
 
     function openSiteDetailFromChart(siteCode, mode) {
-
-
-
       const s = appState.sites.find(item => item.code.toUpperCase() === siteCode.toUpperCase());
-
-
-
       if (!s) return;
 
       const titleEl = document.getElementById('modalChartSiteTitle');
-
       const picEl = document.getElementById('modalChartSitePic');
-
       const scoreEl = document.getElementById('modalChartSiteScore');
-
       const badgeEl = document.getElementById('modalChartSiteBadge');
-
       const listEl = document.getElementById('modalChartCategoryList');
-
       const btnOpenGallery = document.getElementById('btnOpenGalleryFromChart');
-
       const modal = document.getElementById('modalSiteChartDetail');
 
       if (mode === 'rekap_nilai' || mode === 'rekap_nilai_mobil') {
-
         const isMobil = (mode === 'rekap_nilai_mobil' || appState.rekapNilaiMode === 'mobil');
-
         const categories = isMobil ? (appState.categoriesMobil || []) : (appState.categoriesGedung || []);
-
+        const siteHasPan = isMobil ? false : siteHasPantry(s.code);
+        const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || siteHasPan);
         const selectedWeeks = appState.rekapNilaiSelectedWeeks && appState.rekapNilaiSelectedWeeks.length > 0
-
           ? appState.rekapNilaiSelectedWeeks
-
           : [appState.selectedWeekKey || '2026-W45'];
 
-
-
         let totalCatSum = 0;
-
-        const catListHtml = categories.map(cat => {
-
+        const catListHtml = siteCats.map(cat => {
           let sumWeekStars = 0;
-
           let ratedWeeks = 0;
-
           selectedWeeks.forEach(w => {
-
             const r = getBoxRating(s.code, w, cat.key);
-
             if (r > 0) {
-
               sumWeekStars += r;
-
               ratedWeeks++;
-
             }
-
           });
-
           const avg = selectedWeeks.length > 0 ? (sumWeekStars / selectedWeeks.length) : 0;
-
           totalCatSum += avg;
-
           const formattedScore = avg > 0 ? avg.toFixed(1) : '-';
-
           const hasRating = avg > 0;
 
-
-
           return `
-
             <div class="flex items-center justify-between py-1.5 px-2 hover:bg-slate-50 dark:hover:bg-slate-800 transition rounded">
-
               <div class="flex items-center gap-2 min-w-0">
-
                 <i data-lucide="star" class="w-3.5 h-3.5 ${hasRating ? 'text-amber-500 fill-amber-400' : 'text-slate-300'} shrink-0"></i>
-
                 <div class="truncate">
-
                   <span class="font-semibold text-slate-800 dark:text-slate-200">${escapeHtml(cat.name)}</span>
-
                   ${selectedWeeks.length > 1 ? `<span class="text-[10px] text-slate-400 font-mono block">${ratedWeeks} dari ${selectedWeeks.length} Minggu dinilai</span>` : ''}
-
                 </div>
-
               </div>
-
               <div>
-
                 ${hasRating
-
                   ? `<span class="inline-flex items-center gap-1 text-[11px] font-black text-amber-700 bg-amber-50 dark:bg-amber-950/40 dark:text-amber-300 px-2 py-0.5 rounded border border-amber-200 dark:border-amber-700">⭐ ${formattedScore} Bintang</span>`
-
                   : '<span class="inline-flex items-center gap-1 text-[11px] font-semibold text-slate-400 bg-slate-50 dark:bg-slate-800 px-2 py-0.5 rounded border border-slate-200 dark:border-slate-700">- Belum Dinilai</span>'}
-
               </div>
-
             </div>
-
           `;
-
         }).join('');
 
-
-
-        const finalScore = categories.length > 0 ? (totalCatSum / categories.length) : 0;
-
+        const finalScore = siteCats.length > 0 ? (totalCatSum / siteCats.length) : 0;
         const formattedFinal = finalScore.toFixed(2);
 
-
-
         if (titleEl) titleEl.textContent = `${s.code} · ${s.name} (Penilaian Bintang - Audit ${isMobil ? 'Mobil' : 'Gedung'})`;
-
         if (picEl) picEl.textContent = `Nama PIC: ${s.pic || '-'}`;
-
         if (scoreEl) scoreEl.textContent = `Rata-rata: ${formattedFinal} dari 5.0 ⭐ (${selectedWeeks.length} Minggu Dipilih)`;
-
         if (badgeEl) {
-
           badgeEl.textContent = `⭐ ${finalScore.toFixed(1)}`;
-
           badgeEl.className = 'text-xs font-black px-2.5 py-1 rounded-[5px] bg-amber-100 text-amber-800 dark:bg-amber-900/60 dark:text-amber-300 border border-amber-300';
-
         }
-
         if (listEl) listEl.innerHTML = catListHtml;
 
-
-
         if (btnOpenGallery) {
-
           btnOpenGallery.onclick = () => {
-
             closeChartDetailModal(false);
-
             if (typeof openSiteFromRekapNilai === 'function') {
-
               openSiteFromRekapNilai(s.code);
-
             }
-
           };
-
         }
-
-
 
         if (modal) {
-
           modal.classList.remove('hidden');
-
           document.body.classList.add('overflow-hidden');
-
           if (typeof pushModalStack === 'function') {
-
             pushModalStack('modalSiteChartDetail');
-
           }
-
           if (window.lucide) lucide.createIcons();
-
         }
-
         return;
-
       }
 
-
-
+      // Rekap Foto Branch
       const isMobil = (mode === 'mobil');
-
-
-
       const categories = isMobil ? (appState.categoriesMobil || []) : (appState.categoriesGedung || []);
-
-
-
-      const totalCat = categories.length || (isMobil ? 5 : 9);
-
-
-
+      const siteHasPan = isMobil ? false : siteHasPantry(s.code);
+      const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || siteHasPan);
+      const totalCat = siteCats.length || (isMobil ? 5 : 9);
       const activeWeekKey = appState.selectedWeekKey;
 
-
-
       const sitePhotos = appState.drivePhotos.filter(p => {
-
-
-
         if (p.week_key !== activeWeekKey) return false;
-
-
-
         if (p.site_code !== s.code) return false;
-
-
-
         const isCatMobil = Boolean(p.category_key && (p.category_key.startsWith('mobil_') || p.category_key === 'audit_mobil' || p.category_key.includes('tampak_')));
-
-
-
         return isMobil ? isCatMobil : !isCatMobil;
-
-
-
       });
 
-
-
       let uploadedCount = 0;
-
-
-
-      const catListHtml = categories.map(cat => {
-
-
-
+      const catListHtml = siteCats.map(cat => {
         const photo = sitePhotos.find(p => matchPhotoToCategory(p, cat, isMobil));
-
-
-
         let hasPhoto = Boolean(photo);
-
-
-
         let timeStr = (photo && photo.timestamp) ? formatUploadDateTime(photo.timestamp) : '';
 
-
-
-// Foto murni mengacu pada database Google Sheet
-
-
-
+        // Foto murni mengacu pada database Google Sheet
         if (hasPhoto) uploadedCount++;
 
-
-
         return `
-
-
-
           <div class="flex items-center justify-between py-1.5 px-2 hover:bg-slate-50 transition">
-
-
-
             <div class="flex items-center gap-2 min-w-0">
-
-
-
               <i data-lucide="${isMobil ? 'car' : 'camera'}" class="w-3.5 h-3.5 text-slate-400 shrink-0"></i>
-
-
-
               <div class="truncate">
-
-
-
                 <span class="font-semibold text-slate-800">${escapeHtml(cat.name)}</span>
-
-
-
                 ${timeStr ? `<span class="text-[10px] text-slate-400 font-mono block">${timeStr}</span>` : ''}
-
-
-
               </div>
-
-
-
             </div>
-
-
-
             ${hasPhoto 
-
-
-
               ? '<span class="inline-flex items-center gap-1 text-[11px] font-black text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">✓ Terupload</span>'
-
-
-
               : '<span class="inline-flex items-center gap-1 text-[11px] font-black text-rose-700 bg-rose-50 px-2 py-0.5 rounded border border-rose-200">✕ Belum Unggah</span>'}
-
-
-
           </div>
-
-
-
         `;
-
-
-
       }).join('');
 
-
-
       const pct = Math.round((uploadedCount / totalCat) * 100);
-
-
-
       const isComplete = (uploadedCount === totalCat);
 
-
-
-      // Re-use already declared modal elements
-
-      /* titleEl, picEl, scoreEl, badgeEl, listEl, btnOpenGallery, modal are already declared */
-
-
-
       if (titleEl) titleEl.textContent = `${s.code} · ${s.name} (Audit ${isMobil ? 'Mobil' : 'Gedung'})`;
-
-
-
       if (picEl) picEl.textContent = `Nama PIC: ${s.pic || '-'}`;
-
-
-
       if (scoreEl) scoreEl.textContent = `${uploadedCount} dari ${totalCat} Foto Terupload (${pct}%)`;
-
-
-
       if (badgeEl) {
-
-
-
         badgeEl.textContent = isComplete ? 'LENGKAP' : `${pct}%`;
-
-
-
         badgeEl.className = isComplete
-
-
-
           ? 'text-xs font-black px-2.5 py-1 rounded-[5px] bg-emerald-100 text-emerald-800'
-
-
-
           : 'text-xs font-black px-2.5 py-1 rounded-[5px] bg-amber-100 text-amber-800';
-
-
-
       }
-
-
-
       if (listEl) listEl.innerHTML = catListHtml;
 
-
-
       if (btnOpenGallery) {
-
-
-
         btnOpenGallery.onclick = () => {
-
-
-
           closeChartDetailModal(false);
-
-
-
-          dom.selectSite.value = String(s.id);
-
-
-
-          appState.selectedSiteId = s.id;
-
-
-
-          updateSitePicHeader();
-
-
-
-          setActiveAppView(isMobil ? 'mobil' : 'gedung');
-
-
-
-          loadAuditPerSite();
-
-
-
+          openSiteFromChart(s.code, mode);
         };
-
-
-
       }
-
-
 
       if (modal) {
-
-
-
         modal.classList.remove('hidden');
-
-
-
         document.body.classList.add('overflow-hidden');
-
-
-
         if (typeof pushModalStack === 'function') {
-
-
-
           pushModalStack('modalSiteChartDetail');
-
-
-
         }
-
-
-
         if (window.lucide) lucide.createIcons();
-
-
-
       }
-
-
-
     }
 
 
@@ -22785,82 +22281,33 @@
 
 
 
-      const validSites = appState.sites.filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
-
-
+      const siteTypeFilter = (document.getElementById('selectRekapSiteType')?.value || 'PDS').toUpperCase();
+      const validSites = filterSitesByPdsPsr(appState.sites, siteTypeFilter);
 
       const siteDataList = validSites.map(s => {
-
-
-
         const sitePhotos = weekPhotos.filter(p => p.site_code === s.code);
-
-
+        const siteHasPan = isMobil ? false : siteHasPantry(s.code);
+        const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || siteHasPan);
+        const siteTotal = siteCats.length || (isMobil ? 5 : 9);
 
         let count = 0;
-
-
-
-        categories.forEach(cat => {
-
-
-
+        siteCats.forEach(cat => {
           const hasUploaded = sitePhotos.some(p => matchPhotoToCategory(p, cat, isMobil));
-
-
-
           if (hasUploaded) count++;
-
-
-
         });
 
-
-
-        const pct = Math.round((count / totalCat) * 100);
-
-
+        const pct = Math.round((count / siteTotal) * 100);
 
         return {
-
-
-
           code: s.code,
-
-
-
           name: s.name,
-
-
-
           pic: s.pic || '-',
-
-
-
           uploaded: count,
-
-
-
-          total: totalCat,
-
-
-
+          total: siteTotal,
           pct: pct,
-
-
-
-          is_complete: (count === totalCat),
-
-
-
+          is_complete: (count === siteTotal),
           is_zero: (count === 0)
-
-
-
         };
-
-
-
       });
 
 
@@ -23257,7 +22704,7 @@
 
 
 
-          const barH = (item.uploaded / totalCat) * chartHeight;
+          const barH = (item.uploaded / item.total) * chartHeight;
 
 
 
@@ -23461,86 +22908,37 @@
 
 
 
-      const validSites = appState.sites.filter(s => s.code && s.code.toUpperCase() !== 'ALL');
-
-
-
-      // Bangun Header Kolom Excel
-
-
-
-      const headers = ['Kode Site', 'Nama Site', 'Nama PIC', 'Nomor Telepon'];
-
-
-
-      categories.forEach(c => headers.push(c.name));
-
-
-
-      headers.push('Lengkap', 'Persentase', 'Status');
-
-
-
-      const dataRows = [headers];
-
-
+      const siteTypeFilter = (document.getElementById('selectRekapSiteType')?.value || 'PDS').toUpperCase();
+      const validSites = filterSitesByPdsPsr(appState.sites, siteTypeFilter);
 
       validSites.forEach(s => {
-
-
-
         const sitePhotos = weekPhotos.filter(p => p.site_code === s.code);
-
-
+        const siteHasPan = isMobil ? false : siteHasPantry(s.code);
+        const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || siteHasPan);
+        const siteTotal = siteCats.length || (isMobil ? 5 : 9);
 
         let count = 0;
-
-
-
-        const row = [s.code, s.name, s.pic || '-', s.phone || '-'];
-
-
+        const row = [s.code, s.name, s.pic || '-'];
 
         categories.forEach(cat => {
-
-
-
-          const ok = sitePhotos.some(p => p.category_key === cat.key && (p.file_id || p.file_url || p.link_gambar));
-
-
-
-          row.push(ok ? '✓' : '✕');
-
-
-
-          if (ok) count++;
-
-
-
+          if (!isMobil && cat.key === 'pantry' && !siteHasPan) {
+            row.push('-');
+            return;
+          }
+          const hasUploaded = sitePhotos.some(p => matchPhotoToCategory(p, cat, isMobil));
+          if (hasUploaded) {
+            count++;
+            row.push('✓');
+          } else {
+            row.push('✕');
+          }
         });
 
-
-
-        const isComplete = (count === totalCat);
-
-
-
-        const pct = Math.round((count / totalCat) * 100) + '%';
-
-
-
-        const status = isComplete ? 'LENGKAP' : (count === 0 ? 'BELUM UPLOAD' : 'SEBAGIAN');
-
-
-
-        row.push(`${count}/${totalCat}`, pct, status);
-
-
-
+        const pct = Math.round((count / siteTotal) * 100);
+        row.push(`${count}/${siteTotal}`);
+        row.push(`${pct}%`);
+        row.push(count === siteTotal ? 'LENGKAP' : 'BELUM LENGKAP');
         dataRows.push(row);
-
-
-
       });
 
 
@@ -23873,7 +23271,7 @@
 
 
 
-      showToast('Membuat PowerPoint...', 'Menyiapkan slide presentasi monitoring audit...', 'info', 2500);
+      showToast('Membuat PowerPoint...', 'Menyiapkan slide presentasi audit visual...', 'info', 2500);
 
 
 
@@ -23921,63 +23319,21 @@
 
 
 
-      const validSites = appState.sites.filter(s => s.code && s.code.toUpperCase() !== 'ALL');
-
-
-
-      // Hitung statistik kepatuhan nasional
-
-
-
-      let totalComplete = 0;
-
-
-
-      let totalPartial = 0;
-
-
-
-      let totalZero = 0;
-
-
-
-      const siteRows = [];
-
-
+      const siteTypeFilter = (document.getElementById('selectRekapSiteType')?.value || 'PDS').toUpperCase();
+      const validSites = filterSitesByPdsPsr(appState.sites, siteTypeFilter);
 
       validSites.forEach((s, idx) => {
-
-
-
         const sitePhotos = weekPhotos.filter(p => (p.site_code || '').toUpperCase() === s.code.toUpperCase());
-
-
+        const siteHasPan = isMobil ? false : siteHasPantry(s.code);
+        const siteCats = isMobil ? categories : categories.filter(c => c.key !== 'pantry' || siteHasPan);
+        const siteTotal = siteCats.length || (isMobil ? 5 : 9);
 
         let count = 0;
-
-
-
-        categories.forEach(cat => {
-
-
-
+        siteCats.forEach(cat => {
           if (sitePhotos.some(p => matchPhotoToCategory(p, cat, isMobil))) count++;
-
-
-
         });
 
-
-
-        const isComplete = (count === totalCat);
-
-
-
-        const isZero = (count === 0);
-
-
-
-        const pctNum = Math.round((count / totalCat) * 100);
+        const pctNum = Math.round((count / siteTotal) * 100);
 
 
 
@@ -24101,7 +23457,7 @@
 
 
 
-      slideCover.addText(`LAPORAN MONITORING AUDIT ${isMobil ? 'MOBIL' : 'GEDUNG'}`, {
+      slideCover.addText(`LAPORAN AUDIT VISUAL ${isMobil ? 'MOBIL' : 'GEDUNG'}`, {
 
 
 
@@ -25309,7 +24665,7 @@
 
 
 
-              text: "LAPORAN MONITORING AUDIT HODS",
+              text: "LAPORAN AUDIT VISUAL HODS",
 
 
 
@@ -25781,7 +25137,7 @@
 
 
 
-      doc.text('LAPORAN MONITORING AUDIT HODS', 14, 13);
+      doc.text('LAPORAN AUDIT VISUAL HODS', 14, 13);
 
 
 
@@ -27014,7 +26370,7 @@
 
       ctx.textAlign = 'left';
 
-      ctx.fillText(isMobil ? 'HODS STANDARISASI MONITORING REPORT - AUDIT MOBIL' : 'HODS STANDARISASI MONITORING REPORT - AUDIT GEDUNG', headerX + 25, headerY + 40);
+      ctx.fillText(isMobil ? 'AUDIT VISUAL - LAPORAN STANDARISASI - AUDIT MOBIL' : 'AUDIT VISUAL - LAPORAN STANDARISASI - AUDIT GEDUNG', headerX + 25, headerY + 40);
 
 
 
@@ -27526,7 +26882,7 @@
 
       ctx.textAlign = 'left';
 
-      ctx.fillText(`HODS Monitoring System  •  PDS ${site.code} - ${site.name}  •  Dokumentasi Resmi`, 40, 2240);
+      ctx.fillText(`Audit Visual System  •  PDS ${site.code} - ${site.name}  •  Dokumentasi Resmi`, 40, 2240);
 
 
 
@@ -30943,59 +30299,42 @@
 
 
 
-      const uInp = document.getElementById('loginUsername');
-
-
-
+            const uInp = document.getElementById('loginUsername');
       const pInp = document.getElementById('loginPassword');
+      const checkRem = document.getElementById('checkRememberLogin');
 
+      // Muat kredensial jika fitur 'Ingat user & sandi' dicentang sebelumnya
+      let remembered = null;
+      try {
+        const raw = localStorage.getItem('hods_remember_credentials');
+        if (raw) remembered = JSON.parse(raw);
+      } catch (e) {}
 
-
-      if (uInp) {
-
-
-
-        uInp.value = '';
-
-
-
-        uInp.setAttribute('readonly', 'readonly');
-
-
-
+      if (remembered && remembered.remember && remembered.username) {
+        if (uInp) {
+          uInp.value = remembered.username;
+          uInp.removeAttribute('readonly');
+        }
+        if (pInp) {
+          pInp.value = remembered.password || '';
+          pInp.removeAttribute('readonly');
+        }
+        if (checkRem) checkRem.checked = true;
+      } else {
+        if (uInp) {
+          uInp.value = '';
+          uInp.setAttribute('readonly', 'readonly');
+        }
+        if (pInp) {
+          pInp.value = '';
+          pInp.setAttribute('readonly', 'readonly');
+        }
+        if (checkRem) checkRem.checked = false;
+        setTimeout(() => {
+          if (uInp && uInp.hasAttribute('readonly')) uInp.value = '';
+          if (pInp && pInp.hasAttribute('readonly')) pInp.value = '';
+        }, 150);
       }
-
-
-
-      if (pInp) {
-
-
-
-        pInp.value = '';
-
-
-
-        pInp.setAttribute('readonly', 'readonly');
-
-
-
-      }
-
-
-
-      setTimeout(() => {
-
-
-
-        if (uInp && uInp.hasAttribute('readonly')) uInp.value = '';
-
-
-
-        if (pInp && pInp.hasAttribute('readonly')) pInp.value = '';
-
-
-
-      }, 150);
 
 
 
@@ -31120,9 +30459,10 @@
 
       const isAdmin = (u.site_code === 'ALL' || u.role === 'ADMIN');
 
-
-
-      if (headerUserStatus) headerUserStatus.textContent = u.pic_name || (isAdmin ? 'Administrator' : u.site_code);
+      if (headerUserStatus) {
+        const savedPic = isAdmin ? localStorage.getItem('hods_pic_ALL') : localStorage.getItem('hods_pic_' + u.site_code);
+        headerUserStatus.textContent = (typeof formatCleanPersonName === 'function') ? formatCleanPersonName(savedPic || u.pic_name || (isAdmin ? 'Administrator' : u.site_code)) : (savedPic || u.pic_name || (isAdmin ? 'Administrator' : u.site_code));
+      }
 
       const headerSiteCode = document.getElementById('headerSiteCode');
       if (headerSiteCode) headerSiteCode.textContent = (u.site_code || 'ALL').toUpperCase();
@@ -31747,17 +31087,21 @@
 
 
 
-      if (loginSuccess && userData) {
-
-
-
+            if (loginSuccess && userData) {
         appState.currentUser = userData;
-
-
-
         localStorage.setItem('hods_auth_user', JSON.stringify(userData));
 
-
+        // Simpan atau hapus kredensial sesuai centang 'Ingat user & sandi'
+        const checkRem = document.getElementById('checkRememberLogin');
+        if (checkRem && checkRem.checked) {
+          localStorage.setItem('hods_remember_credentials', JSON.stringify({
+            username: username,
+            password: password,
+            remember: true
+          }));
+        } else {
+          localStorage.removeItem('hods_remember_credentials');
+        }
 
         applyUserSession();
 
@@ -31932,69 +31276,49 @@
 
 
 
-        if (appState.currentUser && appState.currentUser.site_code === siteCode) {
-
-
+        if (siteCode === 'ALL' || (appState.currentUser && appState.currentUser.site_code === siteCode)) {
 
           if (picVal) appState.currentUser.pic_name = picVal;
 
-
-
           if (emailVal) appState.currentUser.email = emailVal;
-
-
 
           if (phoneVal) appState.currentUser.phone = phoneVal;
 
-
-
           try { localStorage.setItem('hods_auth_user', JSON.stringify(appState.currentUser)); } catch (e) {}
 
-
-
         }
 
+        if (siteCode === 'ALL') {
+          if (picVal) localStorage.setItem('hods_pic_ALL', picVal);
+          else localStorage.removeItem('hods_pic_ALL');
 
+          if (emailVal) localStorage.setItem('hods_email_ALL', emailVal);
+          else localStorage.removeItem('hods_email_ALL');
 
-        const site = (appState.sites || []).find(s => s && s.code && s.code.toUpperCase() === siteCode.toUpperCase());
+          if (phoneVal) localStorage.setItem('hods_phone_ALL', phoneVal);
+          else localStorage.removeItem('hods_phone_ALL');
+        } else {
+          const site = (appState.sites || []).find(s => s && s.code && s.code.toUpperCase() === siteCode.toUpperCase());
 
+          if (site) {
 
+            site.pic = picVal;
 
-        if (site) {
+            site.email = emailVal;
 
+            site.phone = phoneVal;
 
+          }
 
-          site.pic = picVal;
+          if (picVal) localStorage.setItem('hods_pic_' + siteCode, picVal);
+          else localStorage.removeItem('hods_pic_' + siteCode);
 
+          if (emailVal) localStorage.setItem('hods_email_' + siteCode, emailVal);
+          else localStorage.removeItem('hods_email_' + siteCode);
 
-
-          site.email = emailVal;
-
-
-
-          site.phone = phoneVal;
-
-
-
+          if (phoneVal) localStorage.setItem('hods_phone_' + siteCode, phoneVal);
+          else localStorage.removeItem('hods_phone_' + siteCode);
         }
-
-
-
-        if (picVal) localStorage.setItem('hods_pic_' + siteCode, picVal);
-
-        else localStorage.removeItem('hods_pic_' + siteCode);
-
-
-
-        if (emailVal) localStorage.setItem('hods_email_' + siteCode, emailVal);
-
-        else localStorage.removeItem('hods_email_' + siteCode);
-
-
-
-        if (phoneVal) localStorage.setItem('hods_phone_' + siteCode, phoneVal);
-
-        else localStorage.removeItem('hods_phone_' + siteCode);
 
 
 
@@ -32192,7 +31516,7 @@
 
 
 
-        saveBtn.innerHTML = '<i data-lucide="save" class="w-3.5 h-3.5"></i><span>Simpan Perubahan</span>';
+        saveBtn.innerHTML = '<i data-lucide="save" class="w-3.5 h-3.5"></i><span>SIMPAN</span>';
 
 
 
@@ -32209,6 +31533,7 @@
 
 
             localStorage.setItem('hods_pw_' + userSite, newPw);
+        updateRememberedPasswordIfMatches(userSite, newPw);
 
 
 
@@ -32249,6 +31574,7 @@
 
 
               localStorage.setItem('hods_pw_' + userSite, newPw);
+        updateRememberedPasswordIfMatches(userSite, newPw);
 
 
 
@@ -32308,7 +31634,7 @@
 
 
 
-        saveBtn.innerHTML = '<i data-lucide="save" class="w-3.5 h-3.5"></i><span>Simpan Perubahan</span>';
+        saveBtn.innerHTML = '<i data-lucide="save" class="w-3.5 h-3.5"></i><span>SIMPAN</span>';
 
 
 
@@ -32327,6 +31653,7 @@
 
 
             localStorage.setItem('hods_pw_' + userSite, newPw);
+        updateRememberedPasswordIfMatches(userSite, newPw);
 
 
 
@@ -32381,6 +31708,20 @@
     }
 
 
+
+    
+    function updateRememberedPasswordIfMatches(userSite, newPw) {
+      try {
+        const raw = localStorage.getItem('hods_remember_credentials');
+        if (raw) {
+          const rem = JSON.parse(raw);
+          if (rem && rem.remember && rem.username && rem.username.toUpperCase() === String(userSite).toUpperCase()) {
+            rem.password = newPw;
+            localStorage.setItem('hods_remember_credentials', JSON.stringify(rem));
+          }
+        }
+      } catch (e) {}
+    }
 
     function handleLogout() {
 
@@ -33069,7 +32410,14 @@
 
 
 
+    if (dom.selectStatusUpload) {
+      dom.selectStatusUpload.addEventListener('change', () => {
+        loadAuditPerSite();
+      });
+    }
+
     dom.selectSite.addEventListener('change', (e) => {
+      if (typeof updateHeaderUserInfo === 'function') updateHeaderUserInfo();
       if (typeof clearSiteFilterSearchText === 'function') clearSiteFilterSearchText();
       if (typeof updatePantryCheckboxUI === 'function') updatePantryCheckboxUI();
 
