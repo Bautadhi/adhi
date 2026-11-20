@@ -3793,7 +3793,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5" class="text-amber-400 shrink-0">
             <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
           </svg>
-          <span id="headerTotalStarsValue" class="font-black text-amber-200 tracking-tight">0 ★</span>
+          <span id="headerTotalStarsValue" class="font-black text-amber-200 tracking-tight">0.0</span>
         </div>
 
         <!-- 5. Nama HODS (Di Sebelah Kanan Total Bintang) -->
@@ -16828,7 +16828,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
       const currentWeek = appState.selectedWeekKey;
       if (!currentWeek) {
-        valSpan.textContent = '0.0 ★';
+        valSpan.textContent = '0.0';
         badge.title = 'Belum ada periode week yang dipilih';
         return;
       }
@@ -16981,13 +16981,13 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         const avgNational = validSites.length > 0 ? (sumScores / validSites.length) : 0;
 
         const displayScore = ratedSites.length > 0 ? avgRated : 0;
-        valSpan.textContent = `${formatScore(displayScore)} ★`;
+        valSpan.textContent = formatScore(displayScore);
 
         const modeTitle = isMobilMode ? 'Mobil' : 'Gedung';
         badge.title = `Rata-rata Nilai ${modeTitle} Nasional (${weekLabel}):\n• Rata-rata Site Dinilai: ${formatScore(avgRated)} / 5.00 (${ratedSites.length} dari ${validSites.length} site)\n• Rata-rata Semua Site: ${formatScore(avgNational)} / 5.00\n• Total Akumulasi: ${totalStarsSum} Bintang\n(Hitungan sama persis dengan tabel Rekap Nilai)`;
       } else {
         const res = computeSiteScoreFormula(activeCode);
-        valSpan.textContent = `${formatScore(res.score)} ★`;
+        valSpan.textContent = formatScore(res.score);
 
         const modeTitle = isMobilMode ? 'Mobil' : 'Gedung';
         badge.title = `Hasil Penilaian ${modeTitle} [${activeCode}] - ${weekLabel}:\n• Rata-rata Nilai: ${formatScore(res.score)} / 5.00\n• Total Bintang: ${res.totalStars} ★ dari ${res.totalSlots} area (${res.filledCount} dinilai)\n(Hitungan sama persis dengan kolom Rekap Nilai: ${res.totalStars} bintang / ${res.totalSlots} area)`;
