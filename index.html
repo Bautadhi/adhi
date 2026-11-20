@@ -18,7 +18,7 @@
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <meta name="apple-mobile-web-app-title" content="Laporan Visual PDS">
+  <meta name="apple-mobile-web-app-title" content="Audit Visual">
   <meta name="theme-color" content="#2563eb">
 
 
@@ -28,7 +28,7 @@
 
 
 
-  <title>Laporan Visual PDS</title>
+  <title>Audit Visual - Standarisasi Fasilitas & Armada</title>
 
 
 
@@ -37,21 +37,18 @@
 
 
   <script>
-
-
-
-    // Capture clean native fetch before any corporate shim script (site_shim.js) modifies it
-
-
-
-    window.__originalFetch = window.fetch ? window.fetch.bind(window) : null;
-
-
-
-    window.__originalXHR = window.XMLHttpRequest;
-
-
-
+    // Konfigurasi Polytron Sites Shim: nonaktifkan pengalihan proxy internal agar koneksi langsung ke Google Apps Script aktif
+    window.POLY_SITE_PROXY = false;
+    window.POLY_SITE_PROXY_BYPASS = [
+      'script.google.com',
+      'script.googleusercontent.com',
+      'googleapis.com',
+      'google.com',
+      'cdn.jsdelivr.net',
+      'cdn.tailwindcss.com',
+      'cdnjs.cloudflare.com',
+      'unpkg.com'
+    ];
   </script>
 
 
@@ -711,12 +708,10 @@
 
 
     
-    /* Sembunyikan Logo P saat dibuka di layar HP / Mobile (< 640px) */
-    @media (max-width: 639px) {
-      #mainAppHeaderLogo,
-      #mainAppHeader div[title="Logo PDS"] {
-        display: none !important;
-      }
+    /* Logo P selalu tampil serasi mendampingi judul Audit Visual */
+    #mainAppHeaderLogo,
+    #mainAppHeader div[title="Logo PDS"] {
+      display: flex !important;
     }
 
     /* Kotak Periode Tanggal di Header Sebelah Nama HODS: Lebar Elastis & Rapi */
@@ -727,7 +722,8 @@
       white-space: nowrap !important;
     }
 
-    /* Keseragaman tinggi kotak Header Kanan: Kode Site, Periode, HoDS, Refresh, Fullscreen */
+    /* Keseragaman tinggi kotak Header Kanan: Total Bintang, Kode Site, Periode, HoDS, Refresh, Fullscreen */
+    #mainAppHeader #headerTotalStarsBadge,
     #mainAppHeader #headerUserStatus,
     #mainAppHeader #headerWeekPeriod,
     #mainAppHeader #headerSiteCodeBadge,
@@ -737,6 +733,7 @@
       box-sizing: border-box !important;
     }
     @media (min-width: 640px) {
+      #mainAppHeader #headerTotalStarsBadge,
       #mainAppHeader #headerUserStatus,
       #mainAppHeader #headerWeekPeriod,
       #mainAppHeader #headerSiteCodeBadge,
@@ -744,6 +741,38 @@
       #mainAppHeader #btnToggleFullscreen {
         height: 28px !important;
       }
+    }
+
+    /* Kotak Total Bintang di Header: Tepat di Sebelah Kiri Nama User */
+    #mainAppHeader #headerTotalStarsBadge {
+      width: auto !important;
+      min-width: max-content !important;
+      max-width: none !important;
+      white-space: nowrap !important;
+      overflow: visible !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      background-color: rgba(245, 158, 11, 0.22) !important;
+      border-color: rgba(245, 158, 11, 0.55) !important;
+      color: #fef3c7 !important;
+      cursor: pointer !important;
+      transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.1s ease !important;
+    }
+    #mainAppHeader #headerTotalStarsBadge:hover {
+      background-color: rgba(245, 158, 11, 0.38) !important;
+      border-color: #fbbf24 !important;
+    }
+    #mainAppHeader #headerTotalStarsBadge:active {
+      transform: scale(0.96) !important;
+    }
+    body.dark-theme #mainAppHeader #headerTotalStarsBadge {
+      background-color: rgba(217, 119, 6, 0.25) !important;
+      border-color: rgba(245, 158, 11, 0.5) !important;
+      color: #fde68a !important;
+    }
+    body.dark-theme #mainAppHeader #headerTotalStarsBadge:hover {
+      background-color: rgba(217, 119, 6, 0.42) !important;
+      border-color: #fbbf24 !important;
     }
 
     /* Kotak Nama HoDS: Lebar elastis mengikuti teks, rapi tidak terpotong, dan bisa diklik untuk edit profil */
@@ -3745,21 +3774,29 @@
           <i data-lucide="menu" class="w-4 h-4"></i>
         </button>
 
-        <!-- Logo Gedung P Merah (PDS) Kotak Putih Rapi -->
-        <div id="mainAppHeaderLogo" class="hidden sm:flex w-7 h-7 sm:w-8 sm:h-8 rounded-[6px] bg-white items-center justify-center shadow-xs border border-white/40 shrink-0 p-1 select-none cursor-default" title="Logo PDS">
+        <!-- Logo Gedung P Merah (PDS) Transparan Rapi Sesuai Desain Header -->
+        <div id="mainAppHeaderLogo" class="flex h-7 sm:h-8 w-auto items-center justify-center shrink-0 select-none cursor-default" title="Logo PDS">
           <img src="data:image/png;base64,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" alt="Logo PDS" class="h-full w-auto object-contain pointer-events-none">
         </div>
 
         <!-- Judul & Subtitle Aplikasi Kompak, Rapi & Seimbang -->
         <div class="min-w-0 leading-tight select-none cursor-default">
-          <h1 class="text-xs sm:text-sm md:text-base font-black text-white tracking-wide uppercase truncate leading-none">LAPORAN VISUAL PDS</h1>
+          <h1 class="text-xs sm:text-sm md:text-base font-black text-white tracking-wide uppercase truncate leading-none">AUDIT VISUAL</h1>
           <p class="text-[8.5px] sm:text-[9.5px] text-blue-100 font-semibold tracking-wide truncate leading-tight mt-0.5">STANDARISASI FASILITAS &amp; ARMADA</p>
         </div>
       </div>
 
-      <!-- Kanan: Status Online & User Info & Fullscreen (Urutan dari Kanan: Fullscreen, Refresh, Kode Site, Periode, Nama HODS) -->
+      <!-- Kanan: Status Online & User Info & Fullscreen (Urutan dari Kanan: Fullscreen, Refresh, Kode Site, Periode, Total Bintang, Nama HODS) -->
       <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 cursor-default">
-        <!-- 5. Nama HODS (Paling Kiri di Kumpulan Kanan) -->
+        <!-- 6. Total Bintang di Sebelah Kiri Nama User (Hasil Penilaian Week Terpilih) -->
+        <div id="headerTotalStarsBadge" onclick="handleHeaderTotalStarsClick()" class="inline-flex items-center justify-center gap-1 h-6 sm:h-7 px-2 rounded-[4px] text-xs font-black bg-amber-500/20 hover:bg-amber-500/30 text-amber-200 border border-amber-400/50 shadow-2xs whitespace-nowrap w-auto min-w-max cursor-pointer transition select-none" title="Total Penilaian Bintang pada Week Ini">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="#fbbf24" stroke="#f59e0b" stroke-width="1.5" class="text-amber-400 shrink-0">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+          <span id="headerTotalStarsValue" class="font-black text-amber-200 tracking-tight">0 ★</span>
+        </div>
+
+        <!-- 5. Nama HODS (Di Sebelah Kanan Total Bintang) -->
         <div id="headerUserStatus" onclick="openChangePasswordModal()" class="hidden sm:inline-flex items-center justify-center h-6 sm:h-7 px-2.5 rounded-[4px] text-xs font-semibold bg-blue-700 hover:bg-blue-800 text-white border border-blue-500 shadow-2xs whitespace-nowrap w-auto min-w-max cursor-pointer transition" title="Klik untuk lihat / ubah Nama HoDS &amp; Profil">Administrator</div>
 
         <!-- 4. Periode Week -->
@@ -6155,7 +6192,7 @@
 
           <button id="btnOpenGalleryFromChart" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold rounded-[5px] bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center gap-1.5 cursor-pointer shadow-xs">
             <i data-lucide="image" class="w-3.5 h-3.5"></i>
-            <span>GALERI</span>
+            <span>GALERI (PILIH S/D 4 FOTO)</span>
           </button>
           <button id="btnDismissChartDetail" type="button" class="min-w-[95px] sm:min-w-[105px] h-[36px] text-xs font-bold rounded-[5px] bg-slate-100 hover:bg-slate-200 text-slate-700 border border-slate-300 cursor-pointer flex items-center justify-center">
             TUTUP
@@ -7837,7 +7874,7 @@
 
         <button type="button" id="btnPilihGaleriFile" onclick="selectPhotoSource('gallery')" class="w-full h-[42px] px-4 bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-slate-800 font-bold text-xs sm:text-sm rounded-[5px] flex items-center justify-center gap-2 transition cursor-pointer border border-slate-300 tracking-wider">
           <i data-lucide="image" class="w-4 h-4 text-slate-600"></i>
-          <span>GALERI</span>
+          <span>GALERI (PILIH S/D 4 FOTO)</span>
         </button>
 
 
@@ -8639,7 +8676,7 @@
 
 
 
-    let APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwK5JRPCpdREkMh3TBWlCBeBO0HuTLvT5XFfQ8wLs9EqnfQipqbHkmfkK5Z7vYb6T_g/exec";
+    let APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxxEpcP-cEu14aEZJ1ISs-4o3ih9SAhMls2gFMONLZgfb3pVjAzPJoKTJqd7JJHFA2w/exec";
 
     // ==============================================================================
     // SISTEM ANTRIAN SINKRONISASI (QUEUE) & RETRY EXPONENTIAL BACKOFF DENGAN JITTER
@@ -8648,18 +8685,45 @@
     const appSyncQueue = {
       items: [],
       isProcessing: false,
-      maxRetries: 10,
-      baseDelayMs: 2000,
-      maxDelayMs: 15000,
+      runningTask: null,
+      maxRetries: 3,
+      baseDelayMs: 1500,
+      maxDelayMs: 8000,
+
+      cancelTasksFor(targetKey) {
+        if (!targetKey) return;
+        const initialCount = this.items.length;
+        this.items = this.items.filter(item => {
+          if (item.targetKey === targetKey) {
+            console.log(`[SyncQueue] Membatalkan antrian bertentangan untuk ${targetKey}: "${item.description}"`);
+            return false;
+          }
+          return true;
+        });
+        if (this.items.length !== initialCount) {
+          console.log(`[SyncQueue] Antrian diperbarui setelah pembatalan: ${this.items.length} tersisa.`);
+        }
+        if (this.runningTask && this.runningTask.targetKey === targetKey) {
+          console.log(`[SyncQueue] Menandai proses aktif untuk ${targetKey} sebagai dibatalkan: "${this.runningTask.description}"`);
+          this.runningTask.isCancelled = true;
+        }
+      },
 
       enqueue(task) {
+        if (task.targetKey) {
+          this.cancelTasksFor(task.targetKey);
+        }
         const taskId = 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6);
         const queueItem = {
           id: taskId,
+          targetKey: task.targetKey || null,
           type: task.type || 'sync',
-          description: task.description || 'Proses Sinkronisasi',
+          description: task.description || 'Proses',
           execute: task.execute,
+          onFailed: task.onFailed,
+          maxRetries: task.maxRetries || this.maxRetries,
           retries: 0,
+          isCancelled: false,
           addedAt: Date.now()
         };
         this.items.push(queueItem);
@@ -8675,56 +8739,65 @@
         if (this.isProcessing || this.items.length === 0) return;
         this.isProcessing = true;
 
-        const currentTask = this.items[0];
+        // Ambil tugas terdepan seketika saat mulai diproses (shift di awal)
+        const currentTask = this.items.shift();
+        this.runningTask = currentTask;
         let isSuccess = false;
 
-        while (currentTask.retries < this.maxRetries) {
+        const effectiveMaxRetries = currentTask.maxRetries || this.maxRetries;
+        while (currentTask.retries < effectiveMaxRetries) {
+          if (currentTask.isCancelled) {
+            console.log(`[SyncQueue] Tugas dibatalkan sebelum dieksekusi: "${currentTask.description}"`);
+            break;
+          }
+
           currentTask.retries++;
           try {
-            console.log(`[SyncQueue] Memproses "${currentTask.description}" (Percobaan ${currentTask.retries}/${this.maxRetries})...`);
-            const result = await currentTask.execute();
+            console.log(`[SyncQueue] Memproses "${currentTask.description}" (Percobaan ${currentTask.retries}/${effectiveMaxRetries})...`);
+            const result = await currentTask.execute.call(currentTask);
             if (result !== false) {
               isSuccess = true;
               console.log(`[SyncQueue] Sukses pada percobaan ${currentTask.retries}: "${currentTask.description}"`);
               break;
             }
           } catch (err) {
-            console.warn(`[SyncQueue] Gagal percobaan ${currentTask.retries}/${this.maxRetries} untuk "${currentTask.description}":`, err);
+            console.warn(`[SyncQueue] Gagal percobaan ${currentTask.retries}/${effectiveMaxRetries} untuk "${currentTask.description}":`, err);
           }
 
-          if (currentTask.retries < this.maxRetries) {
-            // Jeda bertahap unik (Exponential Backoff + Jitter acak per perangkat)
+          if (currentTask.isCancelled) {
+            console.log(`[SyncQueue] Tugas dibatalkan saat berjalan: "${currentTask.description}"`);
+            break;
+          }
+
+          if (currentTask.retries < effectiveMaxRetries) {
             const exponentialDelay = Math.min(this.maxDelayMs, this.baseDelayMs * Math.pow(1.4, currentTask.retries - 1));
-            const jitter = Math.floor(Math.random() * 1200) + 300; // 300ms - 1500ms acak
+            const jitter = Math.floor(Math.random() * 1200) + 300;
             const uniqueDelay = Math.round(exponentialDelay + jitter);
             console.log(`[SyncQueue] Menunggu jeda unik ${(uniqueDelay / 1000).toFixed(1)}s sebelum mencoba lagi...`);
             await new Promise(resolve => setTimeout(resolve, uniqueDelay));
           }
         }
 
-        if (!isSuccess) {
-          console.error(`[SyncQueue] Gagal permanen setelah ${this.maxRetries}x percobaan: "${currentTask.description}"`);
-          if (typeof showToast === 'function') {
-            showToast(
-              'Sinkronisasi Tertunda',
-              `Data ${currentTask.description} tersimpan aman di HP. Koneksi server Google sedang sibuk, akan dicoba kembali saat online.`,
-              'warning',
-              5000
-            );
+        if (!isSuccess && !currentTask.isCancelled) {
+          console.error(`[SyncQueue] Gagal permanen: "${currentTask.description}"`);
+          if (typeof currentTask.onFailed === 'function') {
+            try { currentTask.onFailed(); } catch (e) {}
+          } else if (typeof showToast === 'function') {
+            showToast('Gagal Proses', 'Gagal memproses sinkronisasi data.', 'error', 5000);
           }
         }
 
-        this.items.shift();
+        this.runningTask = null;
         this.isProcessing = false;
 
         if (this.items.length > 0) {
-          const pauseBetweenTasks = 250 + Math.floor(Math.random() * 250);
+          const pauseBetweenTasks = 150 + Math.floor(Math.random() * 150);
           setTimeout(() => this.processNext(), pauseBetweenTasks);
         }
       },
 
       getQueueLength() {
-        return this.items.length;
+        return this.items.length + (this.runningTask ? 1 : 0);
       },
 
       isBusy() {
@@ -9397,7 +9470,7 @@
 
 
 
-    function showToast(title, message, type = 'info', duration = 1600) {
+    function showToast(title, message, type = 'info', duration = 900) {
 
 
 
@@ -9501,34 +9574,14 @@
 
 
 
-      // Durasi notifikasi dikurangi agar cepat hilang (maksimal 1.6 - 1.8 detik)
-
-
-
-      const effectiveDuration = Math.min(duration || 1600, 1800);
-
-
+      // Durasi notifikasi dipersingkat agar cepat hilang (~0.9 - 1.1 detik)
+      const effectiveDuration = Math.min(duration || 900, 1100);
 
       setTimeout(() => {
-
-
-
         toast.style.opacity = '0';
-
-
-
         toast.style.transform = 'translateY(-6px) scale(0.96)';
-
-
-
-        toast.style.transition = 'opacity 0.2s ease-out, transform 0.2s ease-out';
-
-
-
-        setTimeout(() => toast.remove(), 200);
-
-
-
+        toast.style.transition = 'opacity 0.15s ease-out, transform 0.15s ease-out';
+        setTimeout(() => toast.remove(), 150);
       }, effectiveDuration);
 
 
@@ -10017,54 +10070,15 @@
 
 
 
-      if (fileId) {
-
-
-
-        const cachedByFile = localStorage.getItem('local_drive_b64_' + fileId);
-
-
-
-        if (cachedByFile && cachedByFile.startsWith('data:image')) {
-
-
-
-          return cachedByFile;
-
-
-
-        }
-
-
-
+      if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {};
+      if (fileId && appState.inMemoryPhotoCache[fileId]) {
+        return appState.inMemoryPhotoCache[fileId];
       }
-
-
-
       if (siteCode && weekKey && catKey) {
-
-
-
-        const scopedKey = `local_photo_${siteCode}_${weekKey}_${catKey}`;
-
-
-
-        const cachedScoped = localStorage.getItem(scopedKey);
-
-
-
-        if (cachedScoped && cachedScoped.startsWith('data:image')) {
-
-
-
-          return cachedScoped;
-
-
-
+        const memScoped = `mem_photo_${siteCode}_${weekKey}_${catKey}`;
+        if (appState.inMemoryPhotoCache[memScoped]) {
+          return appState.inMemoryPhotoCache[memScoped];
         }
-
-
-
       }
 
 
@@ -10125,7 +10139,7 @@
 
 
 
-                try { localStorage.setItem('local_drive_b64_' + fileId, dataUrl); } catch (e) {}
+                try { if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {}; appState.inMemoryPhotoCache[fileId] = dataUrl; } catch (e) {}
 
 
 
@@ -10179,7 +10193,8 @@
 
             if (data && data.success && data.base64) {
 
-              try { localStorage.setItem('local_drive_b64_' + fileId, data.base64); } catch (e) {}
+              try { if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {}; appState.inMemoryPhotoCache[fileId] = data.base64; } catch (e) {}
+
 
               return data.base64;
 
@@ -10243,7 +10258,7 @@
 
                   if (fileId) {
 
-                    try { localStorage.setItem('local_drive_b64_' + fileId, b64); } catch (e) {}
+                    try { if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {}; appState.inMemoryPhotoCache[fileId] = b64; } catch (e) {}
 
                   }
 
@@ -10287,7 +10302,8 @@
 
 
 
-            try { localStorage.setItem('local_drive_b64_' + fileId, data.base64); } catch (e) {}
+            try { if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {}; appState.inMemoryPhotoCache[fileId] = data.base64; } catch (e) {}
+
 
 
 
@@ -10331,7 +10347,8 @@
 
 
 
-            try { localStorage.setItem('local_drive_b64_' + fileId, data.base64); } catch (e) {}
+            try { if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {}; appState.inMemoryPhotoCache[fileId] = data.base64; } catch (e) {}
+
 
 
 
@@ -12881,6 +12898,8 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
 
+      if (typeof updateHeaderTotalStars === 'function') updateHeaderTotalStars();
+
       updateSliderAdminActionButtons();
       const btnGedung = document.getElementById('sliderBtnAuditGedung');
 
@@ -13442,7 +13461,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         );
         if (isAndroidApk) {
           const logo = document.querySelector('#mainAppHeader div[title="Logo PDS"], #mainAppHeader div[title="Polytron"]');
-          if (logo) logo.style.display = 'none';
+          if (logo) logo.style.display = 'flex';
         }
       } catch (e) {
         console.warn('checkAndRemoveLogoForApk error:', e);
@@ -14249,6 +14268,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
     window.appState = appState;
+    window.updateHeaderTotalStars = updateHeaderTotalStars;
 
 
 
@@ -15600,14 +15620,39 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
     async function init() {
-
-
+      // 0. Bersihkan total semua sisa cache foto & catatan lama di localStorage agar data 100% mengikuti database Google Sheet
+      try {
+        localStorage.removeItem('hods_drive_photos_v2');
+        localStorage.removeItem('hods_pending_deletes');
+        if (typeof appState !== 'undefined') appState.pendingDeleteLocks = {};
+        for (let i = localStorage.length - 1; i >= 0; i--) {
+          const k = localStorage.key(i);
+          if (!k) continue;
+          if (k.startsWith('local_drive_b64_') || k.startsWith('local_photo_') || k.startsWith('cached_b64_') || k.startsWith('cached_drive_photos_') || k.startsWith('local_catatan_') || k.startsWith('local_note_') || k.startsWith('local_time_')) {
+            localStorage.removeItem(k);
+          } else {
+            const val = localStorage.getItem(k);
+            if (val && typeof val === 'string' && val.length > 50000 && val.includes('data:image')) {
+              localStorage.removeItem(k);
+            }
+          }
+        }
+      } catch (e) {}
 
       // 1. Calculate weeks
 
 
 
       // Khusus APK Android: Hilangkan logo P di samping judul jika berjalan di aplikasi APK
+      // Pembersihan harian otomatis (hanya simpan data week today, bersihkan sisa lama sehari sekali)
+      if (typeof checkAndRunDailyCleanup === 'function') {
+        checkAndRunDailyCleanup();
+        if (!window._dailyCleanupIntervalStarted) {
+          window._dailyCleanupIntervalStarted = true;
+          setInterval(checkAndRunDailyCleanup, 60 * 60 * 1000); // Periksa otomatis setiap 1 jam jika berganti hari
+        }
+      }
+
       if (typeof checkAndRemoveLogoForApk === 'function') checkAndRemoveLogoForApk();
       initSliderNavigation();
       if (typeof applyResponsiveSliderState === 'function') applyResponsiveSliderState();
@@ -15982,11 +16027,9 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
 
-        const savedPhotos = localStorage.getItem('hods_drive_photos_v2');
-
-
-
-        if (savedPhotos) appState.drivePhotos = JSON.parse(savedPhotos);
+        // Data foto & catatan TIDAK disimpan di localStorage (Single Source of Truth: Google Sheet)
+        appState.drivePhotos = [];
+        try { localStorage.removeItem('hods_drive_photos_v2'); } catch (e) {}
 
 
 
@@ -16086,340 +16129,160 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
 
-    function saveLocalCache() {
-
-
-
-      // 1. Simpan metadata penting (sites, activity logs, registered plats)
-
-      try {
-
-        if (appState.sites) localStorage.setItem('hods_pds_sites_v2', JSON.stringify(appState.sites));
-
-        if (appState.localLogs) localStorage.setItem('hods_activity_logs_v2', JSON.stringify(appState.localLogs));
-
-        if (appState.registeredPlats) localStorage.setItem('hods_registered_plats', JSON.stringify(appState.registeredPlats));
-
-      } catch (e) {
-
-        console.warn('Local storage metadata save note:', e);
-
+    function getCurrentWeekKey() {
+      if (typeof computeWeeks === 'function') {
+        try {
+          const allWeeks = computeWeeks();
+          const curr = allWeeks.find(w => w.is_current) || allWeeks[allWeeks.length - 1];
+          if (curr && curr.week_key) return curr.week_key;
+        } catch (e) {}
       }
+      return appState.selectedWeekKey || '';
+    }
 
-
-
-      // 2. Simpan drivePhotos secara aman & higienis (buang Base64 raksasa agar TIDAK memakan kuota 5 MB localStorage)
-
+    function checkAndRunDailyCleanup() {
       try {
+        const todayStr = new Date().toISOString().slice(0, 10); // Format YYYY-MM-DD
+        const lastCleanup = localStorage.getItem('hods_last_daily_cleanup');
 
-        if (Array.isArray(appState.drivePhotos)) {
-
-          const lightweightPhotos = appState.drivePhotos.map(p => {
-
-            const copy = { ...p };
-
-            // Jika link_gambar atau thumbnail_url berisi string Base64 yang besar (> 20 KB),
-
-            // gantikan dengan direct_view_url / url Drive agar hemat memori localStorage
-
-            if (copy.link_gambar && copy.link_gambar.startsWith('data:image') && copy.link_gambar.length > 20000) {
-
-              copy.link_gambar = copy.direct_view_url || (copy.file_id ? `https://lh3.googleusercontent.com/d/${copy.file_id}` : '');
-
+        if (lastCleanup !== todayStr) {
+          console.log(`[DailyCleanup] Menjalankan pembersihan harian otomatis untuk tanggal ${todayStr}...`);
+          
+          // Bersihkan seluruh kunci foto dan catatan dari localStorage
+          localStorage.removeItem('hods_drive_photos_v2');
+          for (let i = localStorage.length - 1; i >= 0; i--) {
+            const k = localStorage.key(i);
+            if (!k) continue;
+            if (k.startsWith('local_drive_b64_') || k.startsWith('local_photo_') || k.startsWith('cached_b64_') || k.startsWith('cached_drive_photos_') || k.startsWith('local_catatan_') || k.startsWith('local_note_') || k.startsWith('local_time_')) {
+              localStorage.removeItem(k);
             }
-
-            if (copy.thumbnail_url && copy.thumbnail_url.startsWith('data:image') && copy.thumbnail_url.length > 20000) {
-
-              copy.thumbnail_url = copy.link_gambar;
-
-            }
-
-            if (copy.direct_view_url && copy.direct_view_url.startsWith('data:image') && copy.direct_view_url.length > 20000) {
-
-              copy.direct_view_url = copy.link_gambar;
-
-            }
-
-            return copy;
-
-          });
-
-
-
-          try {
-
-            localStorage.setItem('hods_drive_photos_v2', JSON.stringify(lightweightPhotos));
-
-          } catch (quotaErr) {
-
-            // Jika kuota browser penuh karena sampah cache foto lama, bersihkan otomatis dan simpan ulang
-
-            console.warn('LocalStorage penuh, membersihkan cache foto lama untuk membebaskan kuota...');
-
-            for (let i = localStorage.length - 1; i >= 0; i--) {
-
-              const k = localStorage.key(i);
-
-              if (k && (k.startsWith('local_drive_b64_') || k.startsWith('local_photo_'))) {
-
-                localStorage.removeItem(k);
-
-              }
-
-            }
-
-            try {
-
-              localStorage.setItem('hods_drive_photos_v2', JSON.stringify(lightweightPhotos));
-
-            } catch (retryErr) {
-
-              console.warn('Gagal menyimpan drivePhotos setelah pembersihan kuota:', retryErr);
-
-            }
-
           }
 
+          localStorage.setItem('hods_last_daily_cleanup', todayStr);
+          console.log(`[DailyCleanup] Pembersihan harian selesai. LocalStorage bersih total dari foto & catatan.`);
         }
-
-      } catch (errFinal) {
-
-        console.warn('Local storage save photos note:', errFinal);
-
-      }
-
-
-
-    }
-
-
-
-    // ----------------- DIRECT FETCH (BYPASS INTRANET SHIM / PROXY 502) ----------------- //
-
-
-
-        function isLocalFlaskServer() {
-
-      return typeof window !== 'undefined' &&
-
-             window.location &&
-
-             (window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') &&
-
-             (window.location.port === '5000' || window.location.port === '8000');
-
-    }
-
-
-
-    let _pristineFetch = null;
-
-
-
-    function getDirectFetch() {
-
-
-
-      if (_pristineFetch) return _pristineFetch;
-
-
-
-      // 1. Coba ambil fetch murni dari iframe sandbox terisolasi (kebal dari monkey-patch site_shim.js)
-
-
-
-      try {
-
-
-
-        const frame = document.createElement('iframe');
-
-
-
-        frame.id = '__direct_fetch_sandbox__';
-
-
-
-        frame.style.display = 'none';
-
-
-
-        frame.style.width = '0';
-
-
-
-        frame.style.height = '0';
-
-
-
-        frame.style.border = 'none';
-
-
-
-        (document.body || document.documentElement).appendChild(frame);
-
-
-
-        if (frame.contentWindow && typeof frame.contentWindow.fetch === 'function') {
-
-
-
-          _pristineFetch = frame.contentWindow.fetch.bind(frame.contentWindow);
-
-
-
-          return _pristineFetch;
-
-
-
-        }
-
-
-
-      } catch (e) {
-
-
-
-        console.warn('Iframe fetch sandbox note:', e);
-
-
-
-      }
-
-
-
-      // 2. Fallback ke __originalFetch yang dicatat di head sebelum shim aktif
-
-
-
-      if (typeof window.__originalFetch === 'function') {
-
-
-
-        _pristineFetch = window.__originalFetch;
-
-
-
-        return _pristineFetch;
-
-
-
-      }
-
-
-
-      // 3. Fallback default
-
-
-
-      return window.fetch.bind(window);
-
-
-
-    }
-
-
-
-    async function directFetch(url, options = {}) {
-
-
-
-      if (typeof url === 'string' && url.startsWith('/')) {
-
-
-
-        if (!isLocalFlaskServer()) {
-
-
-
-          // Cegah fetch /api/... saat di hosting (sites.polytron.internal) atau file:/// karena tidak ada server Flask
-
-
-
-          return null;
-
-
-
-        }
-
-
-
-      }
-
-
-
-      try {
-
-
-
-        const fn = getDirectFetch();
-
-
-
-        const res = await fn(url, options);
-
-
-
-        if (res && res.status === 502) {
-
-
-
-          console.warn('Proxy internal 502 terdeteksi pada URL:', url);
-
-
-
-        }
-
-
-
-        return res;
-
-
-
       } catch (err) {
-
-
-
-        if (typeof url === 'string' && url.startsWith('/') && !window.location.protocol.startsWith('http')) {
-
-
-
-          return null;
-
-
-
-        }
-
-
-
-        try {
-
-
-
-          return await window.fetch(url, options);
-
-
-
-        } catch (fetchErr) {
-
-
-
-          return null;
-
-
-
-        }
-
-
-
+        console.warn('Daily cleanup note:', err);
       }
-
-
-
     }
 
+    function saveLocalCache() {
+      // 1. Simpan metadata penting (sites, activity logs, registered plats)
+      try {
+        if (appState.sites) localStorage.setItem('hods_pds_sites_v2', JSON.stringify(appState.sites));
+        if (appState.localLogs) {
+          const compactLogs = (appState.localLogs || []).slice(0, 50);
+          localStorage.setItem('hods_activity_logs_v2', JSON.stringify(compactLogs));
+        }
+        if (appState.registeredPlats) localStorage.setItem('hods_registered_plats', JSON.stringify(appState.registeredPlats));
+      } catch (e) {
+        console.warn('Local storage metadata save note:', e);
+      }
 
+      // 2. Data foto & catatan TIDAK BOLEH disimpan ke localStorage (Single Source of Truth: Google Sheet)
+      try {
+        localStorage.removeItem('hods_drive_photos_v2');
+        localStorage.removeItem('hods_pending_deletes');
+        if (typeof appState !== 'undefined') appState.pendingDeleteLocks = {};
+      } catch (e) {}
+    }
 
+    // ----------------- DIRECT FETCH (CLEAN & CORS PREFLIGHT FREE) ----------------- //
+
+    function isLocalFlaskServer() {
+      if (typeof window === 'undefined' || !window.location) return false;
+      const h = window.location.hostname || '';
+      const p = window.location.port || '';
+      const isLocalHost = (h === '127.0.0.1' || h === 'localhost' || h === '0.0.0.0' || h.startsWith('192.168.') || h.startsWith('10.') || h.startsWith('172.'));
+      return isLocalHost && (p === '5000' || p === '8000' || p === '3000' || p === '8080' || p === '');
+    }
+
+    async function directFetch(url, options = {}, retries = 2) {
+      if (typeof url === 'string' && url.startsWith('/')) {
+        if (!isLocalFlaskServer()) {
+          return null;
+        }
+      }
+
+      const isGasUrl = (typeof url === 'string' && url.includes('script.google.com'));
+
+      // PENTING: Bersihkan semua header kustom (seperti X-Poly-Proxy) agar browser TIDAK mengirim CORS preflight (OPTIONS)
+      // Google Apps Script HANYA menerima "Simple CORS Request" (tanpa header kustom)
+      const cleanOpts = { ...options };
+      if (isGasUrl) {
+        if (cleanOpts.method && cleanOpts.method.toUpperCase() === 'POST') {
+          // Hanya gunakan text/plain agar tidak memicu preflight CORS
+          cleanOpts.headers = { 'Content-Type': 'text/plain;charset=utf-8' };
+        } else {
+          // Untuk GET, jangan kirim header apapun agar 100% simple request
+          cleanOpts.headers = undefined;
+        }
+      }
+
+      for (let attempt = 0; attempt <= retries; attempt++) {
+        try {
+          const res = await window.fetch(url, cleanOpts);
+          if (res && res.ok) {
+            return res;
+          }
+
+          // Jika proxy internal polytron atau gateway merespons 502/503/504
+          if (res && (res.status === 502 || res.status === 503 || res.status === 504)) {
+            console.warn(`[directFetch] Gateway/Proxy ${res.status} pada percobaan ${attempt + 1}/${retries + 1} untuk:`, url);
+            // Jika berjalan di lingkungan Flask lokal, fallback ke proxy Flask
+            if (isGasUrl && isLocalFlaskServer()) {
+              try {
+                let localProxyUrl = '/api/gas-proxy';
+                if (url.includes('?')) {
+                  localProxyUrl += '?' + url.split('?')[1];
+                }
+                const proxyRes = await window.fetch(localProxyUrl, {
+                  method: options.method || 'GET',
+                  headers: options.method === 'POST' ? { 'Content-Type': 'application/json' } : undefined,
+                  body: options.body
+                });
+                if (proxyRes && proxyRes.ok) {
+                  return proxyRes;
+                }
+              } catch (pErr) {}
+            }
+          }
+
+          if (attempt < retries) {
+            await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+            continue;
+          }
+          return res;
+        } catch (err) {
+          console.warn(`[directFetch] Network error percobaan ${attempt + 1}/${retries + 1}:`, err);
+
+          // Fallback ke Flask local proxy jika network error
+          if (isGasUrl && isLocalFlaskServer()) {
+            try {
+              let localProxyUrl = '/api/gas-proxy';
+              if (url.includes('?')) {
+                localProxyUrl += '?' + url.split('?')[1];
+              }
+              const proxyRes = await window.fetch(localProxyUrl, {
+                method: options.method || 'GET',
+                headers: options.method === 'POST' ? { 'Content-Type': 'application/json' } : undefined,
+                body: options.body
+              });
+              if (proxyRes && proxyRes.ok) {
+                return proxyRes;
+              }
+            } catch (pErr) {}
+          }
+
+          if (attempt < retries) {
+            await new Promise(r => setTimeout(r, 1000 * (attempt + 1)));
+            continue;
+          }
+          return null;
+        }
+      }
+      return null;
+    }
     // Fetch directly from embedded Google Apps Script
 
 
@@ -16428,14 +16291,26 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
 
+    let _activeFetchLivePromise = null;
+
     async function fetchLiveFromGoogleAppsScript() {
       if (!APPS_SCRIPT_URL) return false;
-      let hasChanges = false;
 
-      try {
-        const nocacheUrl = APPS_SCRIPT_URL + '?action=getAll&_t=' + Date.now();
-        const res = await directFetch(nocacheUrl);
-        const data = await res.json();
+      // Single-Flight: Cegah request paralel ganda yang memicu 502 Bad Gateway di Google Apps Script
+      if (_activeFetchLivePromise) {
+        console.log('[Sync] Sinkronisasi data cloud sedang berlangsung, menggabungkan request...');
+        return await _activeFetchLivePromise;
+      }
+
+      _activeFetchLivePromise = (async () => {
+        let hasChanges = false;
+        try {
+          const nocacheUrl = APPS_SCRIPT_URL + '?action=getAll&_t=' + Date.now();
+          const res = await directFetch(nocacheUrl);
+          if (!res || !res.ok) {
+            throw new Error(`Server Google Apps Script merespons HTTP ${res ? res.status : 'offline'}`);
+          }
+          const data = await res.json();
 
         if (data && data.success) {
 
@@ -16611,7 +16486,8 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
 
-          // 2. SINKRONISASI DATA FOTO & CATATAN: SMART DELTA SYNC (GABUNGKAN DATA DATABASE & LOKAL)
+          // 2. SINKRONISASI DATA FOTO & CATATAN LANGSUNG DARI GOOGLE SHEET (SINGLE SOURCE OF TRUTH)
+          // Data foto dan catatan TIDAK disimpan ke localStorage. Tampilan kartu 100% mengikuti database Google Sheet!
           if (data.data && Array.isArray(data.data)) {
             const remoteList = data.data;
             const syncedPhotos = [];
@@ -16619,9 +16495,8 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
             remoteList.forEach(rem => {
               const itemLockKey = `${rem.site_code}_${rem.week_key}_${rem.category_key}`;
-              handledKeys.add(itemLockKey);
 
-              // 0. JIKA FOTO INI TELAH DIHAPUS OLEH PENGGUNA (PENDING DELETE LOCK), JANGAN PERNAH MUNCULKAN KEMBALI!
+              // 0. JIKA FOTO INI TELAH DIHAPUS OLEH PENGGUNA (PENDING DELETE LOCK), JANGAN MUNCULKAN KEMBALI
               if (appState.pendingDeleteLocks && appState.pendingDeleteLocks[itemLockKey]) {
                 if (Date.now() < appState.pendingDeleteLocks[itemLockKey]) {
                   return; // Lewati baris cloud lama ini
@@ -16633,54 +16508,36 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
                 }
               }
 
+              handledKeys.add(itemLockKey);
+
               const remoteLink = convertToDirectImageLink(rem.link_gambar || rem.thumbnail_url || rem.file_url, rem.file_id);
-              const hasRemoteFile = Boolean(rem.file_id || (remoteLink && remoteLink.trim() !== ''));
-              const activeLock = (appState.recentUploadLocks && appState.recentUploadLocks[itemLockKey]);
-              const localMatch = (appState.drivePhotos || []).find(p =>
-                p.site_code === rem.site_code && p.week_key === rem.week_key && p.category_key === rem.category_key
+              const hasRemoteFile = Boolean((rem.file_id && String(rem.file_id).trim() !== '') || (remoteLink && remoteLink.trim() !== ''));
+
+              // Periksa apakah item ini sedang aktif dalam proses upload background (antrian, running, atau baru selesai < 60s)
+              const isUploadingInQueue = Boolean(
+                (typeof appSyncQueue !== 'undefined' && appSyncQueue.items && appSyncQueue.items.some(t => t.type === 'upload_photo' && t.targetKey === itemLockKey)) ||
+                (typeof appSyncQueue !== 'undefined' && appSyncQueue.runningTask && appSyncQueue.runningTask.type === 'upload_photo' && appSyncQueue.runningTask.targetKey === itemLockKey) ||
+                (appState.recentUploadLocks && appState.recentUploadLocks[itemLockKey] && (Date.now() - (appState.recentUploadLocks[itemLockKey].timestamp || 0) < 60000))
               );
+              const activeLock = (appState.recentUploadLocks && appState.recentUploadLocks[itemLockKey]);
 
-              // Sinkronisasi Catatan: Google Sheet adalah Single Source of Truth
-              // Jika di database Google Sheet diubah menjadi '-' (atau dikosongkan), maka catatan di aplikasi langsung berubah menjadi kosong/terhapus!
-              let finalCatatan = '-';
-              const rawRemCatatan = (rem.catatan !== undefined && rem.catatan !== null) ? String(rem.catatan).trim() : '';
-              if (rawRemCatatan && rawRemCatatan !== '-') {
-                finalCatatan = rawRemCatatan;
-              } else if (activeLock && activeLock.catatan && activeLock.catatan !== '-' && (Date.now() - activeLock.timestamp < 45000)) {
-                // Hanya lindungi catatan jika pengguna baru saja mengklik upload pada beberapa detik yang lalu
-                finalCatatan = activeLock.catatan;
-              }
-
-              // Simpan atau bersihkan cache catatan lokal mengikuti Google Sheet
-              try {
-                if (finalCatatan && finalCatatan !== '-') {
-                  localStorage.setItem(`local_catatan_${rem.site_code}_${rem.week_key}_${rem.category_key}`, finalCatatan);
-                } else {
-                  localStorage.removeItem(`local_catatan_${rem.site_code}_${rem.week_key}_${rem.category_key}`);
-                  localStorage.removeItem(`local_note_${rem.category_key}`);
-                }
-              } catch (e) {}
-
-              // Proteksi upload lokal baru (< 5 menit): pertahankan foto & catatan lokal yang baru diupload
-              if (activeLock && (Date.now() - activeLock.timestamp < 300000)) {
-                if (activeLock.fileId && rem.file_id === activeLock.fileId) {
-                  delete appState.recentUploadLocks[itemLockKey];
-                }
+              // Jika sedang aktif dalam proses upload, pertahankan preview lokal sementara di RAM
+              if (isUploadingInQueue && activeLock) {
                 syncedPhotos.push({
-                  timestamp: rem.timestamp || activeLock.iso,
+                  timestamp: activeLock.iso || rem.timestamp,
                   site_code: rem.site_code,
                   site_name: rem.site_name,
                   week_key: rem.week_key,
                   category_name: rem.category_name,
                   category_key: rem.category_key,
-                  file_id: rem.file_id || activeLock.fileId || '',
-                  drive_url: rem.drive_url || null,
+                  file_id: activeLock.fileId || '',
+                  drive_url: null,
                   link_gambar: activeLock.fullDataUrl || remoteLink,
                   thumbnail_url: activeLock.fullDataUrl || remoteLink,
-                  direct_view_url: remoteLink,
+                  direct_view_url: activeLock.fullDataUrl || remoteLink,
                   file_url: activeLock.fullDataUrl || remoteLink,
                   file_size: rem.file_size || 0,
-                  catatan: finalCatatan,
+                  catatan: (activeLock.catatan && activeLock.catatan !== '-') ? activeLock.catatan : (rem.catatan || '-'),
                   uploader: rem.uploader || 'ODS',
                   status: 'TERSIMPAN',
                   rating: parseInt(rem.rating) || 0
@@ -16688,90 +16545,94 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
                 return;
               }
 
-              // Pertahankan foto lokal jika remote belum memiliki file_id atau link gambar
-              let finalLink = hasRemoteFile ? remoteLink : (localMatch && localMatch.link_gambar ? localMatch.link_gambar : null);
-              let finalHasFile = Boolean(hasRemoteFile || (localMatch && (localMatch.link_gambar || localMatch.file_url)));
+              // Jika tidak sedang diupload: Database Google Sheet adalah 100% SATU-SATUNYA SUMBER KEBENARAN
+              const rawRemCatatan = (rem.catatan !== undefined && rem.catatan !== null) ? String(rem.catatan).trim() : '';
+              const finalCatatan = (rawRemCatatan && rawRemCatatan !== '-') ? rawRemCatatan : '-';
 
-              syncedPhotos.push({
-                timestamp: rem.timestamp,
-                site_code: rem.site_code,
-                site_name: rem.site_name,
-                week_key: rem.week_key,
-                category_name: rem.category_name,
-                category_key: rem.category_key,
-                file_id: rem.file_id || (localMatch ? localMatch.file_id : null),
-                drive_url: rem.drive_url || null,
-                link_gambar: finalHasFile ? finalLink : null,
-                thumbnail_url: finalHasFile ? finalLink : null,
-                file_url: finalHasFile ? finalLink : null,
-                file_size: rem.file_size || (localMatch ? localMatch.file_size : 0),
-                catatan: finalCatatan,
-                uploader: rem.uploader || 'ODS',
-                status: finalHasFile ? 'TERSIMPAN' : 'CATATAN_ONLY',
-                rating: parseInt(rem.rating) || (localMatch ? localMatch.rating : 0)
-              });
+              if (hasRemoteFile) {
+                syncedPhotos.push({
+                  timestamp: rem.timestamp,
+                  site_code: rem.site_code,
+                  site_name: rem.site_name,
+                  week_key: rem.week_key,
+                  category_name: rem.category_name,
+                  category_key: rem.category_key,
+                  no_plat: rem.no_plat || rem.plat || '',
+                  nama_driver: rem.nama_driver || rem.driver || '',
+                  plat: rem.plat || rem.no_plat || '',
+                  driver: rem.driver || rem.nama_driver || '',
+                  file_id: rem.file_id || null,
+                  drive_url: rem.drive_url || null,
+                  link_gambar: remoteLink,
+                  thumbnail_url: remoteLink,
+                  direct_view_url: remoteLink,
+                  file_url: remoteLink,
+                  file_size: rem.file_size || 0,
+                  catatan: finalCatatan,
+                  uploader: rem.uploader || 'ODS',
+                  status: 'TERSIMPAN',
+                  rating: parseInt(rem.rating) || 0
+                });
+              } else if (finalCatatan !== '-') {
+                // Hanya catatan tanpa foto (CATATAN SAJA / NO IMAGE)
+                syncedPhotos.push({
+                  timestamp: rem.timestamp,
+                  site_code: rem.site_code,
+                  site_name: rem.site_name,
+                  week_key: rem.week_key,
+                  category_name: rem.category_name,
+                  category_key: rem.category_key,
+                  no_plat: rem.no_plat || rem.plat || '',
+                  nama_driver: rem.nama_driver || rem.driver || '',
+                  plat: rem.plat || rem.no_plat || '',
+                  driver: rem.driver || rem.nama_driver || '',
+                  file_id: null,
+                  drive_url: null,
+                  link_gambar: null,
+                  thumbnail_url: null,
+                  direct_view_url: null,
+                  file_url: null,
+                  file_size: 0,
+                  catatan: finalCatatan,
+                  uploader: rem.uploader || 'ODS',
+                  status: 'CATATAN_ONLY',
+                  rating: parseInt(rem.rating) || 0
+                });
+              }
+              // Jika di Google Sheet tidak ada file dan tidak ada catatan, abaikan baris ini (kartu otomatis kosong)
             });
 
-            // Sertakan foto/catatan lokal yang belum tercatat sama sekali di database Google Sheet
+            // Sertakan foto lokal jika SEDANG DALAM PROSES UPLOAD atau BARU SAJA DIUNGGAH (<60s)
             (appState.drivePhotos || []).forEach(localP => {
               const localLockKey = `${localP.site_code}_${localP.week_key}_${localP.category_key}`;
               if (!handledKeys.has(localLockKey)) {
-                syncedPhotos.push(localP);
-                handledKeys.add(localLockKey);
+                const isUploadingInQueue = Boolean(
+                  (typeof appSyncQueue !== 'undefined' && appSyncQueue.items && appSyncQueue.items.some(t => t.type === 'upload_photo' && t.targetKey === localLockKey)) ||
+                  (typeof appSyncQueue !== 'undefined' && appSyncQueue.runningTask && appSyncQueue.runningTask.type === 'upload_photo' && appSyncQueue.runningTask.targetKey === localLockKey) ||
+                  (appState.recentUploadLocks && appState.recentUploadLocks[localLockKey] && (Date.now() - (appState.recentUploadLocks[localLockKey].timestamp || 0) < 60000))
+                );
+                if (isUploadingInQueue) {
+                  syncedPhotos.push(localP);
+                  handledKeys.add(localLockKey);
+                } else {
+                  // Baris tidak ada di Google Sheet dan tidak sedang diupload -> buang dari memori RAM
+                  if (appState.inMemoryPhotoCache) {
+                    delete appState.inMemoryPhotoCache[`mem_photo_${localLockKey}`];
+                    if (localP.file_id) delete appState.inMemoryPhotoCache[localP.file_id];
+                  }
+                }
               }
             });
 
-
-
-            // Bersihkan seluruh cache local_photo_, local_time_, local_note_ yang sudah dihapus di Google Sheet
-
-
-
-            const activePhotoKeys = new Set(syncedPhotos.map(p => p.category_key));
-
-
-
-            const activeScopedKeys = new Set(syncedPhotos.map(p => `${p.site_code}_${p.week_key}_${p.category_key}`));
-
-
-
+            // Bersihkan semua sisa cache localStorage foto & catatan
             for (let i = localStorage.length - 1; i >= 0; i--) {
-
-
-
               const k = localStorage.key(i);
-
-
-
-              if (k && (k.startsWith('local_photo_') || k.startsWith('local_time_') || k.startsWith('local_note_'))) {
-
-
-
-                const keyPart = k.replace(/^local_(photo|time|note)_/, '');
-
-
-
-                if (!activePhotoKeys.has(keyPart) && !activeScopedKeys.has(keyPart)) {
-
-
-
-                  localStorage.removeItem(k);
-
-
-
-                }
-
-
-
+              if (k && (k.startsWith('local_photo_') || k.startsWith('local_time_') || k.startsWith('local_note_') || k.startsWith('local_catatan_') || k.startsWith('cached_drive_photos_') || k === 'hods_drive_photos_v2')) {
+                localStorage.removeItem(k);
               }
-
-
-
             }
 
-
-
-            // Smart Delta Sync: Hanya render ulang jika data dari Google Sheet benar-benar berbeda
+          // Smart Delta Sync: Hanya render ulang jika data dari Google Sheet benar-benar berbeda
 
 
 
@@ -16868,17 +16729,16 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
       } catch (err) {
-
-
-
-        console.warn('Notice: Menggunakan data cache lokal:', err);
-
-
-
-        if (dom.txtDriveStatus) dom.txtDriveStatus.textContent = 'Mode Offline / Cache Lokal';
+        console.warn('Notice: Gagal memuat data dari cloud:', err);
+        if (dom.txtDriveStatus) dom.txtDriveStatus.textContent = 'Mode Offline / Gangguan Server';
         return false;
+      } finally {
+        _activeFetchLivePromise = null;
       }
       return Boolean(hasChanges);
+      })();
+
+      return await _activeFetchLivePromise;
     }
 
 
@@ -16953,9 +16813,211 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
 
+      if (typeof updateHeaderTotalStars === 'function') updateHeaderTotalStars();
     }
 
 
+
+        // ----------------- RATA-RATA BINTANG HEADER (SEBELAH KIRI NAMA USER) ----------------- //
+    // Hitungan 100% konsisten dan identik dengan rumus di tabel Rekap Nilai:
+    // Nilai Rata-rata = (Total Bintang pada Week Terpilih) / (Jumlah Kategori Aktif: 9 tanpa pantry / 10 dengan pantry)
+    function updateHeaderTotalStars() {
+      const badge = document.getElementById('headerTotalStarsBadge');
+      const valSpan = document.getElementById('headerTotalStarsValue');
+      if (!badge || !valSpan) return;
+
+      const currentWeek = appState.selectedWeekKey;
+      if (!currentWeek) {
+        valSpan.textContent = '0.0 ★';
+        badge.title = 'Belum ada periode week yang dipilih';
+        return;
+      }
+
+      const wInfo = (appState.availableWeeks || []).find(w => w.week_key === currentWeek) || appState.currentWeek;
+      const weekLabel = (wInfo && wInfo.week_title) ? wInfo.week_title.toUpperCase() : (currentWeek ? 'WEEK ' + String(currentWeek).replace(/.*W/i, '') : 'WEEK');
+
+      // 1. Tentukan Site yang sedang aktif
+      let activeCode = '';
+      const isSiteUser = Boolean(appState.currentUser && appState.currentUser.role !== 'ADMIN' && appState.currentUser.site_code && appState.currentUser.site_code !== 'ALL');
+      
+      if (isSiteUser) {
+        activeCode = (appState.currentUser.site_code || '').toUpperCase();
+      } else {
+        const selVal = (dom.selectSite ? dom.selectSite.value : 'ALL') || 'ALL';
+        if (selVal !== 'ALL' && appState.selectedSiteId !== 'ALL') {
+          const realSites = (appState.sites || []).filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
+          const foundSite = realSites.find(s => String(s.id) === String(selVal) || (s.code && s.code.toUpperCase() === String(selVal).toUpperCase()));
+          activeCode = foundSite && foundSite.code ? foundSite.code.toUpperCase() : String(selVal).toUpperCase();
+        } else {
+          activeCode = 'ALL';
+        }
+      }
+
+      // 2. Mode audit aktif: Gedung vs Mobil
+      const isMobilMode = Boolean(
+        appState.activeAppView === 'mobil' || 
+        appState.auditType === 'mobil' || 
+        appState.activeAuditType === 'mobil' || 
+        appState.rekapNilaiMode === 'mobil' || 
+        appState.rekapMode === 'mobil'
+      );
+
+      // 3. Helper kalkulasi nilai per site yang 100% identik dengan tabel Rekap Nilai
+      function computeSiteScoreFormula(sCode) {
+        sCode = (sCode || '').toUpperCase();
+        const categories = isMobilMode ? (appState.categoriesMobil || []) : (appState.categoriesGedung || []);
+
+        if (isMobilMode) {
+          // Mobil: Berdasarkan plat yang terdaftar
+          const plats = (appState.registeredPlats || []).filter(p => (p.site_code || '').toUpperCase() === sCode);
+          let sumStars = 0;
+          let filledCount = 0;
+          let totalSlots = 0;
+
+          if (plats.length > 0) {
+            plats.forEach(plat => {
+              const cleanPlat = (plat.no_plat || '').replace(/[^a-zA-Z0-9]/g, '');
+              categories.forEach(cat => {
+                totalSlots++;
+                const expKey = `mobil_${cleanPlat}_${cat.key}`;
+                let r = typeof getBoxRating === 'function' ? (getBoxRating(sCode, currentWeek, expKey) || getBoxRating(sCode, currentWeek, cat.key)) : 0;
+                if (!r && appState.drivePhotos && Array.isArray(appState.drivePhotos)) {
+                  const p = appState.drivePhotos.find(item => 
+                    item.site_code && item.site_code.toUpperCase() === sCode &&
+                    item.week_key === currentWeek &&
+                    (item.category_key === expKey || item.category_key === cat.key || (item.base_key === cat.key && (item.no_plat || '').replace(/[^a-zA-Z0-9]/g, '') === cleanPlat))
+                  );
+                  if (p && p.rating > 0) r = parseInt(p.rating);
+                }
+                if (r > 0) {
+                  sumStars += r;
+                  filledCount++;
+                }
+              });
+            });
+          } else {
+            totalSlots = categories.length || 5;
+            categories.forEach(cat => {
+              let r = typeof getBoxRating === 'function' ? getBoxRating(sCode, currentWeek, cat.key) : 0;
+              if (!r && appState.drivePhotos && Array.isArray(appState.drivePhotos)) {
+                const p = appState.drivePhotos.find(item => 
+                  item.site_code && item.site_code.toUpperCase() === sCode &&
+                  item.week_key === currentWeek &&
+                  (item.category_key === cat.key || item.base_key === cat.key)
+                );
+                if (p && p.rating > 0) r = parseInt(p.rating);
+              }
+              if (r > 0) {
+                sumStars += r;
+                filledCount++;
+              }
+            });
+          }
+
+          const score = totalSlots > 0 ? (sumStars / totalSlots) : 0;
+          return {
+            score: score,
+            totalStars: sumStars,
+            filledCount: filledCount,
+            totalSlots: totalSlots,
+            platCount: plats.length
+          };
+        } else {
+          // Gedung: Persis rumus Rekap Nilai (dibagi 9 tanpa pantry / 10 ada pantry)
+          const hasPantrySite = typeof siteHasPantry === 'function' ? siteHasPantry(sCode) : true;
+          const siteCats = categories.filter(c => c.key !== 'pantry' || hasPantrySite);
+          const siteCatCount = siteCats.length || 9;
+
+          let sumStars = 0;
+          let filledCount = 0;
+          siteCats.forEach(c => {
+            let r = typeof getBoxRating === 'function' ? getBoxRating(sCode, currentWeek, c.key) : 0;
+            if (!r && appState.drivePhotos && Array.isArray(appState.drivePhotos)) {
+              const p = appState.drivePhotos.find(item => 
+                item.site_code && item.site_code.toUpperCase() === sCode &&
+                item.week_key === currentWeek &&
+                (item.category_key === c.key || item.base_key === c.key || (typeof matchPhotoToCategory === 'function' && matchPhotoToCategory(item, c, false)) || item.category_key.startsWith(c.key))
+              );
+              if (p && p.rating > 0) r = parseInt(p.rating);
+            }
+            if (r > 0) {
+              sumStars += r;
+              filledCount++;
+            }
+          });
+
+          const score = siteCatCount > 0 ? (sumStars / siteCatCount) : 0;
+          return {
+            score: score,
+            totalStars: sumStars,
+            filledCount: filledCount,
+            totalSlots: siteCatCount,
+            hasPantry: hasPantrySite
+          };
+        }
+      }
+
+      function formatScore(num) {
+        if (!num || num <= 0) return '0.0';
+        return (num % 1 === 0) ? num.toFixed(1) : num.toFixed(2);
+      }
+
+      if (activeCode === 'ALL') {
+        const validSites = (appState.sites || []).filter(s => s && s.code && s.code.toUpperCase() !== 'ALL');
+        let totalStarsSum = 0;
+        let sumScores = 0;
+        const siteResults = [];
+
+        validSites.forEach(st => {
+          const sCode = (st.code || '').toUpperCase();
+          const res = computeSiteScoreFormula(sCode);
+          totalStarsSum += res.totalStars;
+          sumScores += res.score;
+          siteResults.push({ code: sCode, ...res });
+        });
+
+        const ratedSites = siteResults.filter(r => r.totalStars > 0);
+        const avgRated = ratedSites.length > 0 ? (ratedSites.reduce((acc, r) => acc + r.score, 0) / ratedSites.length) : 0;
+        const avgNational = validSites.length > 0 ? (sumScores / validSites.length) : 0;
+
+        const displayScore = ratedSites.length > 0 ? avgRated : 0;
+        valSpan.textContent = `${formatScore(displayScore)} ★`;
+
+        const modeTitle = isMobilMode ? 'Mobil' : 'Gedung';
+        badge.title = `Rata-rata Nilai ${modeTitle} Nasional (${weekLabel}):\n• Rata-rata Site Dinilai: ${formatScore(avgRated)} / 5.00 (${ratedSites.length} dari ${validSites.length} site)\n• Rata-rata Semua Site: ${formatScore(avgNational)} / 5.00\n• Total Akumulasi: ${totalStarsSum} Bintang\n(Hitungan sama persis dengan tabel Rekap Nilai)`;
+      } else {
+        const res = computeSiteScoreFormula(activeCode);
+        valSpan.textContent = `${formatScore(res.score)} ★`;
+
+        const modeTitle = isMobilMode ? 'Mobil' : 'Gedung';
+        badge.title = `Hasil Penilaian ${modeTitle} [${activeCode}] - ${weekLabel}:\n• Rata-rata Nilai: ${formatScore(res.score)} / 5.00\n• Total Bintang: ${res.totalStars} ★ dari ${res.totalSlots} area (${res.filledCount} dinilai)\n(Hitungan sama persis dengan kolom Rekap Nilai: ${res.totalStars} bintang / ${res.totalSlots} area)`;
+      }
+    }
+
+    function handleHeaderTotalStarsClick() {
+      const badge = document.getElementById('headerTotalStarsBadge');
+      const info = badge ? badge.title : 'Hasil Penilaian Bintang';
+      
+      const isAdmin = Boolean(appState.currentUser && (
+        appState.currentUser.site_code === 'ALL' || 
+        appState.currentUser.site_code === 'ADMIN' || 
+        appState.currentUser.role === 'ADMIN' || 
+        appState.currentUser.role === 'admin'
+      ));
+
+      if (isAdmin && typeof setActiveAppView === 'function') {
+        const isMobilMode = Boolean(
+          appState.activeAppView === 'mobil' || 
+          appState.auditType === 'mobil' || 
+          appState.activeAuditType === 'mobil' || 
+          appState.rekapNilaiMode === 'mobil' || 
+          appState.rekapMode === 'mobil'
+        );
+        setActiveAppView(isMobilMode ? 'rekap_nilai_mobil' : 'rekap_nilai_gedung');
+      }
+
+      showToast('Penilaian Bintang', info.replace(/\n/g, ' | '), 'info', 4500);
+    }
 
     function updateSitePicHeader() {
       const headerUserStatus = document.getElementById('headerUserStatus');
@@ -16972,6 +17034,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         if (headerSiteCode) headerSiteCode.textContent = 'ALL';
         if (headerSiteCodeBadge) headerSiteCodeBadge.textContent = 'ALL';
         if (lblPic) lblPic.textContent = adminName;
+        if (typeof updateHeaderTotalStars === 'function') updateHeaderTotalStars();
         return;
       }
 
@@ -16979,13 +17042,14 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
       const site = realSites.find(s => String(s.id) === String(val) || (s.code && s.code.toUpperCase() === String(val).toUpperCase()));
       const code = (site && site.code) ? site.code.toUpperCase() : String(val).toUpperCase();
       const savedSitePic = localStorage.getItem('hods_pic_' + code);
-      const rawPic = savedSitePic || ((site && site.pic) ? site.pic : ((appState.currentUser && appState.currentUser.pic_name) ? appState.currentUser.pic_name : '-'));
+      const rawPic = savedSitePic || ((site && site.pic && site.pic !== '-') ? site.pic : ((appState.currentUser && appState.currentUser.pic_name) ? appState.currentUser.pic_name : (code || '-')));
       const pic = (typeof formatCleanPersonName === 'function') ? formatCleanPersonName(rawPic) : rawPic;
 
       if (headerUserStatus) headerUserStatus.textContent = pic;
       if (headerSiteCode) headerSiteCode.textContent = code;
       if (headerSiteCodeBadge) headerSiteCodeBadge.textContent = code;
       if (lblPic) lblPic.textContent = pic;
+      if (typeof updateHeaderTotalStars === 'function') updateHeaderTotalStars();
     }
 
 
@@ -17296,6 +17360,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
 
+      if (typeof updateHeaderTotalStars === 'function') updateHeaderTotalStars();
     }
 
 
@@ -17514,10 +17579,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
 
       refreshAllData();
-
-
-
-      fetchLiveFromGoogleAppsScript().catch(() => {});
+      // Tab switch hanya merender data memori lokal yang sudah ada tanpa perlu download ulang data cloud
 
 
 
@@ -18971,7 +19033,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
       updateSitePicHeader();
 
       const weekInfo = appState.availableWeeks.find(w => w.week_key === appState.selectedWeekKey) || appState.currentWeek;
-      appState.isLocked = weekInfo ? weekInfo.is_passed : false;
+      appState.isLocked = weekInfo ? Boolean(weekInfo.is_passed) : false;
 
       const isMobilMode = (appState.activeAppView === 'mobil' || appState.auditType === 'mobil' || appState.activeAuditType === 'mobil');
 
@@ -18984,7 +19046,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           lockBanner.innerHTML = `
             <div class="flex items-center gap-2 font-semibold">
               <i data-lucide="lock" class="w-4 h-4 text-amber-600"></i>
-              <span>${isMobilMode ? 'Form Mobil Terkunci:' : 'Form Gedung Terkunci:'} Periode ${weekInfo.week_title} (${weekInfo.date_range}) telah berakhir. Foto dan catatan bersifat read-only.</span>
+              <span>${isMobilMode ? 'Form Mobil Terkunci:' : 'Form Gedung Terkunci:'} Periode ${weekInfo ? weekInfo.week_title : ''} (${weekInfo ? weekInfo.date_range : ''}) telah berakhir. Foto dan catatan bersifat read-only.</span>
             </div>
             <span class="text-[10px] font-bold bg-amber-200 text-amber-900 px-2 py-0.5 rounded-[3px]">TERKUNCI</span>
           `;
@@ -19246,7 +19308,22 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           const baseKey = (targetBox && targetBox.base_key) 
             ? String(targetBox.base_key).toLowerCase().trim() 
             : targetKey.replace(/^mobil_[^_]+_/, '');
-          const targetFileId = (targetBox && targetBox.file_id) ? String(targetBox.file_id).trim() : null;
+          let targetFileId = (targetBox && targetBox.file_id) ? String(targetBox.file_id).trim() : null;
+          const cleanTargetWeek = targetWeek.replace(/[^0-9]/g, '');
+          if (!targetFileId) {
+            const matchInPhotos = (appState.drivePhotos || []).find(p => {
+              if (!p || !p.file_id) return false;
+              const pSite = String(p.site_code || '').toUpperCase().trim();
+              const pWeek = String(p.week_key || '').toUpperCase().trim();
+              const cleanPWeek = pWeek.replace(/[^0-9]/g, '');
+              const isMatchSite = (pSite === targetSiteCode);
+              const isMatchWeek = (pWeek === targetWeek) || (cleanTargetWeek && cleanPWeek && (cleanTargetWeek === cleanPWeek || cleanTargetWeek.endsWith(cleanPWeek) || cleanPWeek.endsWith(cleanTargetWeek)));
+              if (!isMatchSite || !isMatchWeek) return false;
+              const pCat = String(p.category_key || '').toLowerCase().trim();
+              return (pCat === targetKey || pCat === baseKey);
+            });
+            if (matchInPhotos) targetFileId = String(matchInPhotos.file_id).trim();
+          }
 
           const deletedFileIds = new Set();
           if (targetFileId) deletedFileIds.add(targetFileId);
@@ -19266,22 +19343,22 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           appState.drivePhotos = (appState.drivePhotos || []).filter(p => {
             if (!p) return false;
 
-            // Jika file_id sama persis dengan file_id target
-            if (targetFileId && p.file_id && String(p.file_id).trim() === targetFileId) {
-              if (p.file_id) deletedFileIds.add(String(p.file_id).trim());
-              return false; // Hapus!
-            }
-
             const pSite = String(p.site_code || '').toUpperCase().trim();
             const pWeek = String(p.week_key || '').toUpperCase().trim();
-            const cleanTargetWeek = targetWeek.replace(/[^0-9]/g, '');
             const cleanPWeek = pWeek.replace(/[^0-9]/g, '');
 
             const isMatchSite = (pSite === targetSiteCode);
-            const isMatchWeek = (pWeek === targetWeek) || (cleanTargetWeek && cleanPWeek && cleanTargetWeek === cleanPWeek);
+            const isMatchWeek = (pWeek === targetWeek) || (cleanTargetWeek && cleanPWeek && (cleanTargetWeek === cleanPWeek || cleanTargetWeek.endsWith(cleanPWeek) || cleanPWeek.endsWith(cleanTargetWeek)));
 
+            // JANGAN PERNAH menyentuh foto dari site lain atau minggu lain!
             if (!isMatchSite || !isMatchWeek) {
-              return true; // Jangan hapus foto dari site / minggu lain
+              return true; 
+            }
+
+            // Jika di site & minggu yang sama, cocokkan berdasarkan file_id target
+            if (targetFileId && p.file_id && String(p.file_id).trim() === targetFileId) {
+              if (p.file_id) deletedFileIds.add(String(p.file_id).trim());
+              return false; // Hapus!
             }
 
             // Normalisasi kategori
@@ -19289,14 +19366,21 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
             const pBaseCat = pCat.replace(/^mobil_[^_]+_/, '');
 
             let isMatchCat = false;
-            if (pCat === targetKey || pCat === baseKey || pBaseCat === baseKey || pBaseCat === targetKey) {
-              isMatchCat = true;
-            } else if (p.category_name && catName && p.category_name.toLowerCase().trim() === catName.toLowerCase().trim()) {
-              isMatchCat = true;
-            } else if (isMobil && targetBox && targetBox.plat && p.no_plat) {
-              const pPlat = String(p.no_plat).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-              const tPlat = String(targetBox.plat).replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
-              if (pPlat === tPlat && (pBaseCat === baseKey || pCat.includes(baseKey))) {
+            if (isMobil) {
+              const targetPlat = (targetBox && targetBox.plat ? String(targetBox.plat) : '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+              const pPlat = String(p.no_plat || p.plat || '').replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+              const pCatUpper = (p.category_key || '').toUpperCase();
+              if (pCat === targetKey) {
+                isMatchCat = true;
+              } else if (targetPlat && (pPlat === targetPlat || pCatUpper.includes(targetPlat))) {
+                if (pBaseCat === baseKey || pCat === targetKey) {
+                  isMatchCat = true;
+                }
+              }
+            } else {
+              if (pCat === targetKey || pCat === baseKey) {
+                isMatchCat = true;
+              } else if (p.category_name && catName && p.category_name.toLowerCase().trim() === catName.toLowerCase().trim()) {
                 isMatchCat = true;
               }
             }
@@ -19309,17 +19393,19 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
             return true;
           });
 
-          // 4. Pasang Tombstone Deletion Lock (5 menit) agar auto-sync 15s tidak membangkitkan foto sebelum Google Sheet tuntas
+          // 4. Pasang Tombstone Deletion Lock (60 detik) presisi agar auto-sync tidak membangkitkan foto sebelum Google Sheet tuntas
           const lockKeys = [
             `${currentSite.code}_${appState.selectedWeekKey}_${key}`,
-            `${currentSite.code}_${appState.selectedWeekKey}_${baseKey}`,
-            `${targetSiteCode}_${targetWeek}_${targetKey}`,
-            `${targetSiteCode}_${targetWeek}_${baseKey}`
+            `${targetSiteCode}_${targetWeek}_${targetKey}`
           ];
+          if (!isMobil) {
+            lockKeys.push(`${currentSite.code}_${appState.selectedWeekKey}_${baseKey}`);
+            lockKeys.push(`${targetSiteCode}_${targetWeek}_${baseKey}`);
+          }
           if (targetFileId) lockKeys.push(`file_${targetFileId}`);
 
           appState.pendingDeleteLocks = appState.pendingDeleteLocks || {};
-          const lockExpiry = Date.now() + 300000;
+          const lockExpiry = Date.now() + 60000;
           lockKeys.forEach(k => {
             appState.pendingDeleteLocks[k] = lockExpiry;
           });
@@ -19370,38 +19456,62 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           loadAuditPerSite();
           renderRekapTable();
           renderPdsBelumKirimWithChart();
-          showToast('Foto Dihapus', `Foto ${catName} telah dihapus.`, 'info');
+          showToast('Berhasil menghapus Foto', 'Foto berhasil dihapus.', 'success', 900);
 
-          // 8. Kirim aksi hapus ke Google Apps Script via Antrian Handal (appSyncQueue)
+          // 8. Kirim aksi hapus LANGSUNG ke Google Apps Script (Tanpa Antrian Tunggu!)
           if (APPS_SCRIPT_URL) {
-            try {
-              if (typeof appSyncQueue !== 'undefined') {
-                appSyncQueue.enqueue({
-                  type: 'delete_photo',
-                  description: `Hapus foto ${catName} (${currentSite.code})`,
-                  execute: async () => {
-                    const res = await directFetch(APPS_SCRIPT_URL, {
-                      method: "POST",
-                      headers: { "Content-Type": "text/plain;charset=utf-8" },
-                      body: JSON.stringify({
-                        action: "delete",
-                        site_code: currentSite.code,
-                        week_key: appState.selectedWeekKey,
-                        category_key: key,
-                        base_key: baseKey,
-                        file_id: targetFileId || ''
-                      })
-                    });
-                    if (!res) throw new Error("Jaringan offline");
-                    if (!res.ok && res.status !== 200) throw new Error(`HTTP ${res.status}`);
-                    const result = await res.json();
-                    if (!result || !result.success) throw new Error(result?.message || 'Gagal hapus foto di sheet');
-                    console.log('Penghapusan foto terkonfirmasi oleh Google Sheet:', key);
-                    return true;
-                  }
-                });
+            const targetKey = `${currentSite.code}_${appState.selectedWeekKey}_${key}`;
+            
+            // Batalkan tugas upload yang bertentangan di antrian jika ada
+            if (typeof appSyncQueue !== 'undefined' && typeof appSyncQueue.cancelTasksFor === 'function') {
+              appSyncQueue.cancelTasksFor(targetKey);
+            }
+
+            let effectiveFileId = targetFileId || '';
+            if (!effectiveFileId) {
+              const matchInPhotos = (appState.drivePhotos || []).find(p => {
+                if (!p || !p.file_id) return false;
+                const pSite = String(p.site_code || '').toUpperCase().trim();
+                const pWeek = String(p.week_key || '').toUpperCase().trim();
+                const cleanPWeek = pWeek.replace(/[^0-9]/g, '');
+                const isMatchSite = (pSite === targetSiteCode);
+                const isMatchWeek = (pWeek === targetWeek) || (cleanTargetWeek && cleanPWeek && (cleanTargetWeek === cleanPWeek || cleanTargetWeek.endsWith(cleanPWeek) || cleanPWeek.endsWith(cleanTargetWeek)));
+                if (!isMatchSite || !isMatchWeek) return false;
+                const pCat = String(p.category_key || '').toLowerCase().trim();
+                return (pCat === targetKey || pCat === baseKey);
+              });
+              if (matchInPhotos && matchInPhotos.file_id) effectiveFileId = String(matchInPhotos.file_id).trim();
+            }
+
+            // Eksekusi langsung ke Google Apps Script seketika tanpa antrian
+            directFetch(APPS_SCRIPT_URL, {
+              method: "POST",
+              headers: { "Content-Type": "text/plain;charset=utf-8" },
+              body: JSON.stringify({
+                action: "delete",
+                site_code: currentSite.code,
+                week_key: appState.selectedWeekKey,
+                category_key: key,
+                base_key: baseKey,
+                file_id: effectiveFileId || '',
+                no_plat: (targetBox && targetBox.plat) ? targetBox.plat : '',
+                plat: (targetBox && targetBox.plat) ? targetBox.plat : ''
+              })
+            }).then(async res => {
+              if (!res) throw new Error("Jaringan offline");
+              const result = await res.json();
+              if (result && result.success) {
+                console.log('Penghapusan foto terkonfirmasi oleh Google Sheet:', key, result);
+                if (appState.pendingDeleteLocks) {
+                  delete appState.pendingDeleteLocks[targetKey];
+                }
+              } else {
+                console.warn('Google Sheet delete warning:', result);
               }
-            } catch (e) {}
+            }).catch(err => {
+              console.error('Gagal hapus foto ke Google Sheet:', err);
+              showToast('Gagal Hapus', 'Gagal menghapus foto. Silakan coba lagi.', 'error', 4500);
+            });
           }
 
           // 9. Sinkronkan juga ke local backend jika tersedia
@@ -19426,6 +19536,223 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         
 
     // ----------------- RENDER 10 PHOTO CARDS (BERSIH & ANTI-SYNTAX-ERROR) ----------------- //
+        // ----------------- GENERATOR & HANDLER CAP NO IMAGE (UNTUK AREA HANYA CATATAN) ----------------- //
+    function generateNoImagePlaceholderDataUrl(categoryName, siteCode, catatan) {
+      try {
+        const canvas = document.createElement('canvas');
+        canvas.width = 1200;
+        canvas.height = 900;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return '';
+
+        // 1. Background Gradient Lembut
+        const bgGrad = ctx.createLinearGradient(0, 0, 1200, 900);
+        bgGrad.addColorStop(0, '#f8fafc');
+        bgGrad.addColorStop(1, '#e2e8f0');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, 1200, 900);
+
+        // 2. Bingkai Luar
+        ctx.strokeStyle = '#94a3b8';
+        ctx.lineWidth = 14;
+        ctx.strokeRect(20, 20, 1160, 860);
+
+        // 3. Garis Grid Watermark Samar
+        ctx.strokeStyle = '#e2e8f0';
+        ctx.lineWidth = 1;
+        for (let x = 40; x < 1160; x += 40) {
+          ctx.beginPath();
+          ctx.moveTo(x, 40);
+          ctx.lineTo(x, 860);
+          ctx.stroke();
+        }
+        for (let y = 40; y < 860; y += 40) {
+          ctx.beginPath();
+          ctx.moveTo(40, y);
+          ctx.lineTo(1160, y);
+          ctx.stroke();
+        }
+
+        // 4. Stempel Resmi "NO IMAGE" (Besar, Tebal & Miring -7 Derajat)
+        ctx.save();
+        ctx.translate(600, 390);
+        ctx.rotate(-7 * Math.PI / 180);
+
+        // Plat Stempel
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.94)';
+        ctx.fillRect(-360, -115, 720, 230);
+
+        // Garis Stempel Luar Tebal
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 10;
+        ctx.strokeRect(-360, -115, 720, 230);
+
+        // Garis Stempel Dalam Tipis
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 3;
+        ctx.strokeRect(-345, -100, 690, 200);
+
+        // Teks Utama "NO IMAGE"
+        ctx.fillStyle = '#1e293b';
+        ctx.font = '900 88px monospace, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('NO IMAGE', 0, -25);
+
+        // Subteks Stempel
+        ctx.fillStyle = '#475569';
+        ctx.font = 'bold 30px sans-serif';
+        ctx.fillText('HANYA CATATAN', 0, 50);
+
+        ctx.restore();
+
+        // 5. Kotak Informasi Area & Catatan di Bagian Bawah
+        const infoY = 640;
+        const infoH = 200;
+        ctx.fillStyle = '#ffffff';
+        ctx.shadowColor = 'rgba(0, 0, 0, 0.08)';
+        ctx.shadowBlur = 12;
+        ctx.shadowOffsetY = 4;
+        ctx.fillRect(70, infoY, 1060, infoH);
+        ctx.shadowBlur = 0;
+        ctx.shadowOffsetY = 0;
+
+        ctx.strokeStyle = '#cbd5e1';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(70, infoY, 1060, infoH);
+
+        // Aksen Garis Biru
+        ctx.fillStyle = '#2563eb';
+        ctx.fillRect(70, infoY, 8, infoH);
+
+        // Nama Area & Site
+        ctx.fillStyle = '#1e3a8a';
+        ctx.font = 'bold 28px sans-serif';
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        const sitePrefix = siteCode ? `[${siteCode}] ` : '';
+        const catTitle = (categoryName || 'AREA AUDIT').toUpperCase();
+        ctx.fillText(`${sitePrefix}${catTitle}`, 98, infoY + 22);
+
+        // Badge Status Terverifikasi
+        ctx.fillStyle = '#fef3c7';
+        ctx.fillRect(98, infoY + 62, 240, 32);
+        ctx.strokeStyle = '#f59e0b';
+        ctx.lineWidth = 1.5;
+        ctx.strokeRect(98, infoY + 62, 240, 32);
+
+        ctx.fillStyle = '#92400e';
+        ctx.font = 'bold 15px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText('CATATAN TERVERIFIKASI', 218, infoY + 78);
+
+        // Isi Catatan
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'top';
+        ctx.fillStyle = '#1e293b';
+        ctx.font = 'italic 600 22px sans-serif';
+        const cleanNote = (catatan && catatan !== '-') ? catatan.toUpperCase() : 'TIDAK ADA FOTO FISIK. KONDISI TERCATAT PADA AUDIT.';
+        
+        const maxTextWidth = 1000;
+        const words = cleanNote.split(' ');
+        let line = 'CATATAN: "';
+        let lineY = infoY + 110;
+        let lineCount = 0;
+        for (let n = 0; n < words.length; n++) {
+          const testLine = line + (line === 'CATATAN: "' ? '' : ' ') + words[n];
+          const metrics = ctx.measureText(testLine);
+          if (metrics.width > maxTextWidth && n > 0) {
+            ctx.fillText(line, 98, lineY);
+            line = words[n];
+            lineY += 30;
+            lineCount++;
+            if (lineCount >= 2) {
+              line += '..."';
+              break;
+            }
+          } else {
+            line = testLine;
+          }
+        }
+        if (lineCount < 2) {
+          if (!line.endsWith('"')) line += '"';
+          ctx.fillText(line, 98, lineY);
+        }
+
+        // Header Watermark
+        ctx.fillStyle = '#64748b';
+        ctx.font = 'bold 18px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('AUDIT VISUAL - STANDARISASI FASILITAS & ARMADA', 1140, 52);
+
+        return canvas.toDataURL('image/jpeg', 0.92);
+      } catch (err) {
+        console.warn('Gagal generate cap No Image dataUrl:', err);
+        return '';
+      }
+    }
+
+    function handleNoImageCardClick(key, siteCode) {
+      let box;
+      const cleanBoxes = appState.currentBoxes || [];
+      if (siteCode) {
+        box = cleanBoxes.find(b => (b.key === key || b.base_key === key) && b.site_code === siteCode);
+      }
+      if (!box) {
+        box = cleanBoxes.find(b => b.key === key || b.base_key === key);
+      }
+      if (!box && siteCode) {
+        const found = (appState.drivePhotos || []).find(p => 
+          p.site_code === siteCode && 
+          p.week_key === appState.selectedWeekKey && 
+          (p.category_key === key || (p.category_key || '').endsWith('_' + key))
+        );
+        if (found) {
+          box = {
+            key: found.category_key,
+            site_code: found.site_code,
+            name: found.category_name,
+            catatan: found.catatan
+          };
+        }
+      }
+      const catName = box ? (box.name || 'Area') : 'Area';
+      const sCode = (box && box.site_code) ? box.site_code : (siteCode || '');
+      const note = box ? (box.catatan || '') : '';
+      const dataUrl = generateNoImagePlaceholderDataUrl(catName, sCode, note);
+      const isAll = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
+      const titlePrefix = (isAll && sCode) ? `[${sCode}] ` : '';
+      openLightbox(dataUrl, titlePrefix + catName + ' (NO IMAGE)', note || 'Item ini hanya memiliki catatan kondisi tanpa upload foto.');
+    }
+
+    function handleDownloadNoImagePlaceholder(key, siteCode) {
+      let box;
+      const cleanBoxes = appState.currentBoxes || [];
+      if (siteCode) {
+        box = cleanBoxes.find(b => (b.key === key || b.base_key === key) && b.site_code === siteCode);
+      }
+      if (!box) {
+        box = cleanBoxes.find(b => b.key === key || b.base_key === key);
+      }
+      const catName = box ? (box.name || key) : key;
+      const sCode = (box && box.site_code) ? box.site_code : (siteCode || 'SITE');
+      const note = box ? (box.catatan || '') : '';
+      const dataUrl = generateNoImagePlaceholderDataUrl(catName, sCode, note);
+      if (!dataUrl) {
+        showToast('Gagal', 'Tidak dapat membuat gambar stamp.', 'error');
+        return;
+      }
+      const fileName = 'NoImage_' + sCode + '_' + key + '_' + (appState.selectedWeekKey || 'WEEK') + '.jpg';
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Download Berhasil', 'Gambar cap NO IMAGE berhasil diunduh.', 'success');
+    }
+
     function handleCardClick(key, siteCode) {
       let box;
       const cleanBoxes = appState.currentBoxes || [];
@@ -19733,6 +20060,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
       if (container) {
         container.innerHTML = renderStarRatingHtml(targetUid, categoryKey, targetSiteCode, rating, true, true);
       }
+      if (typeof updateHeaderTotalStars === 'function') updateHeaderTotalStars();
 
       showToast('Rating Berhasil', `Nilai ${rating} dari 5 bintang tersimpan untuk area ini.`, 'success', 2500);
 
@@ -19778,6 +20106,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
       const card = document.createElement('div');
       const hasPhoto = Boolean(box.has_photo && box.file_url);
       const safeCatatan = (box.catatan && box.catatan !== '-') ? escapeHtml(box.catatan).toUpperCase() : '';
+      const hasOnlyNote = Boolean(!hasPhoto && safeCatatan && safeCatatan.trim() !== '' && safeCatatan.trim() !== '-');
       const driveUrl = box.drive_url || (box.file_id ? ('https://drive.google.com/file/d/' + box.file_id + '/view?usp=sharing') : '#');
       const fileSizeLabel = box.file_size ? `${(box.file_size / 1024).toFixed(0)} KB` : '';
       const normalBoxName = box.name || 'Area';
@@ -19880,7 +20209,88 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
           ${!isAll ? `
             <!-- Hidden File Input for Overwrite -->
-            <input type="file" id="fileInput_${boxUid}" accept="image/*" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
+            <input type="file" id="fileInput_${boxUid}" accept="image/*" multiple class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
+            <input type="file" id="fileInput_cam_${boxUid}" accept="image/*" capture="environment" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
+          ` : ''}
+        `;
+      } else if (hasOnlyNote) {
+        // KARTU DENGAN CATATAN SAJA (TANPA FOTO) - TAMPILKAN CAP NO IMAGE RESMI
+        card.className = 'photo-card p-[1mm] card-pad-1mm flex flex-col justify-between';
+        card.innerHTML = `
+          <div>
+            <!-- Box Preview Container ID -->
+            <div id="box_preview_${boxUid}">
+              <div class="relative w-full h-[calc(8rem+10mm)] bg-gradient-to-br from-slate-100 via-slate-50 to-slate-200 dark:from-slate-800 dark:via-slate-850 dark:to-slate-900 card-box overflow-hidden group mb-1.5 cursor-pointer flex flex-col items-center justify-center border-2 border-slate-300 dark:border-slate-600 select-none shadow-inner"
+                   onclick="handleNoImageCardClick('${box.key}', '${siteCode}')"
+                   title="Item ini hanya berisi catatan. Klik untuk perbesar cap NO IMAGE">
+                <!-- Tekstur Grid Halus Background -->
+                <div class="absolute inset-0 opacity-[0.06] bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:12px_12px] pointer-events-none"></div>
+
+                <!-- Cap Stempel Resmi NO IMAGE (Besar, Tebal & Miring) -->
+                <div class="relative z-10 px-4 py-2 border-[3.5px] border-slate-700 dark:border-slate-300 rounded-lg bg-white/90 dark:bg-slate-900/90 shadow-md transform -rotate-6 transition-all duration-200 group-hover:scale-105 group-hover:-rotate-3 flex flex-col items-center justify-center">
+                  <div class="flex items-center gap-1.5 text-slate-800 dark:text-slate-100 mb-0.5">
+                    <i data-lucide="image-off" class="w-5 h-5 stroke-[2.5] text-slate-700 dark:text-slate-200"></i>
+                    <span class="text-xl font-black tracking-widest leading-none font-mono">NO IMAGE</span>
+                  </div>
+                  <span class="text-[9px] font-extrabold tracking-widest text-slate-600 dark:text-slate-400 uppercase border-t border-slate-300 dark:border-slate-600 pt-0.5 w-full text-center">HANYA CATATAN</span>
+                </div>
+
+                <!-- Hover Overlay Badge -->
+                <div class="absolute bottom-1.5 inset-x-0 text-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  <span class="px-2 py-0.5 bg-slate-800/90 text-white text-[9px] font-bold rounded shadow-md">Perbesar Cap</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Title -->
+            <div class="flex items-center justify-between gap-1 mb-1">
+              <h4 class="text-xs font-bold text-slate-900 leading-tight">${normalBoxName}</h4>
+            </div>
+
+            <!-- Badge Status & Tombol Ganti/Upload Foto -->
+            <div class="flex items-center justify-between gap-1 mb-1.5 min-h-[18px]">
+              <span class="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-bold text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-950/40 px-1.5 py-0.5 card-box border border-amber-300 dark:border-amber-700" title="Item ini terverifikasi memiliki catatan kondisi tanpa upload foto">
+                <i data-lucide="file-text" class="w-3 h-3 text-amber-600"></i>
+                <span>CATATAN SAJA</span>
+              </span>
+              ${!isAll ? `
+                <button type="button" onclick="triggerFileInput('${box.key}', '${siteCode}')" class="text-[11px] text-blue-600 hover:underline font-semibold cursor-pointer shrink-0">
+                  + Upload Foto
+                </button>
+              ` : '<span></span>'}
+            </div>
+
+            ${!isAll ? `
+              <!-- Menu Download Gambar Cap No Image (Bisa Dipakai Laporan Tanpa Cari di Chrome) -->
+              <div class="mb-2 flex items-stretch gap-1.5">
+                <button type="button" onclick="handleDownloadNoImagePlaceholder('${box.key}', '${siteCode}')"
+                   class="flex-1 h-7 px-2 bg-slate-50 hover:bg-slate-100 text-slate-700 text-[11px] font-semibold card-box border border-slate-300 flex items-center justify-center gap-1 transition cursor-pointer"
+                   title="Download gambar cap No Image ini">
+                  <i data-lucide="download" class="w-3 h-3 text-slate-600"></i>
+                  <span>Download Stamp</span>
+                </button>
+              </div>
+            ` : ''}
+
+            <!-- Kotak Catatan (Selalu Tampil) -->
+            <div class="${!isAll ? 'mt-2 pt-2 border-t border-slate-100' : 'mt-1 pt-1 border-t border-slate-100'}">
+              <div class="flex items-center justify-between gap-1 mb-1 min-h-[20px]">
+                <label class="text-[10px] font-bold text-slate-700 dark:text-slate-300 uppercase tracking-wide">Catatan:</label>
+                <div id="rating_container_${boxUid}" class="flex items-center gap-0.5">
+                  ${renderStarRatingHtml(boxUid, box.key, siteCode, currentRating, isAdmin, false)}
+                </div>
+              </div>
+              <textarea id="note_${boxUid}" rows="2" ${isReadOnlyNote ? 'readonly disabled' : ''} placeholder="${isReadOnlyNote ? 'Read-only (hanya baca)' : 'Tulis catatan kondisi...'}"
+                class="w-full text-xs text-slate-900 ${isReadOnlyNote ? 'bg-slate-100 text-slate-500 border-slate-300 cursor-not-allowed select-text' : 'bg-white border-slate-400 focus:border-slate-800 focus:ring-1 focus:ring-slate-800'} rounded-[5px] p-2 focus:outline-none font-normal uppercase resize-none leading-relaxed transition shadow-2xs"
+                style="text-transform: uppercase;"
+                oninput="this.value = this.value.toUpperCase()"
+                ${isReadOnlyNote ? '' : `onchange="saveNoteOnline('${box.key}', this.value.toUpperCase(), '${siteCode}')"`}>${safeCatatan}</textarea>
+            </div>
+          </div>
+
+          ${!isAll ? `
+            <!-- Hidden File Input -->
+            <input type="file" id="fileInput_${boxUid}" accept="image/*" multiple class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
             <input type="file" id="fileInput_cam_${boxUid}" accept="image/*" capture="environment" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
           ` : ''}
         `;
@@ -19929,7 +20339,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
           ${!isAll ? `
             <!-- Hidden File Input -->
-            <input type="file" id="fileInput_${boxUid}" accept="image/*" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
+            <input type="file" id="fileInput_${boxUid}" accept="image/*" multiple class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
             <input type="file" id="fileInput_cam_${boxUid}" accept="image/*" capture="environment" class="hidden" onchange="handleFilePicked('${box.key}', event, '${siteCode}')">
           ` : ''}
         `;
@@ -20147,7 +20557,15 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         return;
       }
       const { key, siteCode } = pendingPhotoTarget;
-      closePhotoSourceModal();
+      
+      // Sembunyikan modal pilihan sumber foto
+      const m = document.getElementById('modalPilihSumberFoto');
+      if (m) m.classList.add('hidden');
+      if (typeof popModalStack === 'function') {
+        const idx = activeModalStack.lastIndexOf('modalPilihSumberFoto');
+        if (idx !== -1) activeModalStack.splice(idx, 1);
+      }
+      pendingPhotoTarget = null;
 
       // Sinkronisasi pilihan sumber ke Native Android APK jika dijalankan via WebView APK
       try {
@@ -20169,8 +20587,20 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         input.value = '';
         input.click();
       } else {
-        console.warn('Target file input tidak ditemukan:', inputId);
-        showToast('Peringatan', 'Input kamera/file tidak ditemukan pada kartu ini.', 'warning');
+        // Fallback dinamis jika input file tersembunyi belum terender di DOM (100% responsif di HP & Laptop)
+        const genericInput = document.createElement('input');
+        genericInput.type = 'file';
+        genericInput.accept = 'image/*';
+        if (sourceType === 'camera') {
+          genericInput.capture = 'environment';
+        } else {
+          genericInput.multiple = true;
+        }
+        genericInput.className = 'hidden';
+        genericInput.onchange = (e) => handleFilePicked(key, e, siteCode);
+        document.body.appendChild(genericInput);
+        genericInput.click();
+        setTimeout(() => genericInput.remove(), 1000);
       }
     }
 
@@ -20199,6 +20629,7 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           const genericInput = document.createElement('input');
           genericInput.type = 'file';
           genericInput.accept = 'image/*';
+          genericInput.multiple = true;
           genericInput.className = 'hidden';
           genericInput.onchange = (e) => handleFilePicked(key, e, targetSite);
           document.body.appendChild(genericInput);
@@ -20349,16 +20780,24 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
       const rawCatatan = (text || '').trim();
       const catatan = rawCatatan || '-';
 
-      // 1. Update cache lokal seketika
+      // 1. Simpan catatan sebelumnya untuk rollback jika simpan gagal
       let existing = appState.drivePhotos.find(p => 
         p.site_code === currentSite.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
       );
+      const previousCatatan = existing ? existing.catatan : '-';
+      const isNewNoteOnly = !existing;
 
       const nowFormatted = new Date().toISOString().replace('T', ' ').substring(0, 19);
 
       if (existing) {
         existing.catatan = catatan;
         existing.timestamp = nowFormatted;
+        if ((catatan === '-' || !rawCatatan) && !existing.file_id && !existing.link_gambar && !existing.file_url) {
+          const remIdx = appState.drivePhotos.indexOf(existing);
+          if (remIdx >= 0) {
+            appState.drivePhotos.splice(remIdx, 1);
+          }
+        }
       } else {
         existing = {
           timestamp: nowFormatted,
@@ -20378,11 +20817,32 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         appState.drivePhotos.push(existing);
       }
 
-      try {
-        localStorage.setItem(`local_catatan_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`, catatan);
-      } catch(e) {}
-
+      // Catatan TIDAK disimpan di localStorage (Single Source of Truth: Google Sheet)
       saveLocalCache();
+
+      // Perbarui tampilan card secara langsung jika area ini tidak memiliki foto fisik (agar cap CATATAN SAJA langsung sinkron)
+      if (!existing.file_id && !existing.file_url && !existing.link_gambar) {
+        try {
+          if (appState.currentBoxes) {
+            const b = appState.currentBoxes.find(x => x.key === categoryKey || x.base_key === categoryKey);
+            if (b) b.catatan = (catatan && catatan !== '-') ? catatan : '';
+          }
+          const boxUid = siteCode ? `${siteCode}_${categoryKey}` : categoryKey;
+          const oldCard = document.getElementById(`box_preview_${boxUid}`)?.closest('.photo-card') || 
+                          document.getElementById(`box_preview_${currentSite.code}_${categoryKey}`)?.closest('.photo-card');
+          if (oldCard && appState.currentBoxes) {
+            const matchBox = appState.currentBoxes.find(x => x.key === categoryKey || x.base_key === categoryKey);
+            if (matchBox) {
+              const isAll = (dom.selectSite && dom.selectSite.value === 'ALL') || (appState.selectedSiteId === 'ALL');
+              const newCard = createPhotoCardElement(matchBox, currentSite, isAll);
+              oldCard.replaceWith(newCard);
+              if (window.lucide) lucide.createIcons();
+            }
+          }
+        } catch (cardErr) {
+          console.warn('Realtime card update note:', cardErr);
+        }
+      }
 
       // 2. Masukkan ke Antrian Sinkronisasi Background (appSyncQueue)
       if (APPS_SCRIPT_URL) {
@@ -20402,6 +20862,24 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
             appSyncQueue.enqueue({
               type: 'save_catatan',
               description: `Simpan catatan ${catName} (${currentSite.code})`,
+              onFailed: () => {
+                // JIKA GAGAL: Kembalikan catatan ke nilai awal sebelum disimpan
+                if (existing) {
+                  if (previousCatatan && previousCatatan !== '-') {
+                    existing.catatan = previousCatatan;
+                  } else {
+                    if (isNewNoteOnly || (!existing.file_id && !existing.link_gambar)) {
+                      const idx = appState.drivePhotos.indexOf(existing);
+                      if (idx >= 0) appState.drivePhotos.splice(idx, 1);
+                    } else {
+                      existing.catatan = '-';
+                    }
+                  }
+                }
+                loadAuditPerSite();
+                renderRekapTable();
+                showToast('Gagal Simpan Catatan', 'Gagal menyimpan catatan ke database.', 'error', 5000);
+              },
               execute: async () => {
                 const res = await directFetch(APPS_SCRIPT_URL, {
                   method: "POST",
@@ -20455,9 +20933,23 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         const zip = new JSZip();
         let addedCount = 0;
 
-        for (const p of matchingPhotos) {
+for (const p of matchingPhotos) {
           const baseName = `${p.site_code}_${p.category_key}_${p.week_key}`;
           const rawUrl = p.thumbnail_url || p.file_url;
+
+          // 0. Jika item ini hanya memiliki catatan tanpa foto fisik, masukkan cap NO IMAGE resmi ke dalam ZIP
+          if (!rawUrl && !p.file_id && p.catatan && p.catatan !== '-') {
+            try {
+              const noImgData = generateNoImagePlaceholderDataUrl(p.category_name || p.category_key, p.site_code, p.catatan);
+              if (noImgData && noImgData.includes(';base64,')) {
+                zip.file(`${baseName}_NO_IMAGE.jpg`, noImgData.split(';base64,')[1], { base64: true });
+                addedCount++;
+                continue;
+              }
+            } catch (errNoImg) {
+              console.warn('Error adding NO IMAGE placeholder to zip:', errNoImg);
+            }
+          }
 
           // 1. Prioritaskan base64 data dari cache lokal (Zero network request, 100% anti-CORS)
           if (rawUrl && rawUrl.startsWith('data:')) {
@@ -20511,9 +21003,188 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
       }
     }
 
-    // ----------------- STRICT 2MB VALIDATION & OVERWRITE CONFIRMATION ----------------- //
+    // ----------------- PENGGABUNGAN OTOMATIS BANYAK FOTO (100% UTUH TANPA TERPOTONG) ----------------- //
+    function loadFileAsImage(file) {
+      return new Promise((resolve) => {
+        try {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            const img = new Image();
+            img.onload = () => resolve(img);
+            img.onerror = () => resolve(null);
+            img.src = e.target.result;
+          };
+          reader.onerror = () => resolve(null);
+          reader.readAsDataURL(file);
+        } catch (err) {
+          resolve(null);
+        }
+      });
+    }
+
+    // Menggambar foto 100% utuh tanpa ada bagian yang terpotong (contain / fit proporsional)
+    function drawImageContain(ctx, img, dx, dy, dw, dh, bgColor = '#ffffff') {
+      if (!img || !img.width || !img.height) return;
+      ctx.fillStyle = bgColor;
+      ctx.fillRect(dx, dy, dw, dh);
+
+      const imgRatio = img.width / img.height;
+      const targetRatio = dw / dh;
+      let drawW, drawH, drawX, drawY;
+
+      if (imgRatio > targetRatio) {
+        // Foto lebih lebar dibanding area: penuhi lebar, tinggi proporsional di tengah
+        drawW = dw;
+        drawH = dw / imgRatio;
+        drawX = dx;
+        drawY = dy + (dh - drawH) / 2;
+      } else {
+        // Foto lebih tinggi dibanding area: penuhi tinggi, lebar proporsional di tengah
+        drawH = dh;
+        drawW = dh * imgRatio;
+        drawX = dx + (dw - drawW) / 2;
+        drawY = dy;
+      }
+
+      // Seluruh bidang foto asli digambar 100% utuh dari (0,0) sampai (width,height)
+      ctx.drawImage(img, 0, 0, img.width, img.height, Math.round(drawX), Math.round(drawY), Math.round(drawW), Math.round(drawH));
+
+      // Garis tepi tegas di sekeliling foto asli jika ada letterbox
+      if (Math.round(drawW) < Math.round(dw) || Math.round(drawH) < Math.round(dh)) {
+        ctx.strokeStyle = '#64748b';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(Math.round(drawX), Math.round(drawY), Math.round(drawW), Math.round(drawH));
+      }
+
+      // Garis pembatas tegas di sekeliling kotak sel foto agar kotak foto 1-4 terlihat jelas terpisah
+      ctx.strokeStyle = '#0f172a';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(dx, dy, dw, dh);
+    }
+
+    async function mergeMultiplePhotosToSingleFile(files) {
+      const selectedFiles = Array.from(files).slice(0, 4);
+      if (selectedFiles.length <= 1) return selectedFiles[0];
+
+      const loadedImages = await Promise.all(selectedFiles.map(loadFileAsImage));
+      const validImages = loadedImages.filter(img => img && img.width > 0 && img.height > 0);
+      if (validImages.length <= 1) return selectedFiles[0];
+
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      const count = validImages.length;
+
+      // Standar rasio landscape 4:3 resolusi tajam
+      const W = 1600;
+      const H = 1200;
+      canvas.width = W;
+      canvas.height = H;
+
+      // Garis pembatas tegas antar kotak foto (Slate 900 / #0f172a) tebal 12px agar kotak foto 1-4 terlihat sangat jelas terpisah
+      const dividerColor = '#0f172a';
+      const dividerWidth = 12;
+      const gap = dividerWidth;
+
+      // Background dasar berwarna garis pembatas
+      ctx.fillStyle = dividerColor;
+      ctx.fillRect(0, 0, W, H);
+
+      if (count === 2) {
+        // Jika kedua foto adalah landscape (melebar), tumpuk atas-bawah agar bidang lebih luas
+        const bothLandscape = (validImages[0].width >= validImages[0].height && validImages[1].width >= validImages[1].height);
+        if (bothLandscape) {
+          const rowH = (H - gap) / 2;
+          drawImageContain(ctx, validImages[0], 0, 0, W, rowH);
+          drawImageContain(ctx, validImages[1], 0, rowH + gap, W, rowH);
+          // Garis pemisah horizontal
+          ctx.strokeStyle = dividerColor;
+          ctx.lineWidth = dividerWidth;
+          ctx.beginPath();
+          ctx.moveTo(0, rowH + gap / 2);
+          ctx.lineTo(W, rowH + gap / 2);
+          ctx.stroke();
+        } else {
+          // Berdampingan kiri & kanan
+          const colW = (W - gap) / 2;
+          drawImageContain(ctx, validImages[0], 0, 0, colW, H);
+          drawImageContain(ctx, validImages[1], colW + gap, 0, colW, H);
+          // Garis pemisah vertikal
+          ctx.strokeStyle = dividerColor;
+          ctx.lineWidth = dividerWidth;
+          ctx.beginPath();
+          ctx.moveTo(colW + gap / 2, 0);
+          ctx.lineTo(colW + gap / 2, H);
+          ctx.stroke();
+        }
+      } else if (count === 3) {
+        // 3 Foto: 1 di Kiri (50%), 2 di Kanan Bertumpuk (masing-masing 25%)
+        const wLeft = (W - gap) / 2;
+        const wRight = (W - gap) / 2;
+        const hHalf = (H - gap) / 2;
+        drawImageContain(ctx, validImages[0], 0, 0, wLeft, H);
+        drawImageContain(ctx, validImages[1], wLeft + gap, 0, wRight, hHalf);
+        drawImageContain(ctx, validImages[2], wLeft + gap, hHalf + gap, wRight, hHalf);
+        // Garis pemisah vertikal tengah & horizontal kanan
+        ctx.strokeStyle = dividerColor;
+        ctx.lineWidth = dividerWidth;
+        ctx.beginPath();
+        ctx.moveTo(wLeft + gap / 2, 0);
+        ctx.lineTo(wLeft + gap / 2, H);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(wLeft + gap, hHalf + gap / 2);
+        ctx.lineTo(W, hHalf + gap / 2);
+        ctx.stroke();
+      } else if (count === 4) {
+        // 4 Foto: Grid 2x2 Simetris (4 Kuadran Seimbang)
+        const wHalf = (W - gap) / 2;
+        const hHalf = (H - gap) / 2;
+        drawImageContain(ctx, validImages[0], 0, 0, wHalf, hHalf);
+        drawImageContain(ctx, validImages[1], wHalf + gap, 0, wHalf, hHalf);
+        drawImageContain(ctx, validImages[2], 0, hHalf + gap, wHalf, hHalf);
+        drawImageContain(ctx, validImages[3], wHalf + gap, hHalf + gap, wHalf, hHalf);
+        // Garis pemisah silang (tengah vertikal & tengah horizontal)
+        ctx.strokeStyle = dividerColor;
+        ctx.lineWidth = dividerWidth;
+        ctx.beginPath();
+        ctx.moveTo(wHalf + gap / 2, 0);
+        ctx.lineTo(wHalf + gap / 2, H);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(0, hHalf + gap / 2);
+        ctx.lineTo(W, hHalf + gap / 2);
+        ctx.stroke();
+      }
+
+      // Bingkai luar tepi kanvas yang tegas
+      ctx.lineWidth = dividerWidth;
+      ctx.strokeStyle = dividerColor;
+      ctx.strokeRect(0, 0, W, H);
+
+      const dataUrl = canvas.toDataURL('image/jpeg', 0.85);
+      const blob = dataURLtoBlob(dataUrl);
+      if (!blob) return selectedFiles[0];
+      return new File([blob], `foto_gabungan_${count}_${Date.now()}.jpg`, { type: 'image/jpeg' });
+    }
+
+        // ----------------- STRICT 2MB VALIDATION & OVERWRITE CONFIRMATION ----------------- //
     async function handleFilePicked(categoryKey, event, siteCode) {
-      let file = event.target.files[0];
+      const rawFiles = Array.from(event.target.files || []);
+      if (!rawFiles || rawFiles.length === 0) return;
+
+      let file = rawFiles[0];
+      const isMulti = (rawFiles.length > 1);
+
+      if (isMulti) {
+        const filesToMerge = rawFiles.slice(0, 4);
+        try {
+          file = await mergeMultiplePhotosToSingleFile(filesToMerge);
+        } catch (mergeErr) {
+          console.error('Gagal menggabungkan foto:', mergeErr);
+          file = rawFiles[0];
+        }
+      }
+
       if (!file) return;
 
       const MAX_BYTES = 2 * 1024 * 1024; // 2MB
@@ -20535,36 +21206,29 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
 
       let currentSite = null;
       if (typeof siteCode !== 'undefined' && siteCode) {
-        currentSite = appState.sites.find(s => s.code.toUpperCase() === siteCode.toUpperCase());
+        currentSite = appState.sites.find(s => s.code && s.code.toUpperCase() === siteCode.toUpperCase());
       }
       if (!currentSite) {
-        currentSite = appState.sites.find(s => s.id === appState.selectedSiteId);
+        currentSite = appState.sites.find(s => s.id === appState.selectedSiteId || (s.code && s.code.toUpperCase() === String(appState.selectedSiteId).toUpperCase()));
       }
       if (!currentSite || currentSite.code === 'ALL') {
         currentSite = appState.sites.find(s => s.code !== 'ALL') || appState.sites[0];
       }
-      const existing = appState.drivePhotos.find(p => 
+
+      const catDef = (appState.categories || []).find(c => c.key === categoryKey) ||
+                     (appState.categoriesGedung || []).find(c => c.key === categoryKey) ||
+                     (appState.categoriesMobil || []).find(c => c.key === categoryKey);
+
+      const existing = (appState.drivePhotos || []).find(p => 
         p.site_code === currentSite?.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
       );
 
-      const catDef = appState.categories.find(c => c.key === categoryKey);
-
       if (existing) {
-        const detailsHtml = `
-          <div><strong>Area:</strong> ${catDef?.name || categoryKey}</div>
-          <div><strong>File Baru:</strong> ${file.name} (${(file.size / 1024).toFixed(1)} KB)</div>
-          <div class="text-rose-600 font-semibold mt-1">⚠️ Foto lama akan otomatis digantikan dengan file foto baru.</div>
-        `;
-
-        showConfirm(
-          'Konfirmasi Ganti Foto',
-          `Foto untuk "${catDef?.name || categoryKey}" sudah ada. Lanjutkan ganti foto?`,
-          detailsHtml,
-          () => uploadPhotoDirectToDrive(categoryKey, file, true, siteCode)
-        );
-      } else {
-        uploadPhotoDirectToDrive(categoryKey, file, false, siteCode);
+        showToast('Ganti Foto', `Memproses penggantian foto untuk ${catDef?.name || categoryKey}...`, 'info', 2000);
       }
+
+      // Langsung eksekusi upload & ganti foto tanpa jeda modal yang merusak alur di HP/APK
+      uploadPhotoDirectToDrive(categoryKey, file, Boolean(existing), currentSite?.code || siteCode);
 
       event.target.value = '';
     }
@@ -20598,9 +21262,6 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         );
         if (existingP && existingP.catatan && existingP.catatan !== '-') {
           rawCatatan = existingP.catatan.trim();
-        } else {
-          const cachedNote = localStorage.getItem(`local_catatan_${sCode}_${appState.selectedWeekKey}_${categoryKey}`) || localStorage.getItem(`local_note_${categoryKey}`);
-          if (cachedNote && cachedNote !== '-') rawCatatan = cachedNote.trim();
         }
       }
       const catatan = rawCatatan || '-';
@@ -20617,7 +21278,18 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
         let activeDriver = '';
         if (isMobil) {
           const curPlats = appState.registeredPlats.filter(p => p.site_code.toUpperCase() === currentSite.code.toUpperCase());
-          const platObj = curPlats.find(p => p.no_plat === appState.selectedPlat) || curPlats[0];
+          let platObj = null;
+          // Ekstraksi presisi: cari plat langsung dari category_key (misal mobil_L8303BO_tampak_depan)
+          if (categoryKey.startsWith('mobil_')) {
+            const parts = categoryKey.split('_');
+            if (parts.length >= 3) {
+              const keyPlat = parts[1].toUpperCase();
+              platObj = curPlats.find(p => p.no_plat.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() === keyPlat);
+            }
+          }
+          if (!platObj) {
+            platObj = curPlats.find(p => p.no_plat === appState.selectedPlat) || curPlats[0];
+          }
           if (platObj) {
             activePlat = platObj.no_plat;
             activeDriver = platObj.nama_driver;
@@ -20633,6 +21305,21 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           fullDataUrl: fullDataUrl,
           catatan: catatan
         };
+
+        // Bersihkan pending delete lock jika ada, karena pengguna sekarang sengaja mengunggah/mengganti foto baru
+        const cleanLockKeys = [
+          itemLockKey,
+          `${currentSite.code}_${appState.selectedWeekKey}_${categoryKey.replace(/^mobil_[^_]+_/, '')}`,
+          categoryKey
+        ];
+        if (appState.pendingDeleteLocks) {
+          cleanLockKeys.forEach(k => {
+            delete appState.pendingDeleteLocks[k];
+          });
+          try {
+            localStorage.setItem('hods_pending_deletes', JSON.stringify(appState.pendingDeleteLocks));
+          } catch (e) {}
+        }
 
         const localPhotoObj = {
           timestamp: nowUploadIso,
@@ -20666,18 +21353,17 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           appState.drivePhotos.push(localPhotoObj);
         }
 
-        // Simpan waktu upload terbaru dan data foto ke localStorage agar persist seketika
+        // Simpan preview sementara di RAM memory cache (tanpa menyentuh localStorage agar kuota 5MB aman)
         try {
-          localStorage.setItem('local_time_' + categoryKey, nowUploadIso);
-          localStorage.setItem('local_photo_' + categoryKey, fullDataUrl);
-          const scopedKey = `local_photo_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
-          localStorage.setItem(scopedKey, fullDataUrl);
+          if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {};
+          const memScopedKey = `mem_photo_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
+          appState.inMemoryPhotoCache[memScopedKey] = fullDataUrl;
         } catch (e) {}
 
         saveLocalCache();
         loadAuditPerSite(); // Foto langsung tampil di kartu seketika!
         renderRekapTable();
-        showToast('Foto Tersimpan', `Foto ${catDef ? catDef.name : categoryKey} berhasil disimpan!`, 'success', 2500);
+        showToast('Mengupload Foto', 'Sedang mengupload foto, mohon tunggu...', 'info', 2500);
 
         // 2. MASUKKAN KE ANTRIAN SINKRONISASI BACKGROUND (appSyncQueue)
         try {
@@ -20699,10 +21385,41 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
           };
 
           if (typeof appSyncQueue !== 'undefined') {
+            const itemLockKey = `${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
+            if (typeof appSyncQueue.cancelTasksFor === 'function') {
+              appSyncQueue.cancelTasksFor(itemLockKey);
+            }
             appSyncQueue.enqueue({
               type: 'upload_photo',
+              targetKey: itemLockKey,
               description: `Upload foto ${catDef ? catDef.name : categoryKey} (${currentSite.code})`,
-              execute: async () => {
+              maxRetries: 3,
+              onFailed: () => {
+                // JIKA GAGAL UPLOAD: Hapus foto lokal optimis seketika agar kartu kembali bersih/kosong
+                const idx = appState.drivePhotos.findIndex(p =>
+                  p.site_code === currentSite.code && p.week_key === appState.selectedWeekKey && p.category_key === categoryKey
+                );
+                if (idx >= 0) {
+                  appState.drivePhotos.splice(idx, 1);
+                }
+                if (appState.recentUploadLocks) {
+                  delete appState.recentUploadLocks[itemLockKey];
+                }
+                if (appState.inMemoryPhotoCache) {
+                  const memScopedKey = `mem_photo_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
+                  delete appState.inMemoryPhotoCache[memScopedKey];
+                }
+                try {
+                  localStorage.removeItem('local_photo_' + categoryKey);
+                  const scopedKey = `local_photo_${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`;
+                  localStorage.removeItem(scopedKey);
+                } catch (e) {}
+                saveLocalCache();
+                loadAuditPerSite();
+                renderRekapTable();
+                showToast('Gagal Upload', 'Gagal upload foto, data dibatalkan. Silakan coba lagi.', 'error', 5000);
+              },
+              async execute() {
                 if (!APPS_SCRIPT_URL) return true;
                 const res = await directFetch(APPS_SCRIPT_URL, {
                   method: "POST",
@@ -20714,9 +21431,39 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
                 const result = await res.json();
                 if (!result || !result.success) throw new Error(result?.message || 'Server Google Apps Script mengembalikan status gagal');
 
+                // Jika aksi ini dibatalkan oleh user atau item sudah dihapus:
+                const isItemDeleted = (this && this.isCancelled) ||
+                                      (appState.pendingDeleteLocks && (
+                                        appState.pendingDeleteLocks[itemLockKey] ||
+                                        appState.pendingDeleteLocks[`${currentSite.code}_${appState.selectedWeekKey}_${categoryKey}`]
+                                      ));
+
+                if (isItemDeleted) {
+                  console.log(`[SyncQueue] Upload mendarat di server tapi item sudah dihapus user (${itemLockKey}). Membersihkan baris yang baru mendarat di Google Sheet...`);
+                  if (result.file_id && APPS_SCRIPT_URL) {
+                    directFetch(APPS_SCRIPT_URL, {
+                      method: "POST",
+                      headers: { "Content-Type": "text/plain;charset=utf-8" },
+                      body: JSON.stringify({
+                        action: "delete",
+                        site_code: currentSite.code,
+                        week_key: appState.selectedWeekKey,
+                        category_key: categoryKey,
+                        file_id: result.file_id
+                      })
+                    }).catch(() => {});
+                  }
+                  return true;
+                }
+
+                // Berhasil terkirim: perbarui timestamp upload lock agar delta sync tidak membuang foto selama masa propagasi sheet (60 detik)
+                if (appState.recentUploadLocks && appState.recentUploadLocks[itemLockKey]) {
+                  appState.recentUploadLocks[itemLockKey].timestamp = Date.now();
+                }
                 if (result.file_id) {
                   try {
-                    localStorage.setItem('local_drive_b64_' + result.file_id, fullDataUrl);
+                    if (!appState.inMemoryPhotoCache) appState.inMemoryPhotoCache = {};
+                    appState.inMemoryPhotoCache[result.file_id] = fullDataUrl;
                   } catch (e) {}
                 }
                 const match = appState.drivePhotos.find(p =>
@@ -20730,11 +21477,10 @@ const siteTypeFilter = (document.getElementById('selectRekapNilaiSiteType')?.val
                     match.thumbnail_url = result.direct_view_url || result.link_gambar;
                   }
                   match.timestamp = nowUploadIso;
-                  try {
-                    localStorage.setItem('local_time_' + categoryKey, nowUploadIso);
-                  } catch (e) {}
+                  match.status = 'TERSIMPAN';
                   saveLocalCache();
                 }
+                showToast('Upload Berhasil', 'Foto berhasil diupload.', 'success', 3000);
                 return true;
               }
             });
@@ -26746,7 +27492,28 @@ const siteTypeFilter = (document.getElementById('selectRekapSiteType')?.value ||
 
           ctx.textAlign = 'center';
 
-          ctx.fillText(box.has_photo ? '[Foto Gagal Dimuat]' : '[Belum Ada Foto]', imgBoxX + (imgBoxW / 2), imgBoxY + (imgBoxH / 2));
+          if (!box.has_photo && box.catatan && box.catatan !== '-') {
+            // Render cap resmi NO IMAGE di dalam kotak foto kolase
+            ctx.save();
+            ctx.translate(imgBoxX + (imgBoxW / 2), imgBoxY + (imgBoxH / 2));
+            ctx.rotate(-7 * Math.PI / 180);
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(-65, -22, 130, 44);
+            ctx.strokeStyle = '#475569';
+            ctx.lineWidth = 2.5;
+            ctx.strokeRect(-65, -22, 130, 44);
+            ctx.strokeStyle = '#94a3b8';
+            ctx.lineWidth = 1;
+            ctx.strokeRect(-61, -18, 122, 36);
+            ctx.fillStyle = '#1e293b';
+            ctx.font = 'bold 15px monospace, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('NO IMAGE', 0, 0);
+            ctx.restore();
+          } else {
+            ctx.fillText(box.has_photo ? '[Foto Gagal Dimuat]' : '[Belum Ada Foto]', imgBoxX + (imgBoxW / 2), imgBoxY + (imgBoxH / 2));
+          }
 
           ctx.textAlign = 'left';
 
